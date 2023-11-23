@@ -15,41 +15,64 @@ def filename():
 
     filename = fd.askopenfilename(filetypes=filetypes)
     file = open(filename, "r")
-    for line in file:
-        print(line)
-
+    text_area.delete("1.0", "end")
+    text_area.insert("end", file.read(), ("centered",))
+    
     file.close()
 
 root = tk.Tk()
 root.title("TayLOL Sheesh-terpreter")
 root.config(bg='#0c1818')
+root.resizable(False, False)
 root.update()
 set_window_attribute = ct.windll.dwmapi.DwmSetWindowAttribute
 get_parent = ct.windll.user32.GetParent
 set_window_attribute(get_parent(root.winfo_id()), 20, ct.byref(ct.c_int(2)), 4)
 
-open = tk.Button(root, text='Open File', font=font.Font(size = 10), bd=1, command=lambda:filename(), bg='slateblue1', fg='white')
-open.grid(row=0, column=0, padx=5, pady=5, sticky="NSEW")
+open0 = tk.Button(root, text='Open File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:filename())
+open0.grid(row=0, column=0, padx=5, pady=5, sticky="NSEW")
 
-open1 = Label(text = "LOL CODE Interpreter", font=font.Font(size = 12), fg='white',bg='#0c1818')
+open1 = Label(text = "LOL CODE Interpreter", font=font.Font(size = 12, weight='bold'), fg='white',bg='#0c1818')
 open1.grid(row=0, column=1, padx=5, pady=5, columnspan=2, sticky='W')
 
-open2 = tk.Button(root, text='Open File', font=font.Font(size = 10), width = 17, bd=1, bg='white')
-open2.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
+open1 = Label(text = "Lexemes", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
+open1.grid(row=1, column=1, padx=5, sticky='NSEW')
 
-text_area = scrolledtext.ScrolledText(root, wrap = tk.WORD, width = 33, height = 15, bg='#193433')
+open1 = Label(text = "Symbol Table", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
+open1.grid(row=1, column=2, padx=5, sticky='NSEW')
+
+text_area = scrolledtext.ScrolledText(root, width = 33, height = 15, bg='#193433', fg='white')
 text_area.grid(row=1, column=0, padx=5, pady=5, rowspan=2, sticky="NSEW")
 
-text_area1 = scrolledtext.ScrolledText(root, wrap = tk.WORD, width = 33, height = 15, bg='#193433')
-text_area1.grid(row=2, column=1, padx=5, pady=5)
+lexemes = ttk.Treeview(root, selectmode='browse', height=15)
+lexemes.grid(row=2, column=1, padx=5, pady=5)
+lexemes['columns'] = ('lexeme', 'classification')
+lexemes.column("#0", width=0,  stretch=NO)
+lexemes.column("lexeme",anchor=CENTER, width=165,stretch=NO)
+lexemes.column("classification",anchor=CENTER, width=165,stretch=NO)
+lexemes.heading("#0",text="",anchor=CENTER)
+lexemes.heading("lexeme",text="Lexeme",anchor=CENTER)
+lexemes.heading("classification",text="Classification",anchor=CENTER)
 
-text_area2 = scrolledtext.ScrolledText(root, wrap = tk.WORD, width = 33, height = 15, bg='#193433')
-text_area2.grid(row=2, column=2, padx=5, pady=5)
+lexemes = ttk.Treeview(root, selectmode='browse', height=15)
+lexemes.grid(row=2, column=2, padx=5, pady=5)
+lexemes['columns'] = ('identifier', 'value')
+lexemes.column("#0", width=0,  stretch=NO)
+lexemes.column("identifier",anchor=CENTER, width=165,stretch=NO)
+lexemes.column("value",anchor=CENTER, width=165,stretch=NO)
+lexemes.heading("#0",text="",anchor=CENTER)
+lexemes.heading("identifier",text="Identifier",anchor=CENTER)
+lexemes.heading("value",text="Value",anchor=CENTER)
 
-open3 = tk.Button(root, text='Open File', font=font.Font(size = 10), bd=1, bg='white')
+open3 = tk.Button(root, text='EXECUTE', font=font.Font(size = 10), bd=1, bg='#365963', fg='white')
 open3.grid(row=3, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
 
-text_area4 = scrolledtext.ScrolledText(root, wrap = tk.WORD, height = 15, bg='#193433')
+text_area4 = scrolledtext.ScrolledText(root, wrap = tk.WORD, height = 15, fg='white', bg='#193433')
 text_area4.grid(row=4, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
+
+style = ttk.Style(root)
+style.theme_use("clam")
+style.configure("Treeview.Heading", background="#365963", foreground="white", relief="flat")
+style.configure("Treeview", background="#193433", fieldbackground="#193433", foreground="white")
 
 root.mainloop()
