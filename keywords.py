@@ -1,4 +1,5 @@
 import re
+import sys
 
 # try to run this python code
 
@@ -78,11 +79,24 @@ def lex(string):
         print(i, 'is a', keywords[i])
 
 # sample LOLCODE
-string = '''
-HAI
-    I HAS A var ITZ 12
-    VISIBLE "Hello, World!"
-KTHXBYE
-'''
+# string = '''
+# HAI
+#     I HAS A var ITZ 12
+#     VISIBLE "Hello, World!"
+# KTHXBYE
+# '''
 
-lex(string)
+#for accepting many input lines from user
+arr = ""
+con = True
+while con:
+    line = sys.stdin.readline().rstrip('\n')
+    if line == "KTHXBYE": #if eto na-encounter mag stop sa pag-accept
+        con = False
+        arr += line
+        break
+    arr += line
+
+# print(arr)
+
+lex(arr)
