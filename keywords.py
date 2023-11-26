@@ -1,5 +1,7 @@
 import re
 
+# try to run this python code
+
 keywords = {
     'HAI': 'Code Delimiter', 
     'KTHXBYE': 'Code Delimiter', 
@@ -11,6 +13,7 @@ keywords = {
     'I HAS A': 'Variable Declaration',
     'ITZ': 'Variable Assignment', 
     'R': 'Assignment Operator', 
+    'AN': 'Identifier Delimiter',
     'SUM OF': 'Arithmetic Keyword', 
     'DIFF OF': 'Arithmetic Keyword', 
     'PRODUKT OF': 'Arithmetic Keyword', 
@@ -55,35 +58,31 @@ keywords = {
     'MKAY': 'Concatenation Delimiter'
 }
 
+def lex(string):
+    spans = []
+    storage = []
 
+    for keyword in keywords:
+        x = re.search(f" ?{keyword} ?", string) # regex for keywords
+        if x:   # if x is not None
+            spans.append(x.span())
+            spans = sorted(spans, key=lambda a: (a[0], a[1]))
+    for span in spans:  # this is for arranging the found keywords based on string input
+        for keyword in keywords:
+            x = re.search(f" ?{keyword} ?", string)
+            if x:
+                if span == x.span():
+                    storage.append(keyword)
 
-def is_keyword(word):
-    if word in keywords:
-        return 1
-    else:
-        return 0
+    for i in storage:
+        print(i, 'is a', keywords[i])
 
+# sample LOLCODE
 string = '''
-HAIS
+HAI
     I HAS A var ITZ 12
-    VISIBLE "noot noot" var
+    VISIBLE "Hello, World!"
 KTHXBYE
 '''
 
-spans = []
-storage = []
-
-for keyword in keywords:
-    x = re.search(f" ?{keyword} ?", string)
-    if x:
-        spans.append(x.span())
-        spans = sorted(spans, key=lambda a: (a[0], a[1]))
-for span in spans:
-    for keyword in keywords:
-        x = re.search(f" ?{keyword} ?", string)
-        if x:
-            if span == x.span():
-                storage.append(keyword)
-
-for i in storage:
-    print(i, '------>', keywords[i])
+lex(string)
