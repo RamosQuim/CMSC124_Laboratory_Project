@@ -1,5 +1,4 @@
 import re
-import os
 
 keywords = [
     'HAI', 'KTHXBYE', 'WAZZUP', 'BUHBYE', 'BTW', 'OBTW', 'TLDR', 'I HAS A',
@@ -23,6 +22,12 @@ string = '''
         VISIBLE "noot noot" var
     KTHXBYE
 '''
-strings = string.split("\n")
-# for word in string.split():
-#     is_keyword(word)
+
+storage = []
+
+for keyword in keywords:
+    x = re.search(f" ?{keyword} ?", string)
+    if x:
+        storage.append(keyword)
+
+print(storage)
