@@ -62,41 +62,90 @@ keywords = {
 def lex(string):
     spans = []
     storage = []
+    var_ident = []
+    loop_ident = []
+    function_ident = []
 
+    
     for keyword in keywords:
         x = re.search(f" ?{keyword} ?", string) # regex for keywords
         if x:   # if x is not None
             spans.append(x.span())
             spans = sorted(spans, key=lambda a: (a[0], a[1]))
+    
+
+    ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
+    pattern = '[^A-Z ]([A-Z]|[a-z])([A-Z]|[a-z]|[0-9]|\_)*'
+    res = re.search(pattern, string)
+    index = res.span()
+    identifier = string[index[0]:index[1]] #mismong identifier
+    # print("identifier: ",identifier)
+
+    #check 'yung before nung identifier kung I HAS A ba or etc
+    check = 0
+    identifier = string[index[0]:index[1]]
+
+    for keyword in keywords:
+        if keyword == identifier:
+            check = 1
+            break
+
+    if check == 0:
+        #check first kung ano 'yung phrase before the identifier to distinguish what kinf of identifier it is
+        if string[index[0]-8:index[0]-1].strip(' ') == "I HAS A":
+            var_ident.append(identifier.strip('\n'))
+
+        elif string[index[0]-9:index[0]-1].strip(' ') == "IM IN YR":
+            loop_ident.append(identifier.strip('\n'))
+
+        elif string[index[0]-5:index[0]-1].strip(' ') == "IZ I":
+            function_ident.append(identifier.strip('\n'))
+    ##### FOR IDENTIFIER #####
+
+    ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
     for span in spans:  # this is for arranging the found keywords based on string input
         for keyword in keywords:
             x = re.search(f" ?{keyword} ?", string)
             if x:
                 if span == x.span():
                     storage.append(keyword)
+     ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
 
+    ### FOR PRINTING ###
+    print("\nLexical Analyzer:\n")
     for i in storage:
         print(i, 'is a', keywords[i])
 
-# sample LOLCODE
-# string = '''
-# HAI
-#     I HAS A var ITZ 12
-#     VISIBLE "Hello, World!"
-# KTHXBYE
-# '''
+    
+    for j in loop_ident:
+        print(j, " is a LOOP IDENTIFIER")
+    
+    for j in var_ident:
+        print(j, " is a VARIABLE IDENTIFIER")
+  
+    for j in function_ident:
+        print(j, " is a FUNCTION IDENTIFIER")
+    
+     ### FOR PRINTING ###
+
+
 
 #for accepting many input lines from user
-arr = ""
+
+# array_words = []
 con = True
+str = ""
 while con:
-    line = sys.stdin.readline().rstrip('\n')
-    if line == "KTHXBYE": #if eto na-encounter mag stop sa pag-accept
+    line = sys.stdin.readline()
+   
+    if line == "KTHXBYE\n": #if eto na-encounter mag stop sa pag-accept
         con = False
-        arr += line
+        str += line
+        # array_words.append(str.strip('\n'))
         break
-    arr += line
+    str += line
+    # array_words.append(str.strip('\n'))
 
 # print(arr)
 
-lex(arr)
+lex(str)
