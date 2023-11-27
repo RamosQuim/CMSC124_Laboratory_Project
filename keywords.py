@@ -78,7 +78,7 @@ def lex(string):
     pattern = '[^A-Z ]([A-Z]|[a-z])([A-Z]|[a-z]|[0-9]|\_)*'
     res = re.search(pattern, string)
     index = res.span()
-    identifier = string[index[0]:index[1]] #mismong identifier
+    # identifier = string[index[0]:index[1]] #mismong identifier
     # print("identifier: ",identifier)
 
     #check 'yung before nung identifier kung I HAS A ba or etc
@@ -100,6 +100,7 @@ def lex(string):
 
         elif string[index[0]-5:index[0]-1].strip(' ') == "IZ I":
             function_ident.append(identifier.strip('\n'))
+    check = 0
     ##### FOR IDENTIFIER #####
 
     ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
