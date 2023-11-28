@@ -68,17 +68,16 @@ def lex(string):
 
     
     for keyword in keywords:
-        x = re.search(f" ?{keyword} ?", string) # regex for keywords
-        if x:   # if x is not None
-            spans.append(x.span())
+        x = re.compile(f" ?{keyword} ?") # regex for keywords
+        for found in x.finditer(string):
+            spans.append(found.span())
             spans = sorted(spans, key=lambda a: (a[0], a[1]))
-
      ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
     for span in spans:  # this is for arranging the found keywords based on string input
         for keyword in keywords:
-            x = re.search(f" ?{keyword} ?", string)
-            if x:
-                if span == x.span():
+            x = re.compile(f" ?{keyword} ?") # regex for keywords
+            for found in x.finditer(string):
+                if span == found.span():
                     storage.append(keyword)
      ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
     
