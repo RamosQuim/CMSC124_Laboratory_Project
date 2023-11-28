@@ -76,6 +76,7 @@ def lex(string):
     loop_ident = []
     function_ident = []
     allMatches = []
+    dupes = []
     
     ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
     pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
@@ -87,7 +88,8 @@ def lex(string):
 
     
     for keyword in keywords:
-        x = re.compile(f" ?{keyword} ?") # regex for keywords
+        x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
+
         for found in x.finditer(string):
             spans.append(found.span())
             spans = sorted(spans, key=lambda a: (a[0], a[1]))
@@ -96,12 +98,21 @@ def lex(string):
     for found in matches.finditer(string):
             allMatches.append(found.groups())
             spans.append(found.span())
-            spans = sorted(spans, key=lambda a: (a[0], a[1]))
-            
-     ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
+            spans = sorted(spans, key=lambda a: (a[1]))
+
+    for i in range(0, len(spans)):
+        if i != (len(spans)-2):
+            if spans[i][1] == spans[i+1][1]:
+                dupes.append(spans[i+1])
+        else:
+            break
+    
+    for dupe in dupes:
+        spans.remove(dupe)
+
     for span in spans:  # this is for arranging the found keywords based on string input
         for keyword in keywords:
-            x = re.compile(f" ?{keyword} ?") # regex for keywords
+            x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
             for found in x.finditer(string):
                 if span == found.span():
                     storage.append(keyword)
@@ -109,9 +120,6 @@ def lex(string):
         for found in matches.finditer(string):
             if span == found.span():
                 storage.append(found.groups()[1])
-
-     ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
-    
 
     for match in allMatches:
         preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
@@ -132,7 +140,6 @@ def lex(string):
                 var_ident.append(word)
 
     ### FOR PRINTING ###
-        ### FOR PRINTING ###
     print("\nLexical Analyzer:\n")
     for i in storage:
         if i in keywords:
@@ -172,3 +179,5 @@ def main():
     # print(arr)
 
     lex(str)
+
+main()
