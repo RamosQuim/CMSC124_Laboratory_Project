@@ -75,6 +75,14 @@ def lex(string):
     var_ident = []
     loop_ident = []
     function_ident = []
+    allMatches = []
+    
+    ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
+    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
+    #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
+    # \b capture the whole word
+    # (?![A-Z]+\b) exclude all uppercase word
+    # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
     compiled_lexs = []
 
     
@@ -83,6 +91,13 @@ def lex(string):
         for found in x.finditer(string):
             spans.append(found.span())
             spans = sorted(spans, key=lambda a: (a[0], a[1]))
+
+    matches = re.compile(pattern) #find all that matches the pattern in the string
+    for found in matches.finditer(string):
+            allMatches.append(found.groups())
+            spans.append(found.span())
+            spans = sorted(spans, key=lambda a: (a[0], a[1]))
+            
      ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
     for span in spans:  # this is for arranging the found keywords based on string input
         for keyword in keywords:
@@ -90,20 +105,15 @@ def lex(string):
             for found in x.finditer(string):
                 if span == found.span():
                     storage.append(keyword)
+            
+        for found in matches.finditer(string):
+            if span == found.span():
+                storage.append(found.groups()[1])
+
      ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
     
 
-   ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
-    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
-    #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
-    # \b capture the whole word
-    # (?![A-Z]+\b) exclude all uppercase word
-    # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
-
-    matches = re.findall(pattern, string) #find all that matches the pattern in the string
-    # print(matches)
-
-    for match in matches:
+    for match in allMatches:
         preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
         #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
         check =0 #check kung 'yung word is nasa keywords since dapat is hindi
@@ -122,25 +132,23 @@ def lex(string):
                 var_ident.append(word)
 
     ### FOR PRINTING ###
+        ### FOR PRINTING ###
     print("\nLexical Analyzer:\n")
     for i in storage:
-        print(i, 'is a', keywords[i])
-        compiled_lexs.append([f"{i}",f"{keywords[i]}"])
+        if i in keywords:
+            print(i, 'is a', keywords[i])
+            compiled_lexs.append([f"{i}",f"{keywords[i]}"])
+        else:
+            if i in loop_ident:
+                print(i, "is a Loop Identifier")
+                compiled_lexs.append([f"{i}","LOOP IDENTIFIER"])
 
-    
-    for j in loop_ident:
-        print(j, " is a Loop Identifier")
-        compiled_lexs.append([f"{j}","LOOP IDENTIFIER"])
-    
-    for j in var_ident:
-        print(j, " is a Variable Identifier")
-        compiled_lexs.append([f"{j}","VARIABLE IDENTIFIER"])
-  
-    for j in function_ident:
-        print(j, " is a Function Identifier")
-        compiled_lexs.append([f"{j}","FUNCTION IDENTIFIER"])
-    
-     ### FOR PRINTING ###
+            elif i in var_ident:
+                print(i, "is a Variable Identifier")
+                compiled_lexs.append([f"{i}","VARIABLE IDENTIFIER"])
+            elif i in function_ident:
+                print(i, "is a Function Identifier") 
+                compiled_lexs.append([f"{i}","FUNCTION IDENTIFIER"])
 
     return compiled_lexs
 
