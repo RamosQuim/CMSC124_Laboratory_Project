@@ -59,12 +59,23 @@ keywords = {
     'MKAY': 'Concatenation Delimiter'
 }
 
+#this part will be responsible for sending content to the UI
+
+def connect_UI(TextInputs):
+    print(TextInputs)
+    # so ipapasa na dito yung values from the text file :>
+    results = lex(TextInputs)
+    print(f"results:{results}")
+    return results
+
+
 def lex(string):
     spans = []
     storage = []
     var_ident = []
     loop_ident = []
     function_ident = []
+    compiled_lexs = []
 
     
     for keyword in keywords:
@@ -114,37 +125,42 @@ def lex(string):
     print("\nLexical Analyzer:\n")
     for i in storage:
         print(i, 'is a', keywords[i])
+        compiled_lexs.append([f"{i}",f"{keywords[i]}"])
 
     
     for j in loop_ident:
         print(j, " is a Loop Identifier")
+        compiled_lexs.append([f"{j}","LOOP IDENTIFIER"])
     
     for j in var_ident:
         print(j, " is a Variable Identifier")
+        compiled_lexs.append([f"{j}","VARIABLE IDENTIFIER"])
   
     for j in function_ident:
         print(j, " is a Function Identifier")
+        compiled_lexs.append([f"{j}","FUNCTION IDENTIFIER"])
     
      ### FOR PRINTING ###
 
+    return compiled_lexs
 
 
 #for accepting many input lines from user
-
-# array_words = []
-con = True
-str = ""
-while con:
-    line = sys.stdin.readline()
-   
-    if line == "KTHXBYE\n": #if eto na-encounter mag stop sa pag-accept
-        con = False
+def main():
+    # array_words = []
+    con = True
+    str = ""
+    while con:
+        line = sys.stdin.readline()
+    
+        if line == "KTHXBYE\n": #if eto na-encounter mag stop sa pag-accept
+            con = False
+            str += line
+            # array_words.append(str.strip('\n'))
+            break
         str += line
         # array_words.append(str.strip('\n'))
-        break
-    str += line
-    # array_words.append(str.strip('\n'))
 
-# print(arr)
+    # print(arr)
 
-lex(str)
+    lex(str)
