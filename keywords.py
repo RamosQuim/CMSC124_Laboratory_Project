@@ -72,38 +72,8 @@ def lex(string):
         if x:   # if x is not None
             spans.append(x.span())
             spans = sorted(spans, key=lambda a: (a[0], a[1]))
-    
 
-    ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
-    pattern = '[^A-Z ]([A-Z]|[a-z])([A-Z]|[a-z]|[0-9]|\_)*'
-    res = re.search(pattern, string)
-    index = res.span()
-    # identifier = string[index[0]:index[1]] #mismong identifier
-    # print("identifier: ",identifier)
-
-    #check 'yung before nung identifier kung I HAS A ba or etc
-    check = 0
-    identifier = string[index[0]:index[1]]
-
-    for keyword in keywords:
-        if keyword == identifier:
-            check = 1
-            break
-
-    if check == 0:
-        #check first kung ano 'yung phrase before the identifier to distinguish what kinf of identifier it is
-        if string[index[0]-8:index[0]-1].strip(' ') == "I HAS A":
-            var_ident.append(identifier.strip('\n'))
-
-        elif string[index[0]-9:index[0]-1].strip(' ') == "IM IN YR":
-            loop_ident.append(identifier.strip('\n'))
-
-        elif string[index[0]-5:index[0]-1].strip(' ') == "IZ I":
-            function_ident.append(identifier.strip('\n'))
-    check = 0
-    ##### FOR IDENTIFIER #####
-
-    ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
+     ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
     for span in spans:  # this is for arranging the found keywords based on string input
         for keyword in keywords:
             x = re.search(f" ?{keyword} ?", string)
@@ -111,6 +81,35 @@ def lex(string):
                 if span == x.span():
                     storage.append(keyword)
      ### FOR ARRANGEMENT (kulang pa 'yung sa identifier sa pag-arrange) ###
+    
+
+   ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
+    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
+    #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
+    # \b capture the whole word
+    # (?![A-Z]+\b) exclude all uppercase word
+    # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
+
+    matches = re.findall(pattern, string) #find all that matches the pattern in the string
+    # print(matches)
+
+    for match in matches:
+        preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
+        #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
+        check =0 #check kung 'yung word is nasa keywords since dapat is hindi
+        for keyword in keywords:
+            if keyword == word:
+                matches.remove(word)
+                check = 1
+                break
+
+        if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
+            if preceding_words.strip() == "HOW IZ I": 
+                function_ident.append(word)
+            elif preceding_words.strip() == "IM IN YR":
+                loop_ident.append(word)
+            elif preceding_words.strip() == "I HAS A":
+                var_ident.append(word)
 
     ### FOR PRINTING ###
     print("\nLexical Analyzer:\n")
@@ -119,13 +118,13 @@ def lex(string):
 
     
     for j in loop_ident:
-        print(j, " is a LOOP IDENTIFIER")
+        print(j, " is a Loop Identifier")
     
     for j in var_ident:
-        print(j, " is a VARIABLE IDENTIFIER")
+        print(j, " is a Variable Identifier")
   
     for j in function_ident:
-        print(j, " is a FUNCTION IDENTIFIER")
+        print(j, " is a Function Identifier")
     
      ### FOR PRINTING ###
 
