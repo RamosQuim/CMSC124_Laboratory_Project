@@ -5,18 +5,22 @@
 
 import sys
 
-# inputlist = sys.stdin.readlines()
-arr = []
-con = True
-while con:
-    line = sys.stdin.readline().rstrip('\n')
-    if line == "kthxbye":
-        con = False
-        arr.append(line)
-        break
-    arr.append(line)
 
-print(arr)
+def main():
+# inputlist = sys.stdin.readlines()
+    arr = []
+    con = True
+    while con:
+        line = sys.stdin.readline().rstrip('\n')
+        if line == "kthxbye":
+            con = False
+            arr.append(line)
+            break
+        arr.append(line)
+
+    print(arr)
+
+
 
 
 
