@@ -141,14 +141,14 @@ def lex(string):
         else:
             if i in loop_ident:
                 print(i, "is a Loop Identifier")
-                compiled_lexs.append([f"{i}","LOOP IDENTIFIER"])
+                compiled_lexs.append([f"{i}","Loop Identifier"])
 
             elif i in var_ident:
                 print(i, "is a Variable Identifier")
-                compiled_lexs.append([f"{i}","VARIABLE IDENTIFIER"])
+                compiled_lexs.append([f"{i}","Variable Identifier"])
             elif i in function_ident:
                 print(i, "is a Function Identifier") 
-                compiled_lexs.append([f"{i}","FUNCTION IDENTIFIER"])
+                compiled_lexs.append([f"{i}","Function Identifier"])
 
     return compiled_lexs
 

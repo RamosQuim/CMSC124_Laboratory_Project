@@ -26,8 +26,10 @@ def filename():
 
 #this will be responsible for
 def analyzetext():
-    results = []
+    for row in lexemes.get_children():
+        lexemes.delete(row)
 
+    results = []
 
     #this part will get all the input in the text editor
     textEditor_Content = textEditor.get("1.0", "end")
