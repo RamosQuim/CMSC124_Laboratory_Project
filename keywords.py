@@ -75,6 +75,7 @@ def lex(string):
     var_ident = []
     loop_ident = []
     function_ident = []
+    literal = []
     allMatches = []
     dupes = []
     
@@ -84,6 +85,7 @@ def lex(string):
     # \b capture the whole word
     # (?![A-Z]+\b) exclude all uppercase word
     # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
+    literalPattern = r'(\".*\")|\b(0|-?[1-9][0-9]*)\b|\b(WIN|LOSE|NUMBR|NUMBAR|YARN|TROOF)\b'
     compiled_lexs = []
 
     
@@ -96,17 +98,24 @@ def lex(string):
 
     matches = re.compile(pattern) #find all that matches the pattern in the string
     for found in matches.finditer(string):
-            allMatches.append(found.groups())
-            spans.append(found.span())
-            spans = sorted(spans, key=lambda a: (a[1]))
+        allMatches.append(found.groups())
+        spans.append(found.span())
+        spans = sorted(spans, key=lambda a: (a[1]))
+
+    literalMatch = re.compile(literalPattern)
+    for found in literalMatch.finditer(string):
+        literal.append(found.group())
+        spans.append(found.span())
+        spans = sorted(spans, key=lambda a: (a[1]))
+            
 
     for i in range(0, len(spans)):
-        if i != (len(spans)-2):
+        if i != (len(spans)-2) and len(spans)>2:
             if spans[i][1] == spans[i+1][1]:
                 dupes.append(spans[i+1])
         else:
             break
-    
+
     for dupe in dupes:
         spans.remove(dupe)
 
@@ -120,6 +129,10 @@ def lex(string):
         for found in matches.finditer(string):
             if span == found.span():
                 storage.append(found.groups()[1])
+        
+        for found in literalMatch.finditer(string):
+            if span == found.span():
+                storage.append(found.group())
 
     for match in allMatches:
         preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
@@ -149,13 +162,24 @@ def lex(string):
             if i in loop_ident:
                 print(i, "is a Loop Identifier")
                 compiled_lexs.append([f"{i}","Loop Identifier"])
-
             elif i in var_ident:
                 print(i, "is a Variable Identifier")
                 compiled_lexs.append([f"{i}","Variable Identifier"])
             elif i in function_ident:
                 print(i, "is a Function Identifier") 
                 compiled_lexs.append([f"{i}","Function Identifier"])
+            elif i in literal:
+                if i[0] == '"':
+                    print(i[0], "is a String Delimiter")
+                    compiled_lexs.append([f"{i[0]}","String Delimiter"])
+                    if i[-1] == '"':
+                        print(i[1:-1], "is a Literal")
+                        print(i[-1], "is a String Delimiter")
+                        compiled_lexs.append([f"{i[1:-1]}","Literal"])
+                        compiled_lexs.append([f"{i[-1]}","String Delimiter"])
+                else:
+                    print(i, "is a Literal")
+                    compiled_lexs.append([f"{i}","Literal"])
 
     return compiled_lexs
 
