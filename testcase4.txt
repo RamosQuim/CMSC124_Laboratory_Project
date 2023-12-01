@@ -1,0 +1,8 @@
+HAI
+BTW this will print hello world
+    HOW IZ I printHello1
+        VISIBLE "Hello, World"
+    IF U SAY SO
+
+    I IZ printHello1
+KTHXBYE

@@ -75,17 +75,19 @@ def lex(string):
     var_ident = []
     loop_ident = []
     function_ident = []
+    comment = []
     literal = []
     allMatches = []
     dupes = []
     
     ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
     pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
+    commentPattern = r'BTW.*'
     #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
     # \b capture the whole word
     # (?![A-Z]+\b) exclude all uppercase word
     # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
-    literalPattern = r'(\".*\")|\b(0|-?[1-9][0-9]*)\b|\b(WIN|LOSE|NUMBR|NUMBAR|YARN|TROOF)\b'
+    literalPattern = r'(\".*\")|\b(0(\.[0-9]+|-0.[0-9]*[1-9]+[0-9]*)?|-?[1-9][0-9]*(\.[0-9]+)?)\b|\b(WIN|LOSE|NUMBR|NUMBAR|YARN|TROOF)\b'
     compiled_lexs = []
 
     
@@ -98,16 +100,24 @@ def lex(string):
 
     matches = re.compile(pattern) #find all that matches the pattern in the string
     for found in matches.finditer(string):
-        allMatches.append(found.groups())
+        if found.group()[0:3] != 'BTW':
+            allMatches.append(found.groups())
+            spans.append(found.span())
+            spans = sorted(spans, key=lambda a: (a[1]))
+
+    commentMatch = re.compile(commentPattern)
+    for found in commentMatch.finditer(string):
+        allMatches.append((found.group()[0:3], found.group()[4:len(found.group())]))
         spans.append(found.span())
         spans = sorted(spans, key=lambda a: (a[1]))
+        
 
     literalMatch = re.compile(literalPattern)
     for found in literalMatch.finditer(string):
         literal.append(found.group())
         spans.append(found.span())
         spans = sorted(spans, key=lambda a: (a[1]))
-            
+          
 
     for i in range(0, len(spans)):
         if i != (len(spans)-2) and len(spans)>2:
@@ -130,10 +140,14 @@ def lex(string):
             if span == found.span():
                 storage.append(found.groups()[1])
         
+        for found in commentMatch.finditer(string):
+            if span == found.span():
+                storage.append(found.group()[4:len(found.group())])
+        
         for found in literalMatch.finditer(string):
             if span == found.span():
                 storage.append(found.group())
-
+    
     for match in allMatches:
         preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
         #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
@@ -145,13 +159,15 @@ def lex(string):
                 break
 
         if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
-            if preceding_words.strip() == "HOW IZ I": 
+            if preceding_words.strip() == "HOW IZ I" or preceding_words.strip() == "I IZ": 
                 function_ident.append(word)
             elif preceding_words.strip() == "IM IN YR":
                 loop_ident.append(word)
             elif preceding_words.strip() == "I HAS A":
                 var_ident.append(word)
-
+            elif preceding_words == "BTW":
+                comment.append(word)
+    
     ### FOR PRINTING ###
     print("\nLexical Analyzer:\n")
     for i in storage:
@@ -180,6 +196,9 @@ def lex(string):
                 else:
                     print(i, "is a Literal")
                     compiled_lexs.append([f"{i}","Literal"])
+            elif i in comment:
+                print(i, "is a Comment")
+                compiled_lexs.append([f"{i}","Comment"])
 
     return compiled_lexs
 
@@ -201,7 +220,3 @@ def main():
         # array_words.append(str.strip('\n'))
 
     # print(arr)
-
-    lex(str)
-
-main()

@@ -34,16 +34,16 @@ def analyzetext():
     #this part will get all the input in the text editor
     textEditor_Content = textEditor.get("1.0", "end")
     returned_value = keywords.connect_UI(textEditor_Content)
-    print(f"returned_value: {returned_value}")
+    # print(f"returned_value: {returned_value}")
     results.append(returned_value)
-    print(results)
+    # print(results)
 
 
     #this part will show the newly added things!!
     for item in results:
-        print(f"item:{item}")
+        # print(f"item:{item}")
         for j in item:
-            print(f"j:{j}")
+            # print(f"j:{j}")
             lexemes.insert("", "end", values=j)
 
 
