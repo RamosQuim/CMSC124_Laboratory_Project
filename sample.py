@@ -65,24 +65,31 @@ def lex(string):
     function_ident = []
     allMatches = []
     dupes = []
-    tempStorage = []
+    symbol_table = []
 
     ##### FOR IDENTIFIER
-    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b[^.*]' #regex to catch the preceding words before the match word and also the match word
+    pattern = r'(.*)[^"]\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b[^"]([^\n]+)?' #regex to catch the preceding words before the match word and also the match word
     #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
     # \b capture the whole word
-    # (?![A-Z]+\b) exclude all uppercase word
+    # (?![A-Z]+\b) exclude all uppercase word (.*)?
     # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
-    compiled_lexs = []
+    
+
 
     matches = re.findall(pattern, string) #find all that matches the pattern in the string
 
     for match in matches:
-        # print(match)
-            
-    
-        preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
-
+        
+        preceding_words = match[0]
+        word = match[1]
+        next_words = match[2]
+        if next_words != " ":
+            if next_words[0:3].strip() == "ITZ":
+                var_value = []
+                possible_val = next_words[3:].strip()
+                var_value.append(word)
+                var_value.append(possible_val.replace('"', ''))
+                symbol_table.append(var_value)
        
         #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
         check = 0 #check kung 'yung word is nasa keywords since dapat is hindi
@@ -94,9 +101,9 @@ def lex(string):
                 break
 
         if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
-            if preceding_words.strip() == "HOW IZ I": 
+            if preceding_words.strip() == "HOW IZ I" or preceding_words.strip() == "YR AN": 
                 function_ident.append(word)
-            elif preceding_words.strip() == "IM IN YR" or "UPPIN YR":
+            elif (preceding_words.strip() == "IM IN YR" or preceding_words.strip() == "UPPIN YR") or (preceding_words[len(preceding_words)-9:].strip() == "UPPIN YR" or preceding_words[len(preceding_words)-9:].strip() == "IM IN YR"):
                 loop_ident.append(word)
             elif preceding_words.strip() == "I HAS A":
                 var_ident.append(word)
@@ -106,19 +113,31 @@ def lex(string):
                 pre = preceding_words
                 x = re.findall(pattern, pre)
                 for a in x:
-                    preceding_words, word =a
-                    if preceding_words.strip() == "HOW IZ I" or "YR AN": 
+                    preceding_words = a[0]
+                    word = a[1]
+                    next_words = a[2]
+                    if next_words != " ":
+                        if next_words[0:3].strip() == "ITZ":
+                            var_value = []
+                            possible_val = next_words[3:].strip()
+
+                            var_value.append(word)
+                            var_value.append(possible_val.replace('"', ''))
+                            # print(f"value for {word} is {possible_val}")
+                            symbol_table.append(var_value)
+
+                    if preceding_words.strip() == "HOW IZ I" or preceding_words.strip() == "YR AN": 
                         function_ident.append(word)
-                    elif preceding_words.strip() == "IM IN YR" or "UPPIN YR":
+                    elif (preceding_words.strip() == "IM IN YR" or preceding_words.strip() == "UPPIN YR") or (preceding_words[len(preceding_words)-9:].strip() == "UPPIN YR" or preceding_words[len(preceding_words)-9:].strip() == "IM IN YR"):
                         loop_ident.append(word)
                     elif preceding_words.strip() == "I HAS A":
                         var_ident.append(word)
                 if x == []:
                     break
-                print(x)  
+                # print(x)  
 
            
-
+    print("\nIDENTIFIERS:")
     for i in function_ident:
         print(f"{i} is a function identifier")
     
@@ -127,6 +146,10 @@ def lex(string):
     
     for i in var_ident:
         print(f"{i} is a var identifier")
+
+    print("\nSYMBOL TABLE:")
+    for j in symbol_table:
+        print(f"identifier: {j[0]} \t value: {j[1]}")
 
         
 #for accepting many input lines from user
