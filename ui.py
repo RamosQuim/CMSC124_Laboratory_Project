@@ -22,6 +22,7 @@ def filename():
     textEditor.insert("end", file.read(), ("centered",))
    
     file.close()
+    analyzetext()
 
 
 #this will be responsible for
@@ -63,8 +64,8 @@ openButton.grid(row=0, column=0, padx=5, pady=5, sticky="NSEW")
 
 
 #this is the button for the analyze
-lexanalyzeButton = tk.Button(root, text='Analyze File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:analyzetext())
-lexanalyzeButton.grid(row=1, column=0, padx=5, pady=2.5, sticky="NSEW")
+#lexanalyzeButton = tk.Button(root, text='Analyze File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:analyzetext())
+#lexanalyzeButton.grid(row=1, column=0, padx=5, pady=2.5, sticky="NSEW")
 
 
 title = Label(text = "TayLOL Sheesh-terpreter: A LOL CODE Interpreter", font=font.Font(size = 12, weight='bold'), fg='white',bg='#0c1818')
@@ -79,7 +80,7 @@ symbolHeader = Label(text = "Symbol Table", font=font.Font(size = 12), fg='white
 symbolHeader.grid(row=1, column=2, padx=5, sticky='NSEW')
 
 textEditor = scrolledtext.ScrolledText(root, width = 33, height = 15, bg='#193433', fg='white')
-textEditor.grid(row=2, column=0, padx=5, pady=5, sticky="NSEW")
+textEditor.grid(row=1, column=0, padx=5, pady=5, rowspan=2, sticky="NSEW")
 
 
 lexemes = ttk.Treeview(root, selectmode='browse', height=15)
