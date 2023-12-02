@@ -22,7 +22,6 @@ def filename():
     textEditor.insert("end", file.read(), ("centered",))
    
     file.close()
-    analyzetext()
 
 
 #this will be responsible for
@@ -105,7 +104,7 @@ symbolTable.heading("identifier",text="Identifier",anchor=CENTER)
 symbolTable.heading("value",text="Value",anchor=CENTER)
 
 
-executeButton = tk.Button(root, text='EXECUTE', font=font.Font(size = 10), bd=1, bg='#365963', fg='white')
+executeButton = tk.Button(root, text='EXECUTE', font=font.Font(size = 10), bd=1, bg='#365963', fg='white',command=lambda:analyzetext())
 executeButton.grid(row=3, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
 
 
