@@ -107,7 +107,7 @@ def lex(string):
                 x = re.findall(pattern, pre)
                 for a in x:
                     preceding_words, word =a
-                    if preceding_words.strip() == "HOW IZ I": 
+                    if preceding_words.strip() == "HOW IZ I" or "YR AN": 
                         function_ident.append(word)
                     elif preceding_words.strip() == "IM IN YR" or "UPPIN YR":
                         loop_ident.append(word)
