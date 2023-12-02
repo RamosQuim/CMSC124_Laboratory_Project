@@ -169,35 +169,35 @@ def lex(string):
                 comment.append(word)
     
     ### FOR PRINTING ###
-    print("\nLexical Analyzer:\n")
+    #print("\nLexical Analyzer:\n")
     for i in storage:
         if i in keywords:
-            print(i, 'is a', keywords[i])
+            #print(i, 'is a', keywords[i])
             compiled_lexs.append([f"{i}",f"{keywords[i]}"])
         else:
             if i in loop_ident:
-                print(i, "is a Loop Identifier")
+                #print(i, "is a Loop Identifier")
                 compiled_lexs.append([f"{i}","Loop Identifier"])
             elif i in var_ident:
-                print(i, "is a Variable Identifier")
+                #print(i, "is a Variable Identifier")
                 compiled_lexs.append([f"{i}","Variable Identifier"])
             elif i in function_ident:
-                print(i, "is a Function Identifier") 
+                #print(i, "is a Function Identifier") 
                 compiled_lexs.append([f"{i}","Function Identifier"])
             elif i in literal:
                 if i[0] == '"':
-                    print(i[0], "is a String Delimiter")
+                    #print(i[0], "is a String Delimiter")
                     compiled_lexs.append([f"{i[0]}","String Delimiter"])
                     if i[-1] == '"':
-                        print(i[1:-1], "is a Literal")
-                        print(i[-1], "is a String Delimiter")
+                        #print(i[1:-1], "is a Literal")
+                        #print(i[-1], "is a String Delimiter")
                         compiled_lexs.append([f"{i[1:-1]}","Literal"])
                         compiled_lexs.append([f"{i[-1]}","String Delimiter"])
                 else:
-                    print(i, "is a Literal")
+                    # print(i, "is a Literal")
                     compiled_lexs.append([f"{i}","Literal"])
             elif i in comment:
-                print(i, "is a Comment")
+                # print(i, "is a Comment")
                 compiled_lexs.append([f"{i}","Comment"])
 
     return compiled_lexs
@@ -219,4 +219,4 @@ def main():
         str += line
         # array_words.append(str.strip('\n'))
 
-    # print(arr)
+    return str
