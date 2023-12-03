@@ -12,24 +12,113 @@ KTHXBYE
 '''
 # print(str.splitlines())
 
-for h in range(0, len(lexemes.splitlines())):
+varidents = []
+hasHai = -1
+hasKthxbye = -1
+hasWazzup = -1
+hasBuhbye = -1
+hasVarDec = 0
+lines = lexemes.splitlines()
+
+for h in range(0, len(lines)):
     lexeme = keywords.lex(lexemes.splitlines()[h])
     if ['BTW', 'Comment Identifier'] in lexeme:
         lexeme.pop(lexeme.index(['BTW', 'Comment Identifier'])+1)
         lexeme.pop(lexeme.index(['BTW', 'Comment Identifier']))
-
     for i in range(0, len(lexeme)):
-        if lexeme[i][0] == 'I HAS A':
-            if len(lexeme) < 2 or lexeme[i+1][1] != 'Variable Identifier':
-                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tI HAS A must have a variable identifier')
+        ## PROGRAM BLOCK SYNTAX
+        if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
+            hasHai = 0
+            break
+        else:
+                if lexeme[i][0] == 'HAI' and hasHai > -1:
+                    print(f'>> SyntaxError in line {h+1} near <HAI>: \n\tAlready has HAI; it must be declared once')
+                    success = 0
+                    break
+                elif lexeme[i][0] == 'HAI' and hasKthxbye > -1:
+                    print(f'>> SyntaxError in line {h+1} near <HAI>: \n\HAI must be declared before KTHXBYE')
+                    success = 0
+                    break
+        if hasHai == 0:
+            ## VARIABLE BLOCK SYNTAX
+            if lexeme[i][0] == 'WAZZUP' and hasWazzup == -1 and hasBuhbye == -1:
+                hasWazzup = 0
+                break
+            else:
+                if lexeme[i][0] == 'WAZZUP' and hasWazzup > -1:
+                    print(f'>> SyntaxError in line {h+1} near <WAZZUP>: \n\tAlready has WAZZUP; it must be declared once')
+                    success = 0
+                    break
+                elif lexeme[i][0] == 'WAZZUP' and hasBuhbye > -1:
+                    print(f'>> SyntaxError in line {h+1} near <WAZZUP>: \n\tWAZZUP must be declared before BUHBYE')
+                    success = 0
+                    break
+            ## VARIABLE DECLARATION SYNTAX
+            if lexeme[i][0] == 'I HAS A' and hasWazzup == 0:
+                if len(lexeme) < 2 or lexeme[i+1][1] != 'Variable Identifier':
+                    print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tI HAS A must have a variable identifier')
+                    success = 0
+                    break
+                elif len(lexeme) > 2:
+                    if lexeme[i+2][0] != 'ITZ':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'ITZ' keyword?")
+                        success = 0
+                        break
+                    elif len(lexeme) < 4 or lexeme[i+3][1] != 'Literal' or lexeme[i+3][1] != 'Variable Identifier':
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tITZ must have a literal or variable identifier')
+                        success = 0
+                        break
+                else:
+                    hasVarDec = 1
+                    varidents.append(lexeme[i][0])
+                    break
+            else:
+                if lexeme[i][0] == 'I HAS A' and hasWazzup == -1:
+                    print(f'>> SyntaxError in line {h+1} near <I HAS A>: \n\tI HAS A statements must be inside WAZZUP and BUHBYE')
+                    success = 0
+                    break
+                elif lexeme[i][0] != 'I HAS A' and lexeme[i][0] != 'BUHBYE' and lexeme[i][0] != 'KTHXBYE' and hasWazzup == 0 and hasBuhbye == -1: 
+                    print(f'>> SyntaxError in line {h+1} in <WAZZUP> block: \n\tonly I HAS A statements can be inside WAZZUP and BUHBYE')
+                    success = 0
+                    break
+            
+            if lexeme[i][0] == 'BUHBYE' and hasWazzup == 0:
+                hasBuhbye = 0
+                hasWazzup = 1
+                break
+            else:
+                if lexeme[i][0] == 'BUHBYE' and hasWazzup == -1 and hasBuhbye == -1:
+                    print(f'>> SyntaxError in line {h+1} near <BUHBYE>: \n\BUHBYE must be declared after WAZZUP')
+                    success = 0
+                    break
+                elif lexeme[i][0] == 'BUHBYE' and hasWazzup == 0 and hasBuhbye == 1:
+                    print(f'>> SyntaxError in line {h+1} near <BUHBYE>: \n\tAlready has BUHBYE; it must be declared once')
+                    success = 0
+                    break
+        else:
+            print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\Statements must be inside HAI and KTHXBYE')
+            success = 0
+            break
+
+        if lexeme[i][0] == 'KTHXBYE' and hasHai == 0:
+                hasKthxbye = 0
+                hasHai = 1
+                break
+        else:
+            if lexeme[i][0] == 'KTHXBYE' and hasHai == -1 and hasKthxbye == -1:
+                print(f'>> SyntaxError in line {h+1} near <KTHXBYE>: \n\KTHXBYE must be declared after HAI')
                 success = 0
-            elif len(lexeme) > 2:
-                if lexeme[i+2][0] != 'ITZ':
-                    print(f">> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'ITZ' keyword?")
-                    success = 0
-                elif len(lexeme) < 4 or lexeme[i+3][1] != 'Literal':
-                    print(f'>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tITZ must have a literal')
-                    success = 0
+                break
+            elif lexeme[i][0] == 'KTHXBYE' and hasHai == 0 and hasKthxbye == 1:
+                print(f'>> SyntaxError in line {h+1} near <KTHXBYE>: \n\tAlready has KTHXBYE; it must be declared once')
+                success = 0
+                break
+
+if hasHai == 0 and hasKthxbye == -1:
+    print(f'>> SyntaxError in line {h+1} in <HAI>: \n\tHAI must be enclosed with KTHXBYE')
+
+if hasWazzup == 0 and hasBuhbye == -1:
+    print(f'>> SyntaxError in line {h+1} in <WAZZUP>: \n\tWAZZUP must be enclosed with BUHBYE')
 
 if success == 1:
     print('>> No syntax errors.')
