@@ -2,6 +2,9 @@ HAI
 BTW this will print hello world
     HOW IZ I printHello1
         VISIBLE "Hello, World"
+        VISIBLE Hi,Crush
+        VISIBLE 1234
+        UPPIN YR temp
     IF U SAY SO
 
     I IZ printHello1
