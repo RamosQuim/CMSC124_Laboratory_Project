@@ -12,6 +12,7 @@ KTHXBYE
 '''
 # print(str.splitlines())
 
+comparison = ['BOTH SAEM', 'DIFFRINT']
 varidents = []
 hasHai = -1
 hasKthxbye = -1
@@ -26,7 +27,7 @@ for h in range(0, len(lines)):
         lexeme.pop(lexeme.index(['BTW', 'Comment Identifier'])+1)
         lexeme.pop(lexeme.index(['BTW', 'Comment Identifier']))
     for i in range(0, len(lexeme)):
-        ## PROGRAM BLOCK SYNTAX
+        ## PROGRAM BLOCK SYNTAX - HAI
         if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
             hasHai = 0
             break
@@ -40,7 +41,7 @@ for h in range(0, len(lines)):
                     success = 0
                     break
         if hasHai == 0:
-            ## VARIABLE BLOCK SYNTAX
+            ## VARIABLE BLOCK SYNTAX - WAZZUP
             if lexeme[i][0] == 'WAZZUP' and hasWazzup == -1 and hasBuhbye == -1:
                 hasWazzup = 0
                 break
@@ -81,7 +82,7 @@ for h in range(0, len(lines)):
                     print(f'>> SyntaxError in line {h+1} in <WAZZUP> block: \n\tonly I HAS A statements can be inside WAZZUP and BUHBYE')
                     success = 0
                     break
-            
+            ## VARIABLE BLOCK SYNTAX - BUHBYE
             if lexeme[i][0] == 'BUHBYE' and hasWazzup == 0:
                 hasBuhbye = 0
                 hasWazzup = 1
@@ -95,18 +96,107 @@ for h in range(0, len(lines)):
                     print(f'>> SyntaxError in line {h+1} near <BUHBYE>: \n\tAlready has BUHBYE; it must be declared once')
                     success = 0
                     break
+            
+            ## COMPARISON SYNTAX - BOTH SAEM
+            if lexeme[i][0] == 'BOTH SAEM':
+                if len(lexeme) != 4 and len(lexeme) != 7:
+                    print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+                    success = 0
+                    break
+                elif lexeme[i+1][0].isnumeric() == False or lexeme[i+1][0].isnumeric() == False:
+                    print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                    success = 0
+                    break
+                elif len(lexeme) == 4:
+                    if lexeme[i+2][0] != 'AN':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+3][0].isnumeric() == False or lexeme[i+3][0].isnumeric() == False:
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                        success = 0
+                        break
+                elif len(lexeme) == 7:
+                    if lexeme[i+2][0] != 'AN':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+3][0] != 'SMALLR OF' and lexeme[i+3][0] != 'BIGGR OF':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+4][0].isnumeric() == False or lexeme[i+4][0].isnumeric() == False:
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                        success = 0
+                        break
+                    elif lexeme[i+5][0] != 'AN':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+6][0].isnumeric() == False or lexeme[i+6][0].isnumeric() == False:
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                        success = 0
+                        break
+                else:
+                    break
+            ## COMPARISON SYNTAX - DIFFRINT
+            if lexeme[i][0] == 'DIFFRINT':
+                if len(lexeme) != 4 and len(lexeme) != 7:
+                    print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tDIFFRINT <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+                    success = 0
+                    break
+                elif lexeme[i+1][0].isnumeric() == False or lexeme[i+1][0].isnumeric() == False:
+                    print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tDIFFRINT only accepts NUMBR or NUMBAR type')
+                    success = 0
+                    break
+                elif len(lexeme) == 4:
+                    if lexeme[i+2][0] != 'AN':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+3][0].isnumeric() == False or lexeme[i+3][0].isnumeric() == False:
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tDIFFRINT only accepts NUMBR or NUMBAR type')
+                        success = 0
+                        break
+                elif len(lexeme) == 7:
+                    if lexeme[i+2][0] != 'AN':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+3][0] != 'SMALLR OF' and lexeme[i+3][0] != 'BIGGR OF':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+4][0].isnumeric() == False or lexeme[i+4][0].isnumeric() == False:
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                        success = 0
+                        break
+                    elif lexeme[i+5][0] != 'AN':
+                        print(f">> SyntaxError in line {h+1} near <{lexeme[i+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                        success = 0
+                        break
+                    elif lexeme[i+6][0].isnumeric() == False or lexeme[i+6][0].isnumeric() == False:
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                        success = 0
+                        break
+                else:
+                    break
+
         else:
             print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\Statements must be inside HAI and KTHXBYE')
             success = 0
             break
 
+        
+
+        ## PROGRAM BLOCK SYNTAX - KTHXBYE
         if lexeme[i][0] == 'KTHXBYE' and hasHai == 0:
                 hasKthxbye = 0
                 hasHai = 1
                 break
         else:
             if lexeme[i][0] == 'KTHXBYE' and hasHai == -1 and hasKthxbye == -1:
-                print(f'>> SyntaxError in line {h+1} near <KTHXBYE>: \n\KTHXBYE must be declared after HAI')
+                print(f'>> SyntaxError in line {h+1} near <KTHXBYE>: \n\tKTHXBYE must be declared after HAI')
                 success = 0
                 break
             elif lexeme[i][0] == 'KTHXBYE' and hasHai == 0 and hasKthxbye == 1:
