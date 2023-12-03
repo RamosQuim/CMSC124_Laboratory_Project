@@ -65,10 +65,45 @@ def lex(string):
     function_ident = []
     it = []
     symbol_table = []
+    spans = []
+    storage = []
+    allMatches = []
+    dupes = []
+
+
+    compiled_lexs = []
+
+    
+    for keyword in keywords:
+        x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
+
+        for found in x.finditer(string):
+            spans.append(found.span())
+            spans = sorted(spans, key=lambda a: (a[0], a[1]))
+
+    for i in range(0, len(spans)):
+        if i != (len(spans)-2):
+            if spans[i][1] == spans[i+1][1]:
+                dupes.append(spans[i+1])
+        else:
+            break
+    
+    for dupe in dupes:
+        spans.remove(dupe)
+
+    for span in spans:  # this is for arranging the found keywords based on string input
+        for keyword in keywords:
+            x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
+            for found in x.finditer(string):
+                if span == found.span():
+                    storage.append(keyword)
+            
+        # for found in matches.finditer(string):
+        #     if span == found.span():
+        #         storage.append(found.groups()[1])
 
     ##### FOR IDENTIFIER
-    # pattern = r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b(.*[^"\n]*)' #regex to catch the preceding words before the match word and also the match word
-    # pattern = r'^([^\n"]*)\b(?![A-Z]+\b(?:' + '|'.join(re.escape(keyword) for keyword in keywords.keys()) + r'))([A-Za-z][A-Z0-9_]*)\b(.*[^"\n]*)'
+    
     pattern = r'^([^\n]*[^"])\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^\n]*)'
     matches = re.findall(pattern, string, re.MULTILINE)
 
@@ -217,7 +252,12 @@ def lex(string):
                 if x == []:
                     break
                 # print(x)  
-
+    ### FOR PRINTING ###
+    print("\nLexical Analyzer:\n")
+    for i in storage:
+        if i in keywords:
+            print(i, 'is a', keywords[i])
+            compiled_lexs.append([f"{i}",f"{keywords[i]}"])
            
     print("\nIDENTIFIERS:")
     for i in function_ident:
