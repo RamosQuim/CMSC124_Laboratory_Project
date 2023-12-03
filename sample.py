@@ -63,28 +63,38 @@ def lex(string):
     var_ident = []
     loop_ident = []
     function_ident = []
-    allMatches = []
-    dupes = []
+    it = []
     symbol_table = []
 
     ##### FOR IDENTIFIER
-    pattern = r'(.*)[^"]\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b[^"]([^\n]+)?' #regex to catch the preceding words before the match word and also the match word
+    pattern = r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b(.*[^"\n]*)' #regex to catch the preceding words before the match word and also the match word
+    
+    # pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b(.*)'
+
+    
     #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
     # \b capture the whole word
     # (?![A-Z]+\b) exclude all uppercase word (.*)?
     # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
-    
+    # pattern =r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^"\n]*)$'
 
 
-    matches = re.findall(pattern, string) #find all that matches the pattern in the string
 
+    # matches = re.findall(pattern, string, re.MULTILINE) #find all that matches the pattern in the string
+    # pattern = r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^"\n]*)$'
+    matches = re.findall(pattern, string, re.MULTILINE)
+
+    print(matches)
     for match in matches:
         
-        preceding_words = match[0]
+        preceding_words = match[0].strip()
+        
         word = match[1]
-        next_words = match[2]
+        next_words = match[2].strip()
+        # print(word)
+        # print(preceding_words)
         if next_words != " ":
-            if next_words[0:3].strip() == "ITZ":
+            if next_words[0:3] == "ITZ":
                 var_value = []
                 possible_val = next_words[3:].strip()
                 var_value.append(word)
@@ -101,23 +111,63 @@ def lex(string):
                 break
 
         if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
-            if preceding_words.strip() == "HOW IZ I" or preceding_words.strip() == "YR AN": 
+            if preceding_words == "HOW IZ I" or preceding_words == "YR AN": 
                 function_ident.append(word)
-            elif (preceding_words.strip() == "IM IN YR" or preceding_words.strip() == "UPPIN YR") or (preceding_words[len(preceding_words)-9:].strip() == "UPPIN YR" or preceding_words[len(preceding_words)-9:].strip() == "IM IN YR"):
+            elif (preceding_words == "IM IN YR" or preceding_words == "UPPIN YR") or (preceding_words[len(preceding_words)-9:].strip() == "UPPIN YR" or preceding_words[len(preceding_words)-9:].strip() == "IM IN YR"):
                 loop_ident.append(word)
-            elif preceding_words.strip() == "I HAS A":
+            elif preceding_words == "I HAS A":
                 var_ident.append(word)
+            elif preceding_words == "VISIBLE" or preceding_words[0:7].strip() == "VISIBLE":
+                temp = []
+                c = 0
+                for j in symbol_table:
+                    if j[0] == word:
+                        c = 1
+                        temp.append(j[1])
+                        # print(j[1])
+
+                if c == 0:
+                    temp.append(word.replace('"', ''))
+                # if len(preceding_words) > 8:
+                #     w = preceding_words[7:].strip()
+                #     temp.append(w)
+                
+                # it.append(temp)
+
+                while 1:
+                    pre = preceding_words
+                    x = re.findall(pattern, pre)
+                    for a in x:
+                        preceding_words = a[0]
+                        word = a[1]
+                        next_words = a[2]
+                        
+                        if preceding_words == "VISIBLE" or preceding_words[0:7].strip() == "VISIBLE":
+                            
+                            c = 0
+                            for j in symbol_table:
+                                if j[0] == word:
+                                    c = 1
+                                    temp.append(j[1])
+                                    print(j[1])
+
+                            if c == 0:
+                                temp.append(word.replace('"', ''))
+                    if x == []:
+                        it.append(temp)
+                        break
+
            
             # check for identifiers na nasa preceding words pa
             while 1:
                 pre = preceding_words
                 x = re.findall(pattern, pre)
                 for a in x:
-                    preceding_words = a[0]
+                    preceding_words = a[0].strip()
                     word = a[1]
-                    next_words = a[2]
+                    next_words = a[2].strip()
                     if next_words != " ":
-                        if next_words[0:3].strip() == "ITZ":
+                        if next_words[0:3] == "ITZ":
                             var_value = []
                             possible_val = next_words[3:].strip()
 
@@ -132,6 +182,46 @@ def lex(string):
                         loop_ident.append(word)
                     elif preceding_words.strip() == "I HAS A":
                         var_ident.append(word)
+                    elif preceding_words == "VISIBLE" or preceding_words[0:7].strip() == "VISIBLE":
+                        temp = []
+                        c = 0
+                        for j in symbol_table:
+                            if j[0] == word:
+                                c = 1
+                                temp.append(j[1])
+                                # print(j[1])
+
+                        if c == 0:
+                            temp.append(word.replace('"', ''))
+                        
+
+                        while 1:
+                            pr = preceding_words
+                            y = re.findall(pattern, pr)
+                            for b in y:
+                                preceding_words = b[0]
+                                wd = b[1]
+                                nw = b[2]
+                        
+                                if preceding_words == "VISIBLE" or preceding_words[0:7].strip() == "VISIBLE":
+                                    c = 0
+                                    for j in symbol_table:
+                                        if j[0] == wd:
+                                            c = 1
+                                            temp(j[1])
+                                    # print(j[1])
+
+                                    if c == 0:
+                                        temp.append(wd.replace('"', ''))
+                            if y == []:
+                                it.append(temp)
+                                break
+
+                                
+                        
+
+                        
+                        
                 if x == []:
                     break
                 # print(x)  
@@ -150,6 +240,20 @@ def lex(string):
     print("\nSYMBOL TABLE:")
     for j in symbol_table:
         print(f"identifier: {j[0]} \t value: {j[1]}")
+    
+    
+    for i in it:
+        j = ""
+        for k in range(len(i)):
+            j += i[k]
+            j += " "
+            
+        print(f"identifier: IT \t value: {j}")
+                
+
+    
+
+    
 
         
 #for accepting many input lines from user

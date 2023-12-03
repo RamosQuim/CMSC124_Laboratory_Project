@@ -78,8 +78,8 @@ def lex(string):
     allMatches = []
     dupes = []
     
-    ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
-    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
+    ##### FOR IDENTIFIER
+    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b[^.*]' #regex to catch the preceding words before the match word and also the match word
     #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
     # \b capture the whole word
     # (?![A-Z]+\b) exclude all uppercase word
@@ -94,50 +94,74 @@ def lex(string):
             spans.append(found.span())
             spans = sorted(spans, key=lambda a: (a[0], a[1]))
 
-    matches = re.compile(pattern) #find all that matches the pattern in the string
-    for found in matches.finditer(string):
-            allMatches.append(found.groups())
-            spans.append(found.span())
-            spans = sorted(spans, key=lambda a: (a[1]))
-
-    for i in range(0, len(spans)):
-        if i != (len(spans)-2):
-            if spans[i][1] == spans[i+1][1]:
-                dupes.append(spans[i+1])
-        else:
-            break
-    
-    for dupe in dupes:
-        spans.remove(dupe)
-
-    for span in spans:  # this is for arranging the found keywords based on string input
-        for keyword in keywords:
-            x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
-            for found in x.finditer(string):
-                if span == found.span():
-                    storage.append(keyword)
+    matches = re.findall(pattern, string) #find all that matches the pattern in the string
+    for found in matches:
+            # allMatches.append(found.groups())
+            # spans.append(found.span())
+            # spans = sorted(spans, key=lambda a: (a[1]))
+            print(found)
             
-        for found in matches.finditer(string):
-            if span == found.span():
-                storage.append(found.groups()[1])
-
-    for match in allMatches:
-        preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
+            for match in matches:
+                preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
         #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
-        check =0 #check kung 'yung word is nasa keywords since dapat is hindi
-        for keyword in keywords:
-            if keyword == word:
-                matches.remove(word)
-                check = 1
-                break
+                check = 0 #check kung 'yung word is nasa keywords since dapat is hindi
+                x = re.findall(pattern, preceding_words)
+                print(x)
+                for keyword in keywords:
+                    if keyword == word:
+                        matches.remove(word)
+                        check = 1
+                        break
 
-        if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
-            if preceding_words.strip() == "HOW IZ I": 
-                function_ident.append(word)
-            elif preceding_words.strip() == "IM IN YR":
-                loop_ident.append(word)
-            elif preceding_words.strip() == "I HAS A":
-                var_ident.append(word)
+                if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
+                    
+                    if preceding_words.strip() == "HOW IZ I": 
+                        function_ident.append(word)
+                    elif preceding_words.strip() == "IM IN YR":
+                        loop_ident.append(word)
+                    elif preceding_words.strip() == "I HAS A":
+                        
+                        var_ident.append(word)
+
+
+    # for i in range(0, len(spans)):
+    #     if i != (len(spans)-2):
+    #         if spans[i][1] == spans[i+1][1]:
+    #             dupes.append(spans[i+1])
+    #     else:
+    #         break
+    
+    # for dupe in dupes:
+        # spans.remove(dupe)
+
+    # for span in spans:  # this is for arranging the found keywords based on string input
+    #     for keyword in keywords:
+    #         x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
+    #         for found in x.finditer(string):
+    #             if span == found.span():
+    #                 storage.append(keyword)
+            
+    #     for found in matches.finditer(string):
+    #         if span == found.span():
+    #             storage.append(found.groups()[1])
+
+    # for match in matches:
+    #     preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
+    #     #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
+    #     check =0 #check kung 'yung word is nasa keywords since dapat is hindi
+    #     for keyword in keywords:
+    #         if keyword == word:
+    #             matches.remove(word)
+    #             check = 1
+    #             break
+
+        # if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
+        #     if preceding_words.strip() == "HOW IZ I": 
+        #         function_ident.append(word)
+        #     elif preceding_words.strip() == "IM IN YR":
+        #         loop_ident.append(word)
+        #     elif preceding_words.strip() == "I HAS A":
+        #         var_ident.append(word)
 
     ### FOR PRINTING ###
     print("\nLexical Analyzer:\n")
