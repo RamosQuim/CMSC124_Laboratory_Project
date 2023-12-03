@@ -67,51 +67,40 @@ def lex(string):
     symbol_table = []
 
     ##### FOR IDENTIFIER
-    pattern = r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b(.*[^"\n]*)' #regex to catch the preceding words before the match word and also the match word
-    
-    # pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b(.*)'
-
-    
-    #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
-    # \b capture the whole word
-    # (?![A-Z]+\b) exclude all uppercase word (.*)?
-    # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
-    # pattern =r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^"\n]*)$'
-
-
-
-    # matches = re.findall(pattern, string, re.MULTILINE) #find all that matches the pattern in the string
-    # pattern = r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^"\n]*)$'
+    # pattern = r'^([^\n"]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b(.*[^"\n]*)' #regex to catch the preceding words before the match word and also the match word
+    # pattern = r'^([^\n"]*)\b(?![A-Z]+\b(?:' + '|'.join(re.escape(keyword) for keyword in keywords.keys()) + r'))([A-Za-z][A-Z0-9_]*)\b(.*[^"\n]*)'
+    pattern = r'^([^\n]*[^"])\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^\n]*)'
     matches = re.findall(pattern, string, re.MULTILINE)
 
-    print(matches)
+    # print(matches)
     for match in matches:
         
         preceding_words = match[0].strip()
         
         word = match[1]
-        next_words = match[2].strip()
-        # print(word)
-        # print(preceding_words)
-        if next_words != " ":
-            if next_words[0:3] == "ITZ":
-                var_value = []
-                possible_val = next_words[3:].strip()
-                var_value.append(word)
-                var_value.append(possible_val.replace('"', ''))
-                symbol_table.append(var_value)
-       
-        #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
+         #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
         check = 0 #check kung 'yung word is nasa keywords since dapat is hindi
                 
         for keyword in keywords:
             if keyword == word:
-                matches.remove(word)
+                # matches.remove(word)
                 check = 1
                 break
 
         if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
-            if preceding_words == "HOW IZ I" or preceding_words == "YR AN": 
+            next_words = match[2].strip()
+        # print(word)
+        # print(preceding_words)
+            if next_words != " ":
+                if next_words[0:3] == "ITZ":
+                    var_value = []
+                    possible_val = next_words[3:].strip()
+                    var_value.append(word)
+                    var_value.append(possible_val.replace('"', ''))
+                    symbol_table.append(var_value)
+            
+            
+            if preceding_words.strip() == "HOW IZ I" or preceding_words[len(preceding_words)-5:].strip() == "YR AN": 
                 function_ident.append(word)
             elif (preceding_words == "IM IN YR" or preceding_words == "UPPIN YR") or (preceding_words[len(preceding_words)-9:].strip() == "UPPIN YR" or preceding_words[len(preceding_words)-9:].strip() == "IM IN YR"):
                 loop_ident.append(word)
@@ -124,9 +113,11 @@ def lex(string):
                     if j[0] == word:
                         c = 1
                         temp.append(j[1])
+
                         # print(j[1])
 
                 if c == 0:
+                    # print(word)
                     temp.append(word.replace('"', ''))
                 # if len(preceding_words) > 8:
                 #     w = preceding_words[7:].strip()
@@ -136,7 +127,10 @@ def lex(string):
 
                 while 1:
                     pre = preceding_words
-                    x = re.findall(pattern, pre)
+                    # print(pre)
+                    pt = r'^([^\n]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^\n]*)'
+                    x = re.findall(pt, pre)
+                    # print(x)
                     for a in x:
                         preceding_words = a[0]
                         word = a[1]
@@ -149,9 +143,10 @@ def lex(string):
                                 if j[0] == word:
                                     c = 1
                                     temp.append(j[1])
-                                    print(j[1])
+                                    # print(j[1])
 
                             if c == 0:
+                                print(word)
                                 temp.append(word.replace('"', ''))
                     if x == []:
                         it.append(temp)
@@ -162,8 +157,10 @@ def lex(string):
             while 1:
                 pre = preceding_words
                 x = re.findall(pattern, pre)
+                # print(x)
                 for a in x:
                     preceding_words = a[0].strip()
+                    # print(preceding_words[len(preceding_words)-5:])
                     word = a[1]
                     next_words = a[2].strip()
                     if next_words != " ":
@@ -176,7 +173,7 @@ def lex(string):
                             # print(f"value for {word} is {possible_val}")
                             symbol_table.append(var_value)
 
-                    if preceding_words.strip() == "HOW IZ I" or preceding_words.strip() == "YR AN": 
+                    if preceding_words.strip() == "HOW IZ I" or preceding_words[len(preceding_words)-5:].strip() == "YR AN": 
                         function_ident.append(word)
                     elif (preceding_words.strip() == "IM IN YR" or preceding_words.strip() == "UPPIN YR") or (preceding_words[len(preceding_words)-9:].strip() == "UPPIN YR" or preceding_words[len(preceding_words)-9:].strip() == "IM IN YR"):
                         loop_ident.append(word)
@@ -197,7 +194,8 @@ def lex(string):
 
                         while 1:
                             pr = preceding_words
-                            y = re.findall(pattern, pr)
+                            pt = r'^([^\n]*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*|[A-Za-z])\b([^\n]*)'
+                            y = re.findall(pt, pr)
                             for b in y:
                                 preceding_words = b[0]
                                 wd = b[1]
@@ -216,12 +214,6 @@ def lex(string):
                             if y == []:
                                 it.append(temp)
                                 break
-
-                                
-                        
-
-                        
-                        
                 if x == []:
                     break
                 # print(x)  
@@ -244,11 +236,12 @@ def lex(string):
     
     for i in it:
         j = ""
-        for k in range(len(i)):
+        for k in range(len(i)-1, -1, -1):
+            # print(k)
             j += i[k]
             j += " "
             
-        print(f"identifier: IT \t value: {j}")
+        print(f"identifier: IT \t\t value: {j}")
                 
 
     
