@@ -181,7 +181,7 @@ def lex(string):
                                     # print(j[1])
 
                             if c == 0:
-                                print(word)
+                                # print(word)
                                 temp.append(word.replace('"', ''))
                     if x == []:
                         it.append(temp)
@@ -251,6 +251,7 @@ def lex(string):
                                 break
                 if x == []:
                     break
+                
                 # print(x)  
     ### FOR PRINTING ###
     print("\nLexical Analyzer:\n")
