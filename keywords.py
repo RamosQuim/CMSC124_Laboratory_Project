@@ -18,6 +18,7 @@ class LOLLexer:
             current_value = self.source_code[self.current_position:self.current_position + 10]
             
             token = self.match_token()
+
             if token is not None:
                 self.tokens.append(token) #appends the token to the tokens list
             else:
@@ -102,9 +103,9 @@ token_patterns = {
     r'\s*(NUMBR|NUMBAR|YARN|TROOF|NOOB)\s' : 'Type Literal',  
     r'\s*(WIN|FAIL)\s*': 'TROOF Literal',                 
     r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*': 'Identifier',           
-    r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s': 'NUMBAR Literal',  
+    r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
     r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
-    r'\s*\"[^\"]*\"\s*': 'YARN literal',                  
+    r'\s*\"[^\"]*\"\s*': 'YARN Literal',                  
 }
 
 def lex(str):
@@ -114,10 +115,11 @@ def lex(str):
         tokens = lexer.tokenize()
         
         for i in range(0, len(tokens)):
+            
             temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
             val = temp.lstrip()
 
-            if val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
+            if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
                 new = Token('String Delimiter', '"')
                 tokens[i].value = val[1:-1]
                 tokens.insert(i, new)
@@ -137,12 +139,14 @@ def lex(str):
             
                 
 
-        print('\n\nTokens:')
+        # print('\n\nTokens:')
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
 
         return compiled_lex
 
+def connect_UI(str):
+    return lex(str)
 
 #for accepting many input lines from user
 def main():
@@ -160,7 +164,7 @@ def main():
         str += line
         # array_words.append(str.strip('\n'))
 
-    for string in lex(str):
-        print(f'{string[0]} is a {string[1]}')
-    
-main()
+    return str
+    # for string in lex(str):
+    #     print(f'{string[0]} is a {string[1]}')
+#main()
