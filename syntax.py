@@ -183,130 +183,6 @@ for h in range(0, len(lines)):
                             break
                     else:
                         break
-                # ##BOOLEAN SYNTAX - BOTH OF
-                # if lexeme[i][0] == "BOTH OF":
-                #     if len(lexeme) > 4 or len(lexeme) <= 3:
-                #         success = 0
-                #         print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                #         break
-                #     elif len(lexeme) == 4:
-                #         if lexeme[i+1][0] != 'WIN':
-                #             if lexeme[i+1][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #         elif lexeme[i+1][0] != 'FAIL':
-                #             if lexeme[i+1][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                        
-                #         if lexeme[i+2][0] != 'AN':
-                #             success = 0
-                #             print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
-                #             break
-                    
-                #         if lexeme[i+3][0] != 'WIN':
-                #             if lexeme[i+3][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #             break
-                #         elif lexeme[i+3][0] != 'FAIL':
-                #             if lexeme[i+3][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #             break
-                ##BOOLEAN SYNTAX - EITHER OF
-                # if lexeme[i][0] == "EITHER OF":
-                #     if len(lexeme) > 4 or len(lexeme) <= 3:
-                #         success = 0
-                #         print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                #         break
-                #     elif len(lexeme) == 4:
-                #         if lexeme[i+1][0] != 'WIN':
-                #             if lexeme[i+1][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #         elif lexeme[i+1][0] != 'FAIL':
-                #             if lexeme[i+1][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                        
-                #         if lexeme[i+2][0] != 'AN':
-                #             success = 0
-                #             print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
-                #             break
-                    
-                #         if lexeme[i+3][0] != 'WIN':
-                #             if lexeme[i+3][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #             break
-                #         elif lexeme[i+3][0] != 'FAIL':
-                #             if lexeme[i+3][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #             break
-                
-                # ##BOOLEAN SYNTAX - WON OF
-                # if lexeme[i][0] == "WON OF":
-                #     if len(lexeme) > 4 or len(lexeme) <= 3:
-                #         success = 0
-                #         print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                #         break
-                #     elif len(lexeme) == 4:
-                #         if lexeme[i+1][0] != 'WIN':
-                #             if lexeme[i+1][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #         elif lexeme[i+1][0] != 'FAIL':
-                #             if lexeme[i+1][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                        
-                #         if lexeme[i+2][0] != 'AN':
-                #             success = 0
-                #             print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
-                #             break
-                    
-                #         if lexeme[i+3][0] != 'WIN':
-                #             if lexeme[i+3][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #             break
-                #         elif lexeme[i+3][0] != 'FAIL':
-                #             if lexeme[i+3][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #             break
-                
-                # ##BOOLEAN SYNTAX - NOT
-                # if lexeme[i][0] == "NOT":
-                #     if len(lexeme) > 3 or len(lexeme) < 2: 
-                #         success = 0
-                #         print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tNOT [WIN|FAIL]')
-                #         break
-                #     elif len(lexeme) == 2:
-                #         if lexeme[i+1][0] != 'WIN':
-                #             if lexeme[i+1][0] != 'FAIL':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
-                #         elif lexeme[i+1][0] != 'FAIL':
-                #             if lexeme[i+1][0] != 'WIN':
-                #                 success = 0
-                #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                #                 break
 
                 ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
                 if lexeme[i][0] == 'ALL OF':
@@ -592,6 +468,131 @@ for h in range(0, len(lines)):
                             break
                     break
 
+                ##BOOLEAN SYNTAX - BOTH OF
+                if lexeme[i][0] == "BOTH OF":
+                    if len(lexeme) > 4 or len(lexeme) <= 3:
+                        success = 0
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                        break
+                    elif len(lexeme) == 4:
+                        if lexeme[i+1][0] != 'WIN':
+                            if lexeme[i+1][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        elif lexeme[i+1][0] != 'FAIL':
+                            if lexeme[i+1][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        
+                        if lexeme[i+2][0] != 'AN':
+                            success = 0
+                            print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
+                            break
+                    
+                        if lexeme[i+3][0] != 'WIN':
+                            if lexeme[i+3][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                            break
+                        elif lexeme[i+3][0] != 'FAIL':
+                            if lexeme[i+3][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                            break
+                #BOOLEAN SYNTAX - EITHER OF
+                if lexeme[i][0] == "EITHER OF":
+                    if len(lexeme) > 4 or len(lexeme) <= 3:
+                        success = 0
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                        break
+                    elif len(lexeme) == 4:
+                        if lexeme[i+1][0] != 'WIN':
+                            if lexeme[i+1][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        elif lexeme[i+1][0] != 'FAIL':
+                            if lexeme[i+1][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        
+                        if lexeme[i+2][0] != 'AN':
+                            success = 0
+                            print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
+                            break
+                    
+                        if lexeme[i+3][0] != 'WIN':
+                            if lexeme[i+3][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                            break
+                        elif lexeme[i+3][0] != 'FAIL':
+                            if lexeme[i+3][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                            break
+                
+                ##BOOLEAN SYNTAX - WON OF
+                if lexeme[i][0] == "WON OF":
+                    if len(lexeme) > 4 or len(lexeme) <= 3:
+                        success = 0
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                        break
+                    elif len(lexeme) == 4:
+                        if lexeme[i+1][0] != 'WIN':
+                            if lexeme[i+1][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        elif lexeme[i+1][0] != 'FAIL':
+                            if lexeme[i+1][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        
+                        if lexeme[i+2][0] != 'AN':
+                            success = 0
+                            print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
+                            break
+                    
+                        if lexeme[i+3][0] != 'WIN':
+                            if lexeme[i+3][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                            break
+                        elif lexeme[i+3][0] != 'FAIL':
+                            if lexeme[i+3][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                            break
+                
+                ##BOOLEAN SYNTAX - NOT
+                if lexeme[i][0] == "NOT":
+                    if len(lexeme) > 3 or len(lexeme) < 2: 
+                        success = 0
+                        print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tNOT [WIN|FAIL]')
+                        break
+                    elif len(lexeme) == 2:
+                        if lexeme[i+1][0] != 'WIN':
+                            if lexeme[i+1][0] != 'FAIL':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+                        elif lexeme[i+1][0] != 'FAIL':
+                            if lexeme[i+1][0] != 'WIN':
+                                success = 0
+                                print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                break
+
                 ## CONCATENATION BLOCK SYNTAX - SMOOSH
                 if lexeme[i][0] == 'SMOOSH':
                     if len(lexeme) <= 2 or len(lexeme)%2 == 1:
@@ -604,8 +605,9 @@ for h in range(0, len(lines)):
                             print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not declared.')
                             break
                     else:
+                        print(lexeme)
                         for j in range(0, int((len(lexeme)-2)/2)):
-                            if lexeme[(j+1)*2][0] != 'AN':
+                            if lexeme[(j+1)*2][0] != 'AN' and lexeme[(j+1)*2][0] != '"':
                                 success = 0
                                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[(j+1)*2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
                                 break
