@@ -1,207 +1,229 @@
 import re
 import sys
 
-# try to run this python code
+compiled_lex = []
+symbol_table = []
 
-keywords = {
-    'HAI': 'Code Delimiter', 
-    'KTHXBYE': 'Code Delimiter', 
-    'WAZZUP': 'Function Block Delimiter', 
-    'BUHBYE': 'Function Block Delimiter', 
-    'BTW': 'Comment Identifier', 
-    'OBTW': 'Multi-line Comment Delimiter', 
-    'TLDR': 'Multi-line Comment Delimiter', 
-    'I HAS A': 'Variable Declaration',
-    'ITZ': 'Variable Assignment', 
-    'R': 'Assignment Operator', 
-    'AN': 'Identifier Delimiter',
-    'SUM OF': 'Arithmetic Keyword', 
-    'DIFF OF': 'Arithmetic Keyword', 
-    'PRODUKT OF': 'Arithmetic Keyword', 
-    'QUOSHUNT OF': 'Arithmetic Keyword', 
-    'MOD OF': 'Arithmetic Keyword', 
-    'BIGGR OF': 'Arithmetic Keyword', 
-    'SMALLR OF': 'Arithmetic Keyword', 
-    'BOTH OF': 'Boolean Keyword', 
-    'EITHER OF': 'Boolean Keyword', 
-    'WON OF': 'Boolean Keyword', 
-    'NOT': 'Boolean Keyword',
-    'ANY OF': 'Boolean Keyword', 
-    'ALL OF': 'Boolean Keyword', 
-    'BOTH SAEM': 'Comparison Keyword', 
-    'DIFFRINT': 'Comparison Keyword', 
-    'SMOOSH': 'Concatenation Delimiter', 
-    'MAEK': 'Typecasting Operator', 
-    'A': 'Typecasting Declaration', 
-    'IS NOW A': 'Re-casting Declaration',
-    'VISIBLE': 'Output Keyword', 
-    'GIMMEH': 'Input Keyword', 
-    'O RLY?': 'Flow-control Delimiter', 
-    'YA RLY': 'If Delimiter', 
-    'MEBBE': 'Else-if Delimiter', 
-    'NO WAI': 'Else Delimiter', 
-    'OIC': 'Flow-control Delimiter', 
-    'WTF?': 'Flow-control Delimiter', 
-    'OMG': 'Switch-case Delimiter',
-    'OMGWTF': 'Switch-case Delimiter', 
-    'IM IN YR': 'Loop Delimiter', 
-    'UPPIN': 'Loop Operator', 
-    'NERFIN': 'Loop Operator', 
-    'YR': 'Code Delimiter', 
-    'TIL': 'Iteration Keyword', 
-    'WILE': 'Iteration Keyword', 
-    'IM OUTTA YR': 'Loop Delimiter',
-    'HOW IZ I': 'Function Delimiter', 
-    'IF U SAY SO': 'Function Delimiter', 
-    'GTFO': 'Break Keyword', 
-    'FOUND YR': 'Function Return Keyword', 
-    'I IZ': 'Function Call Keyword', 
-    'MKAY': 'Concatenation Delimiter'
+
+class LOLLexer:
+    def __init__(self, source_code_file):
+        self.source_code = source_code_file
+        self.tokens = []
+        self.current_position = 0
+
+    #
+    def tokenize(self):
+        while self.current_position < len(self.source_code):
+            # print(f"Current position: {self.current_position}")
+            
+            # Print the current value at the position
+            current_value = self.source_code[self.current_position:self.current_position + 10]
+            
+            token = self.match_token()
+
+            if token is not None:
+                self.tokens.append(token) #appends the token to the tokens list
+            else:
+                raise SyntaxError(f"Invalid token at position {self.current_position}")
+        return self.tokens
+
+
+    #responsible for the actual checking and matching in regex
+    def match_token(self):
+        for pattern, token_type in token_patterns.items():
+            match = re.match(pattern, self.source_code[self.current_position:]) #checks if it matches any pattern in the token_patters
+            if match:
+                value = match.group(0)
+                self.current_position += len(value)
+                return Token(token_type, value)     #returns the Token
+        return None
+
+class Token:
+    def __init__(self, type, value):
+        self.type = type
+        self.value = value
+
+# Updated LOLCODE token patterns to allow for indentation
+token_patterns = {
+
+    # Keywords [<type>, <classification>]
+    r'\s*HAI\s+': 'Code Delimiter',
+    r'\s*KTHXBYE\s+': 'Code Delimiter',
+    r'\s*WAZZUP\s+': 'Variable Declaration Delimiter',
+    r'\s*BUHBYE\s+': 'Variable Declaration Delimiter',
+    r'((\s*BTW .*)|( BTW .*))': 'Comment Line',
+    r'\s*OBTW\s+': 'Comment Delimiter',
+    r'\s*TLDR\s+': 'Comment Delimiter',
+    r'\s*I HAS A\s+': 'Variable Declaration',
+    r'\s*ITZ\s+': 'Variable Assignment',
+    r'\s*R\s+': 'Variable Assignment',
+    r'\s*AN\s+': 'Parameter Delimiter',                                   
+    r'\s*SUM OF\s+': 'Arithmetic Operation',
+    r'\s*DIFF OF\s+': 'Arithmetic Operation',
+    r'\s*PRODUKT OF\s+': 'Arithmetic Operation',
+    r'\s*QUOSHUNT OF\s+': 'Arithmetic Operation',
+    r'\s*BIGGER OF\s+': 'Arithmetic Operation',
+    r'\s*SMALLR OF\s+': 'Arithmetic Operation',
+    r'\s*BOTH OF\s+': 'Boolean Operation',
+    r'\s*EITHER OF\s+': 'Boolean Operation',
+    r'\s*WON OF\s+': 'Boolean Operation',
+    r'\s*NOT\s+': 'Boolean Operation',
+    r'\s*ANY OF\s+': 'Boolean Operation',
+    r'\s*ALL OF\s+': 'Boolean Operation',
+    r'\s*BOTH SAEM\s+': 'Comparison Operation',
+    r'\s*DIFFRINT\s+': 'Comparison Operation',
+    r'\s*SMOOSH\s+': 'String Contatenation',
+    r'\s*MAEK\s+': 'Typecasting Operation',
+    r'\s*A\s+': 'Typecasting Operation',                   
+    r'\s*IS NOW A\s+': 'Typecasting Operation',
+    r'\s*VISIBLE\s+': 'Output Keyword',
+    r'\s*GIMMEH\s+': 'Input Keyword',
+    r'\s*O\sRLY\?\s+': 'If-then Keyword',
+    r'\s*YA RLY\s+': 'If-then Keyword',
+    r'\s*MEBBE\s+': 'If-then Keyword',
+    r'\s*NO WAI\s+': 'If-then Keyword',
+    r'\s*OIC\s+': 'If-then Keyword',
+    r'\s*WTF\?\s+': 'Switch-Case Keyword',
+    r'\s*OMG\s+': 'Switch-Case Keyword',
+    r'\s*OMG WTF\s+': 'Switch-Case Keyword',
+    r'\s*IM IN YR\s+': 'Loop Keyword',
+    r'\s*UPPIN\s+': 'Loop Operation',
+    r'\s*NERFIN\s+': 'Loop Operation',
+    r'\s*YR\s+': 'Parameter Delimiter',
+    r'\s*TIL\s+': 'Loop Keyword',
+    r'\s*WILE\s+': 'Loop Keyword',
+    r'\s*IM OUTTA YR\s+': 'Loop Keyword',
+    r'\s*HOW IZ I\s+': 'Function Keyword',
+    r'\s*IF U SAY SO\s+': 'Function Keyword',
+    r'\s*GTFO\s+': 'Return Keyword',
+    r'\s*FOUND YR\s+': 'Return keyword',
+    r'\s*I IZ\s+': 'Function Call',
+    r'\s*MKAY\s+': 'Concatenation Delimiter',                              
+    r'\s*NOOB\s+': 'Void Literal',
+
+    # Literals and variable identifiers
+    r'\s*(NUMBR|NUMBAR|YARN|TROOF|NOOB)\s' : 'Type Literal',  
+    r'\s*(WIN|FAIL)\s*': 'TROOF Literal',                 
+    r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*': 'Identifier',           
+    r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
+    r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
+    r'\s*\"[^\"]*\"\s*': 'YARN Literal',                  
 }
 
-#this part will be responsible for sending content to the UI
-
-def connect_UI(TextInputs):
-    print(TextInputs)
-    # so ipapasa na dito yung values from the text file :>
-    results = lex(TextInputs)
-    print(f"results:{results}")
-    return results
-
-
-def lex(string):
-    spans = []
-    storage = []
-    var_ident = []
-    loop_ident = []
-    function_ident = []
-    comment = []
-    literal = []
-    allMatches = []
-    dupes = []
-    
-    ##### FOR IDENTIFIER ##### kulang pa kapag more than 2 identifiers
-    pattern = r'(.*)\b(?![A-Z]+\b)([A-Za-z][A-Z|a-z|0-9|\_]*)\b' #regex to catch the preceding words before the match word and also the match word
-    commentPattern = r'BTW.*'
-    #(.*): This is a capturing group that matches any character (.) zero or more times (*). The .* part captures everything on the line (greedily).
-    # \b capture the whole word
-    # (?![A-Z]+\b) exclude all uppercase word
-    # ([A-Za-z][A-Z|a-z|0-9|\_]*) para sa identifier
-    literalPattern = r'(\".*\")|\b(0(\.[0-9]+|-0.[0-9]*[1-9]+[0-9]*)?|-?[1-9][0-9]*(\.[0-9]+)?)\b|\b(WIN|LOSE|NUMBR|NUMBAR|YARN|TROOF)\b'
-    compiled_lexs = []
-
-    
-    for keyword in keywords:
-        x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
-
-        for found in x.finditer(string):
-            spans.append(found.span())
-            spans = sorted(spans, key=lambda a: (a[0], a[1]))
-
-    matches = re.compile(pattern) #find all that matches the pattern in the string
-    for found in matches.finditer(string):
-        if found.group()[0:3] != 'BTW':
-            allMatches.append(found.groups())
-            spans.append(found.span())
-            spans = sorted(spans, key=lambda a: (a[1]))
-
-    commentMatch = re.compile(commentPattern)
-    for found in commentMatch.finditer(string):
-        allMatches.append((found.group()[0:3], found.group()[4:len(found.group())]))
-        spans.append(found.span())
-        spans = sorted(spans, key=lambda a: (a[1]))
+def lex(str):
+    code = str
+    if code.strip() != "":  # to avoid error when there is no input
+        lexer = LOLLexer(code)
+        tokens = lexer.tokenize()
         
-
-    literalMatch = re.compile(literalPattern)
-    for found in literalMatch.finditer(string):
-        literal.append(found.group())
-        spans.append(found.span())
-        spans = sorted(spans, key=lambda a: (a[1]))
-          
-
-    for i in range(0, len(spans)):
-        if i != (len(spans)-2) and len(spans)>2:
-            if spans[i][1] == spans[i+1][1]:
-                dupes.append(spans[i+1])
-        else:
-            break
-
-    for dupe in dupes:
-        spans.remove(dupe)
-
-    for span in spans:  # this is for arranging the found keywords based on string input
-        for keyword in keywords:
-            x = re.compile(r'\b'+keyword+r'\b') # regex for keywords
-            for found in x.finditer(string):
-                if span == found.span():
-                    storage.append(keyword)
+        for i in range(0, len(tokens)):
             
-        for found in matches.finditer(string):
-            if span == found.span():
-                storage.append(found.groups()[1])
-        
-        for found in commentMatch.finditer(string):
-            if span == found.span():
-                storage.append(found.group()[4:len(found.group())])
-        
-        for found in literalMatch.finditer(string):
-            if span == found.span():
-                storage.append(found.group())
-    
-    for match in allMatches:
-        preceding_words, word = match #unpack or hinihiwalay niya 'yung nacatch ng regex since ang regex
-        #kinacatch niya is 'yung preceding words sa line kung saan andon 'yung identifier, so sa matches ganito siya (<preceding>, <match word>)
-        check =0 #check kung 'yung word is nasa keywords since dapat is hindi
-        for keyword in keywords:
-            if keyword == word:
-                matches.remove(word)
-                check = 1
-                break
+            temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
+            val = temp.lstrip()
 
-        if check == 0: #if wala siya sa keywords, check 'yung preceding phrase in the same line of the word to identify what identifier the word is
-            if preceding_words.strip() == "HOW IZ I" or preceding_words.strip() == "I IZ": 
-                function_ident.append(word)
-            elif preceding_words.strip() == "IM IN YR":
-                loop_ident.append(word)
-            elif preceding_words.strip() == "I HAS A":
-                var_ident.append(word)
-            elif preceding_words == "BTW":
-                comment.append(word)
+            # print(tokens[i+1].value)
+            
+            # print(temp)
+
+            if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
+                new = Token('String Delimiter', '"')
+                tokens[i].value = val[1:-1]
+                tokens.insert(i, new)
+                tokens.insert(i+2, new)
+            elif 'BTW' in val:
+                tokens[i].value = val[4:]
+                comment = Token('Comment Delimiter', 'BTW')
+                tokens.insert(i, comment)
+            
+            if tokens[i].type == 'Identifier':
+                print(f"before: {tokens[i-1].value} word: {tokens[i].value}")
+                if tokens[i-1].value.rstrip().lstrip() == 'I HAS A':
+                    tokens[i].type = 'Variable Identifier'
+                    
+                elif tokens[i-1].value.rstrip().lstrip() == 'IM IN YR':
+                    tokens[i].type = 'Loop Identifier'
+                elif tokens[i-1].value.rstrip().lstrip() == 'HOW IZ I' or tokens[i-1].value == 'I IZ':
+                    tokens[i].type = 'Function Identifier'
+
+                
+            
+                
+
+        # print('\n\nTokens:')
+        for token in tokens:
+            compiled_lex.append([token.value.rstrip().lstrip(), token.type])
+
+        return compiled_lex
     
-    ### FOR PRINTING ###
-    print("\nLexical Analyzer:\n")
-    for i in storage:
-        if i in keywords:
-            print(i, 'is a', keywords[i])
-            compiled_lexs.append([f"{i}",f"{keywords[i]}"])
-        else:
-            if i in loop_ident:
-                print(i, "is a Loop Identifier")
-                compiled_lexs.append([f"{i}","Loop Identifier"])
-            elif i in var_ident:
-                print(i, "is a Variable Identifier")
-                compiled_lexs.append([f"{i}","Variable Identifier"])
-            elif i in function_ident:
-                print(i, "is a Function Identifier") 
-                compiled_lexs.append([f"{i}","Function Identifier"])
-            elif i in literal:
-                if i[0] == '"':
-                    print(i[0], "is a String Delimiter")
-                    compiled_lexs.append([f"{i[0]}","String Delimiter"])
-                    if i[-1] == '"':
-                        print(i[1:-1], "is a Literal")
-                        print(i[-1], "is a String Delimiter")
-                        compiled_lexs.append([f"{i[1:-1]}","Literal"])
-                        compiled_lexs.append([f"{i[-1]}","String Delimiter"])
+def symbolTable(str):
+    it = []
+    # print(lex(str))
+
+    for token in lex(str):
+        if token[1].rstrip().lstrip() == 'Variable Identifier':
+            arr = []
+            matches = re.finditer(r'I HAS A \b'+token[0]+r'\b', str)
+            last_occurrence_startIndex = -1
+            end_index = -1
+            for match in matches:
+                last_occurrence_startIndex = match.start()
+                end_index = match.end()
+
+            if str[end_index+1:end_index+4].rstrip().lstrip() == "ITZ":
+                whole = str[end_index+5:]
+                value = re.match(r'(.*)[^\n]*',whole)[0]
+                if len(symbol_table) == 0:
+                    arr.append(token[0])
+                    arr.append(value)
+                    symbol_table.append(arr)
                 else:
-                    print(i, "is a Literal")
-                    compiled_lexs.append([f"{i}","Literal"])
-            elif i in comment:
-                print(i, "is a Comment")
-                compiled_lexs.append([f"{i}","Comment"])
+                    for i in symbol_table:
+                        if i[0] != token[0]:
 
-    return compiled_lexs
+                            arr.append(token[0])
+                            arr.append(value)
+                            symbol_table.append(arr)
+                        else:
+                            break
 
+        elif token[0].rstrip().lstrip() == 'VISIBLE':
+            if len(it) == 0:
+
+                matches = re.finditer(r'\b'+token[0]+r'\b', str)
+                for match in matches:
+                    last_occurrence_startIndex = match.start()
+                    end_index = match.end()
+                    whole = str[end_index+1:]
+                    value = (re.match(r'(.*)[^ \n]*',whole)[0]).split()
+                    temp = []
+                    for v in value:
+                        c = 0
+                        if v[0] == '"' and v[len(v)-1] == '"':
+                            temp.append(v)
+                        else:
+                            for j in symbol_table:
+                                if j[0].split() == v.split():
+                                    c = 1
+                                    temp.append(j[1])
+                                    break
+                    it.append(temp)
+
+    j = ""   
+    for k in it[len(it)-1:len(it)]:
+        for i in range(0, len(k)):
+            j += k[i]
+            j += " "
+    
+    symbol_table.insert(0, ['IT', j])
+
+    
+    print("\nSymbol table:")
+    for j in symbol_table:
+        print(f"identifier: {j[0]}          value: {j[1]}")
+
+
+def connect_UI(str):
+    return lex(str)
 
 #for accepting many input lines from user
 def main():
@@ -219,4 +241,8 @@ def main():
         str += line
         # array_words.append(str.strip('\n'))
 
-    # print(arr)
+    # return str
+    # for string in lex(str):
+    #     print(f'{string[0]} is a {string[1]}')
+    symbolTable(str)
+main()
