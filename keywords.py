@@ -135,15 +135,15 @@ def lex(str):
                 comment = Token('Comment Delimiter', 'BTW')
                 tokens.insert(i, comment)
             
-            if tokens[i].type == 'Identifier':
-                print(f"before: {tokens[i-1].value} word: {tokens[i].value}")
-                if tokens[i-1].value.rstrip().lstrip() == 'I HAS A':
-                    tokens[i].type = 'Variable Identifier'
-                    
-                elif tokens[i-1].value.rstrip().lstrip() == 'IM IN YR':
-                    tokens[i].type = 'Loop Identifier'
-                elif tokens[i-1].value.rstrip().lstrip() == 'HOW IZ I' or tokens[i-1].value == 'I IZ':
-                    tokens[i].type = 'Function Identifier'
+            if tokens[i].type == 'Variable Declaration':
+                if tokens[i+1].type == 'Identifier':
+                    tokens[i+1].type = 'Variable Identifier'
+            elif tokens[i].type == 'Loop Keyword':
+                if tokens[i+1].type == 'Identifier':
+                    tokens[i+1].type = 'Loop Identifier'
+            elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
+                if tokens[i+1].type == 'Identifier':
+                    tokens[i+1].type = 'Function Identifier'
 
                 
             
@@ -152,7 +152,7 @@ def lex(str):
         # print('\n\nTokens:')
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
-
+        print(compiled_lex)
         return compiled_lex
     
 def symbolTable(str):
