@@ -135,15 +135,16 @@ def lex(str):
                 comment = Token('Comment Delimiter', 'BTW')
                 tokens.insert(i, comment)
             
-            if tokens[i].type == 'Variable Declaration':
-                if tokens[i+1].type == 'Identifier':
-                    tokens[i+1].type = 'Variable Identifier'
-            elif tokens[i].type == 'Loop Keyword':
-                if tokens[i+1].type == 'Identifier':
-                    tokens[i+1].type = 'Loop Identifier'
-            elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
-                if tokens[i+1].type == 'Identifier':
-                    tokens[i+1].type = 'Function Identifier'
+            if i != len(tokens):
+                if tokens[i].type == 'Variable Declaration':
+                    if tokens[i+1].type == 'Identifier':
+                        tokens[i+1].type = 'Variable Identifier'
+                elif tokens[i].type == 'Loop Keyword':
+                    if tokens[i+1].type == 'Identifier':
+                        tokens[i+1].type = 'Loop Identifier'
+                elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
+                    if tokens[i+1].type == 'Identifier':
+                        tokens[i+1].type = 'Function Identifier'
 
                 
             
