@@ -4,8 +4,10 @@ BTW this will print hello world
         VISIBLE "Hello, World"
         VISIBLE Hi,Crush
         VISIBLE 1234
+        VISIBLE
         UPPIN YR temp
     IF U SAY SO
-
     I IZ printHello1
+    SUM OF 12 AN 32
+    SUM OF "123" AN 123
 KTHXBYE
