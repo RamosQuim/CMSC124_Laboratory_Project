@@ -96,7 +96,26 @@ def syntax(text):
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <BUHBYE>: \n\tAlready has BUHBYE; it must be declared once')
                             success = 0
                             break
-                    
+                    # ## PRINTING
+                    # if lexeme[i][0] == 'VISIBLE':
+                    #     # if less than
+                    #     if len(lexeme) < 2:
+                    #         print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tVISIBLE must have a Variable Identifier, Literal, or an Expression')
+                    #     else:
+                    #         #VARIDENT
+                    #         if lexeme[i+1][1] != 'String Delimiter':
+                    #             #LITERAL
+                    #             if lexeme[i+1][0].isnumeric() == False:
+                    #                 #EXPRESSIONS
+                    #                 if lexeme[i+1][1] != 'Arithmetic Keyword' | lexeme[i+1][1] != 'Boolean Keyword' | lexeme[i+1][1] != 'Comparison Keyword':
+                    #                     print(f'>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tVISIBLE only accepts Variable Identifier, Literal, and Expression')
+                    #                     success = 0
+                    #         else:
+                    #             #condition para pag nakalimutan ng quotation sa dulo!
+                    #             if lexeme[i+3][1] != 'String Delimiter':
+                    #                 print(f'>> SyntaxError in line {h+1} near <{lexeme[i+3][1]}>: \n\tVariable Identifier ')
+                    #                 success = 0
+
                     ## COMPARISON SYNTAX - BOTH SAEM
                     if lexeme[i][0] == 'BOTH SAEM':
                         if len(lexeme) != 4 and len(lexeme) != 7:

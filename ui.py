@@ -8,6 +8,7 @@ from tkinter import filedialog as fd
 import ctypes as ct
 import keywords
 import syntax
+import semantics
 
 
 # this will readd the file and store the content in textEditor
@@ -40,17 +41,15 @@ def analyzetext():
 
     #this part will get all the input in the text editor
     textEditor_Content = textEditor.get("1.0", "end")
-    returned_value = keywords.connect_UI(textEditor_Content)
     symbols = keywords.symbolTable(textEditor_Content)
     # print(f"returned_value: {returned_value}")
-    results.append(returned_value)
+    results.append(keywords.lex(textEditor_Content))
     symbolsResults.append(symbols)
 
     #this part will show the newly added things!!
     for item in results:
         # print(f"item:{item}")
         for j in item:
-            # print(f"j:{j}")
             lexemes.insert("", "end", values=j)
     
     #this part will show the newly added things!!
@@ -59,8 +58,10 @@ def analyzetext():
         for j in item:
             # print(f"j:{j}")
             symbolTable.insert("", "end", values=j)
-    
-    console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
+    if syntax.syntax(textEditor_Content) != '>> No syntax errors.':
+        console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
+    else:
+        console.insert("end", semantics.semantics(textEditor_Content), ("centered",))
 
 
 root = tk.Tk()

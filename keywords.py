@@ -62,7 +62,7 @@ token_patterns = {
     r'\s*DIFF OF\s+': 'Arithmetic Operation',
     r'\s*PRODUKT OF\s+': 'Arithmetic Operation',
     r'\s*QUOSHUNT OF\s+': 'Arithmetic Operation',
-    r'\s*BIGGER OF\s+': 'Arithmetic Operation',
+    r'\s*BIGGR OF\s+': 'Arithmetic Operation',
     r'\s*SMALLR OF\s+': 'Arithmetic Operation',
     r'\s*BOTH OF\s+': 'Boolean Operation',
     r'\s*EITHER OF\s+': 'Boolean Operation',
@@ -111,6 +111,7 @@ token_patterns = {
 }
 
 def lex(str):
+    global compiled_lex
     code = str
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
@@ -145,10 +146,6 @@ def lex(str):
                 elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
                     if tokens[i+1].type == 'Identifier':
                         tokens[i+1].type = 'Function Identifier'
-
-                
-            
-                
 
         # print('\n\nTokens:')
         for token in tokens:
@@ -227,24 +224,24 @@ def symbolTable(str):
 def connect_UI(str):
     return lex(str)
 
-# for accepting many input lines from user
-def main():
-    # array_words = []
-    con = True
-    str = ""
-    while con:
-        line = sys.stdin.readline()
+# # for accepting many input lines from user
+# def main():
+#     # array_words = []
+#     con = True
+#     str = ""
+#     while con:
+#         line = sys.stdin.readline()
     
-        if line == "KTHXBYE\n": #if eto na-encounter mag stop sa pag-accept
-            con = False
-            str += line
-            # array_words.append(str.strip('\n'))
-            break
-        str += line
-        # array_words.append(str.strip('\n'))
+#         if line == "KTHXBYE\n": #if eto na-encounter mag stop sa pag-accept
+#             con = False
+#             str += line
+#             # array_words.append(str.strip('\n'))
+#             break
+#         str += line
+#         # array_words.append(str.strip('\n'))
 
-    return str
-    # for string in lex(str):
-    #     print(f'{string[0]} is a {string[1]}')
-    symbolTable(str)
-# main()
+#     return str
+#     # for string in lex(str):
+#     #     print(f'{string[0]} is a {string[1]}')
+#     symbolTable(str)
+# # main()
