@@ -329,6 +329,7 @@ for h in range(0, len(lines)):
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
                 if lexeme[i][0] == 'ANY OF':
                     boolean_index = 1
+                    print(f"lexeme: {lexeme}")
                     if len(lexeme) <= 5:
                         success = 0
                         print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
