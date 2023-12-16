@@ -632,6 +632,17 @@ def syntax(text):
                                         success = 0
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[((j+1)*2)+1][0]} is not declared.')
                                         break
+                                    
+                     #FOR VARIABLE ASSIGNMENT USING R
+                    if lexeme[i+1][1] == 'Variable Assignment':
+                        if lexeme[i][1] != 'Variable Identifier':
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i][0]} is not a variable identifier.')
+                            break
+                        elif lexeme[i+2][1] != 'Variable Identifier' or lexeme[i+2][1] != 'TROOF Literal' or lexeme[i+2][1] != 'NUMBAR Literal' or lexeme[i+2][1] != 'NUMBR Literal' or lexeme[i+2][1] != 'YARN Literal':
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
+                            break
 
                 else:
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')
