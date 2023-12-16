@@ -1,5 +1,8 @@
 import keywords
 
+#note: 
+#VARIABLE ASSIGNMENT USING R = wala pang syntax para sa expression
+
 def isfloat(num):
     try:
         float(num)
@@ -13,6 +16,7 @@ def syntax(text):
 
     comparison = ['BOTH SAEM', 'DIFFRINT']
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
+    varAssignment_literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
     varidents = []
     hasHai = -1
@@ -28,6 +32,7 @@ def syntax(text):
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
                 
             for i in range(0, len(lexeme)):
+                print(lexeme)
                 ## PROGRAM BLOCK SYNTAX - HAI
                 if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
                     hasHai = 0
@@ -633,16 +638,23 @@ def syntax(text):
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[((j+1)*2)+1][0]} is not declared.')
                                         break
                                     
-                     #FOR VARIABLE ASSIGNMENT USING R
-                    if lexeme[i+1][1] == 'Variable Assignment':
-                        if lexeme[i][1] != 'Variable Identifier':
+                    #  #FOR VARIABLE ASSIGNMENT USING R 
+                    #wala pang ano para sa expression
+                    if lexeme[i][1] == 'Variable Assignment':
+                        print(lexeme[i][0])
+                        print(lexeme[i+1][0])
+                        print(lexeme[i-1][1])
+                        if lexeme[i-1][1] != 'Identifier':
+                            if lexeme[i-1][1] != 'Variable Identifier':
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not an identifier.')
+                                break
+                        if lexeme[i+1][1] not in varAssignment_literals:
                             success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i][0]} is not a variable identifier.')
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
                             break
-                        elif lexeme[i+2][1] != 'Variable Identifier' or lexeme[i+2][1] != 'TROOF Literal' or lexeme[i+2][1] != 'NUMBAR Literal' or lexeme[i+2][1] != 'NUMBR Literal' or lexeme[i+2][1] != 'YARN Literal':
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
-                            break
+                        
+                       
 
                 else:
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')

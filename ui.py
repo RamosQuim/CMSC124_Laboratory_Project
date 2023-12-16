@@ -66,12 +66,8 @@ def analyzetext():
 
 root = tk.Tk()
 root.title("TayLOL Sheesh-terpreter")
-root.config(bg='#0c1818')
-root.resizable(False, False)
-root.update()
-set_window_attribute = ct.windll.dwmapi.DwmSetWindowAttribute
-get_parent = ct.windll.user32.GetParent
-set_window_attribute(get_parent(root.winfo_id()), 20, ct.byref(ct.c_int(2)), 4)
+root.configure(bg='#0c1818')
+root.geometry("800x600")  # Set your desired window size
 
 
 #this is the opening file button
