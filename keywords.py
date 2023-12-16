@@ -2,6 +2,8 @@ import re
 import sys
 
 compiled_lex = []
+symbol_table = []
+
 
 class LOLLexer:
     def __init__(self, source_code_file):
@@ -119,6 +121,10 @@ def lex(str):
             temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
             val = temp.lstrip()
 
+            # print(tokens[i+1].value)
+            
+            # print(temp)
+
             if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
                 new = Token('String Delimiter', '"')
                 tokens[i].value = val[1:-1]
@@ -129,26 +135,99 @@ def lex(str):
                 comment = Token('Comment Delimiter', 'BTW')
                 tokens.insert(i, comment)
             
-            if tokens[i].type == 'Identifier':
-                if tokens[i-1].value.rstrip().lstrip() == 'I HAS A':
-                    tokens[i].type = 'Variable Identifier'
-                elif tokens[i-1].value.rstrip().lstrip() == 'IM IN YR':
-                    tokens[i].type = 'Loop Identifier'
-                elif tokens[i-1].value.rstrip().lstrip() == 'HOW IZ I' or tokens[i-1].value == 'I IZ':
-                    tokens[i].type = 'Function Identifier'
+            if i != len(tokens):
+                if tokens[i].type == 'Variable Declaration':
+                    if tokens[i+1].type == 'Identifier':
+                        tokens[i+1].type = 'Variable Identifier'
+                elif tokens[i].type == 'Loop Keyword':
+                    if tokens[i+1].type == 'Identifier':
+                        tokens[i+1].type = 'Loop Identifier'
+                elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
+                    if tokens[i+1].type == 'Identifier':
+                        tokens[i+1].type = 'Function Identifier'
+
+                
             
                 
 
         # print('\n\nTokens:')
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
-
         return compiled_lex
+    
+def symbolTable(str):
+    it = []
+    # print(lex(str))
+
+    for token in lex(str):
+        if token[1].rstrip().lstrip() == 'Variable Identifier':
+            arr = []
+            matches = re.finditer(r'I HAS A \b'+token[0]+r'\b', str)
+            last_occurrence_startIndex = -1
+            end_index = -1
+            for match in matches:
+                last_occurrence_startIndex = match.start()
+                end_index = match.end()
+
+            if str[end_index+1:end_index+4].rstrip().lstrip() == "ITZ":
+                whole = str[end_index+5:]
+                value = re.match(r'(.*)[^\n]*',whole)[0]
+                if len(symbol_table) == 0:
+                    arr.append(token[0])
+                    arr.append(value)
+                    symbol_table.append(arr)
+                else:
+                    for i in symbol_table:
+                        if i[0] != token[0]:
+
+                            arr.append(token[0])
+                            arr.append(value)
+                            symbol_table.append(arr)
+                        else:
+                            break
+
+        elif token[0].rstrip().lstrip() == 'VISIBLE':
+            if len(it) == 0:
+
+                matches = re.finditer(r'\b'+token[0]+r'\b', str)
+                for match in matches:
+                    last_occurrence_startIndex = match.start()
+                    end_index = match.end()
+                    whole = str[end_index+1:]
+                    value = (re.match(r'(.*)[^ \n]*',whole)[0]).split()
+                    temp = []
+                    for v in value:
+                        c = 0
+                        if v[0] == '"' and v[len(v)-1] == '"':
+                            temp.append(v)
+                        else:
+                            for j in symbol_table:
+                                if j[0].split() == v.split():
+                                    c = 1
+                                    temp.append(j[1])
+                                    break
+                    it.append(temp)
+
+    j = ""   
+    for k in it[len(it)-1:len(it)]:
+        for i in range(0, len(k)):
+            j += k[i]
+            j += " "
+    
+    if len(it) != 0:
+        symbol_table.insert(0, ['IT', j])
+
+    
+    # print("\nSymbol table:")
+    # for j in symbol_table:
+    #     print(f"identifier: {j[0]}          value: {j[1]}")
+    return symbol_table
+
 
 def connect_UI(str):
     return lex(str)
 
-#for accepting many input lines from user
+# for accepting many input lines from user
 def main():
     # array_words = []
     con = True
@@ -167,4 +246,5 @@ def main():
     return str
     # for string in lex(str):
     #     print(f'{string[0]} is a {string[1]}')
-#main()
+    symbolTable(str)
+# main()

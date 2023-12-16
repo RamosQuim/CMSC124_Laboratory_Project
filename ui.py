@@ -7,6 +7,7 @@ from tkinter import scrolledtext
 from tkinter import filedialog as fd
 import ctypes as ct
 import keywords
+import syntax
 
 
 # this will readd the file and store the content in textEditor
@@ -22,23 +23,28 @@ def filename():
     textEditor.insert("end", file.read(), ("centered",))
    
     file.close()
-    analyzetext()
 
 
 #this will be responsible for
 def analyzetext():
     for row in lexemes.get_children():
         lexemes.delete(row)
+    
+    for row in symbolTable.get_children():
+        symbolTable.delete(row)
+    
+    console.delete("1.0", "end")
 
     results = []
+    symbolsResults = []
 
     #this part will get all the input in the text editor
     textEditor_Content = textEditor.get("1.0", "end")
     returned_value = keywords.connect_UI(textEditor_Content)
+    symbols = keywords.symbolTable(textEditor_Content)
     # print(f"returned_value: {returned_value}")
     results.append(returned_value)
-    # print(results)
-
+    symbolsResults.append(symbols)
 
     #this part will show the newly added things!!
     for item in results:
@@ -46,6 +52,15 @@ def analyzetext():
         for j in item:
             # print(f"j:{j}")
             lexemes.insert("", "end", values=j)
+    
+    #this part will show the newly added things!!
+    for item in symbolsResults:
+        # print(f"item:{item}")
+        for j in item:
+            # print(f"j:{j}")
+            symbolTable.insert("", "end", values=j)
+    
+    console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
 
 
 root = tk.Tk()
@@ -105,12 +120,12 @@ symbolTable.heading("identifier",text="Identifier",anchor=CENTER)
 symbolTable.heading("value",text="Value",anchor=CENTER)
 
 
-executeButton = tk.Button(root, text='EXECUTE', font=font.Font(size = 10), bd=1, bg='#365963', fg='white')
+executeButton = tk.Button(root, text='EXECUTE', font=font.Font(size = 10), bd=1, bg='#365963', fg='white',command=lambda:analyzetext())
 executeButton.grid(row=3, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
 
 
-text_area4 = scrolledtext.ScrolledText(root, wrap = tk.WORD, height = 15, fg='white', bg='#193433')
-text_area4.grid(row=4, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
+console = scrolledtext.ScrolledText(root, wrap = tk.WORD, height = 15, fg='white', bg='#193433')
+console.grid(row=4, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
 
 
 # style of tables
