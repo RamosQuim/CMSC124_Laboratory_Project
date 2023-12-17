@@ -1,8 +1,7 @@
 import re
 import sys
 
-compiled_lex = []
-symbol_table = []
+
 
 
 class LOLLexer:
@@ -111,7 +110,8 @@ token_patterns = {
 }
 
 def lex(str):
-    global compiled_lex
+    # global compiled_lex
+    compiled_lex = []
     code = str
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
@@ -150,10 +150,13 @@ def lex(str):
         # print('\n\nTokens:')
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
+        
+        print(compiled_lex)
         return compiled_lex
     
 def symbolTable(str):
     it = []
+    symbol_table = []
     # print(lex(str))
 
     for token in lex(str):
@@ -204,6 +207,7 @@ def symbolTable(str):
                                     temp.append(j[1])
                                     break
                     it.append(temp)
+                    temp.clear()
 
     j = ""   
     for k in it[len(it)-1:len(it)]:
@@ -218,11 +222,13 @@ def symbolTable(str):
     # print("\nSymbol table:")
     # for j in symbol_table:
     #     print(f"identifier: {j[0]}          value: {j[1]}")
+    it.clear()
     return symbol_table
 
 
 def connect_UI(str):
     return lex(str)
+    
 
 # # for accepting many input lines from user
 # def main():
