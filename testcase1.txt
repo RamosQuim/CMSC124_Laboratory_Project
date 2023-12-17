@@ -4,6 +4,8 @@ HAI
         I HAS A 123
         I HAS A var2 123 
         I HAS A var3 ITZ AN
+        I HAS A var1 ITZ 12
+		I HAS A var ITZ 123
     BUHBYE
     BOTH OF 
     BOTH OF GIMMEH AN FAIL
@@ -41,4 +43,21 @@ HAI
     ANY OF ALL OF BOTH OF WIN AN WIN AN BOTH OF WIN AN WIN MKAY
     BTW correct
     ANY OF NOT x AN BOTH OF y AN z AN EITHER OF x AN y MKAY
+
+    var1 R
+	var1 R var1
+	var1 R var
+	var1 R YARN
+	var R var1
+
+	MAEK var1 A NUMBAR
+	MAEK var1 YARN
+	MAEK var1
+	MAEK
+	MAEK var1 A
+	var1 R MAEK var1
+	var1 R MAEK var1 YARN
+	var1 R
+	var1 R MAEK
+	var1 R MAEK VAR YARN
 KTHXBYE

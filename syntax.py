@@ -61,7 +61,7 @@ def syntax(text):
                             success = 0
                             break
                     ## VARIABLE DECLARATION SYNTAX
-                    print(lexeme)
+                    # print(lexeme)
                     if lexeme[i][0] == 'I HAS A' and hasWazzup == 0:
                         if len(lexeme) < 2 or lexeme[i+1][1] != 'Variable Identifier':
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tI HAS A must have a variable identifier')
@@ -688,7 +688,7 @@ def syntax(text):
                     
                     #MAEK TYPECASTING
                     if lexeme[i][0] == 'MAEK':
-                        print(lexeme)
+                        # print(lexeme)
 
                         if len(lexeme) >= 6 or len(lexeme) <=2:
                             success = 0
