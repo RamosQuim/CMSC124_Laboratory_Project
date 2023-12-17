@@ -32,7 +32,7 @@ def syntax(text):
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
                 
             for i in range(0, len(lexeme)):
-                print(lexeme)
+                # print(lexeme)
                 ## PROGRAM BLOCK SYNTAX - HAI
                 if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
                     hasHai = 0
@@ -61,6 +61,7 @@ def syntax(text):
                             success = 0
                             break
                     ## VARIABLE DECLARATION SYNTAX
+                    print(lexeme)
                     if lexeme[i][0] == 'I HAS A' and hasWazzup == 0:
                         if len(lexeme) < 2 or lexeme[i+1][1] != 'Variable Identifier':
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tI HAS A must have a variable identifier')
@@ -71,12 +72,12 @@ def syntax(text):
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'ITZ' keyword?")
                                 success = 0
                                 break
-                            elif len(lexeme) < 4 or (lexeme[i+3][1] != 'Literal' and lexeme[i+3][1] != 'Variable Identifier'):
+                            elif len(lexeme) < 4 or (lexeme[i+3][1] not in varAssignment_literals and lexeme[i+3][1] != 'Variable Identifier'):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tITZ must have a literal or variable identifier')
                                 success = 0
                                 break
                         hasVarDec = 1
-                        varidents.append(lexeme[i][0])
+                        varidents.append(lexeme[i+1][0])
                         break
                     else:
                         if lexeme[i][0] != 'I HAS A' and lexeme[i][0] != 'BUHBYE' and lexeme[i][0] != 'KTHXBYE' and hasWazzup == 0 and hasBuhbye == -1: 
@@ -637,25 +638,103 @@ def syntax(text):
                                         success = 0
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[((j+1)*2)+1][0]} is not declared.')
                                         break
-                                    
-                    #  #FOR VARIABLE ASSIGNMENT USING R 
-                    #wala pang ano para sa expression
-                    if lexeme[i][1] == 'Variable Assignment':
-                        print(lexeme[i][0])
-                        print(lexeme[i+1][0])
-                        print(lexeme[i-1][1])
-                        if lexeme[i-1][1] != 'Identifier':
-                            if lexeme[i-1][1] != 'Variable Identifier':
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not an identifier.')
-                                break
-                        if lexeme[i+1][1] not in varAssignment_literals:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
-                            break
                         
-                       
+                    #  #FOR VARIABLE ASSIGNMENT USING R AND R WITH MAEK
+                    # wala pang ano para sa expression
+                    if lexeme[i][0] == 'R':
+                        # print(lexeme) #r
+                        # print(lexeme[i])
+                        # print(len(lexeme))
+                        # print(lexeme[i+1][0]) #maek
+                        
+                        # print(lexeme[i-1][0]) #var
+                        # print(lexeme[i+2][0]) #maek
+                        
+                        if len(lexeme) == 3:
 
+                            if lexeme[i-1][0] not in varidents:
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not a variable identifier.')
+                                break
+                            if lexeme[i+1][1] not in varAssignment_literals and lexeme[i+1][0] not in varidents:
+                                    success = 0
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
+                                    break    
+                        elif len(lexeme) == 5:
+                            if lexeme[i-1][0] not in varidents:
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not a variable identifier.')
+                                break
+                            if lexeme[i+1][1] not in varAssignment_literals and lexeme[i+1][0] not in varidents:
+                                if lexeme[i+1][0] != 'MAEK':
+                                    success = 0
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [MAEK | Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
+                                    break 
+                            if lexeme[i+2][0] not in varidents:
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} is not a variable identifier.')
+                                break
+                            if lexeme[i+3][1] != 'Type Literal':
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+3][0]} should be a type literal.')
+                                break
+
+                        else:
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
+                            break
+
+                        
+                    
+                    #MAEK TYPECASTING
+                    if lexeme[i][0] == 'MAEK':
+                        print(lexeme)
+
+                        if len(lexeme) >= 6 or len(lexeme) <=2:
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
+                            break
+                        else:
+                            if lexeme[i+1][0] not in varidents:
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} should be a variable identifier.')
+                                break
+
+                            if lexeme[i-1][0] == 'R' and len(lexeme) == 4:
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
+                                break
+                            elif lexeme[i-1][0] == 'R' and len(lexeme) == 5:
+
+                                if lexeme[i+2][1] != 'Type Literal':
+                                    success = 0
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} should be a type literal.')
+                                    break
+                            else:
+                                if lexeme[i+2][0] != 'A' and lexeme[i+2][1] != 'Type Literal':
+                                    success = 0
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} should be a type literal or an A.')
+                                    break
+                                elif lexeme[i+2][0] == 'A':
+                                    if len(lexeme) == 3:
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
+                                        break
+                                    else:
+                                        if lexeme[i+3][1] != 'Type Literal' or len(lexeme) == 3:
+                                            success = 0
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} should be a type literal.')
+                                            break
+                          
+                                
+                        
+                           
+                            
+
+
+                        
+                        
+                        
                 else:
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')
                     success = 0

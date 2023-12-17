@@ -102,7 +102,7 @@ token_patterns = {
     r'\s*NOOB\s+': 'Void Literal',
 
     # Literals and variable identifiers
-    r'\s*(NUMBR|NUMBAR|YARN|TROOF|NOOB)\s' : 'Type Literal',  
+    r'\s*(NUMBR|NUMBAR|YARN|TROOF|NOOB)\s?' : 'Type Literal',  
     r'\s*(WIN|FAIL)\s*': 'TROOF Literal',                 
     r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*': 'Identifier',           
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  

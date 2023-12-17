@@ -1,4 +1,8 @@
 HAI
+	WAZZUP
+		I HAS A var1 ITZ 12
+		I HAS A var ITZ 123
+	BUHBYE
 	BOTH SAEM 1 AN 2
 	DIFFRINT 1 AN 2
 	BOTH SAEM 1 AN SMALLR OF 1 AN 2
@@ -19,4 +23,21 @@ HAI
 	WON OF FAIL AN FAIL
 	NOT WIN
 	NOT FAIL
+
+	var1 R
+	var1 R var1
+	var1 R var
+	var1 R YARN
+	var R var1
+
+	MAEK var1 A NUMBAR
+	MAEK var1 YARN
+	MAEK var1
+	MAEK
+	MAEK var1 A
+	var1 R MAEK var1
+	var1 R MAEK var1 YARN
+	var1 R
+	var1 R MAEK
+	var1 R MAEK VAR YARN
 KTHXBYE
