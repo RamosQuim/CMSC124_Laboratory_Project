@@ -728,7 +728,7 @@ def syntax(text):
 
                     #IS NOW A
                     if lexeme[i][0] == 'IS NOW A':
-                        print(lexeme)
+                        # print(lexeme)
                         if len(lexeme) == 3:
                             if lexeme[i-1][0] not in varidents:
                                 success = 0
