@@ -150,8 +150,7 @@ def lex(str):
         # print('\n\nTokens:')
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
-        
-        print(compiled_lex)
+    
         return compiled_lex
     
 def symbolTable(str):

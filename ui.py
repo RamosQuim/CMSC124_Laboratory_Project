@@ -67,7 +67,6 @@ def analyzetext():
 root = tk.Tk()
 root.title("TayLOL Sheesh-terpreter")
 root.configure(bg='#0c1818')
-root.geometry("800x600")  # Set your desired window size
 
 
 #this is the opening file button
@@ -91,7 +90,7 @@ lexemeHeader.grid(row=1, column=1, padx=5, sticky='NSEW')
 symbolHeader = Label(text = "Symbol Table", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
 symbolHeader.grid(row=1, column=2, padx=5, sticky='NSEW')
 
-textEditor = scrolledtext.ScrolledText(root, width = 33, height = 15, bg='#193433', fg='white')
+textEditor = scrolledtext.ScrolledText(root, width = 40, height = 15, bg='#193433', fg='white')
 textEditor.grid(row=1, column=0, padx=5, pady=5, rowspan=2, sticky="NSEW")
 
 
