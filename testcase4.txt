@@ -1,8 +1,10 @@
 HAI
-BTW this will print hello world
-    HOW IZ I printHello1
-        VISIBLE "Hello, World"
-    IF U SAY SO
-
-    I IZ printHello1
+WAZZUP
+	I HAS A var1 ITZ 1
+	I HAS A var2 ITZ WIN
+	I HAS A var3 ITZ 123.123
+BUHBYE
+	VISIBLE var1
+	VISIBLE var2
+	VISIBLE var3
 KTHXBYE

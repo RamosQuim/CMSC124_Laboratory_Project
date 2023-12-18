@@ -162,8 +162,8 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
                                 success = 0
                                 break
-                        else:
-                            break
+                        
+                        break
                     ## COMPARISON SYNTAX - DIFFRINT
                     if lexeme[i][0] == 'DIFFRINT':
                         if len(lexeme) != 4 and len(lexeme) != 7:
@@ -204,8 +204,8 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
                                 success = 0
                                 break
-                        else:
-                            break
+                        
+                        break
 
                     ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
                     if lexeme[i][0] == 'ALL OF':
@@ -740,7 +740,7 @@ def syntax(text):
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                             break
-                    #ARITHMETIC OPERATIONS SYNTAX - FOR ALL ARITHMETIC OPERATIONS!
+                    # #ARITHMETIC OPERATIONS SYNTAX - FOR ALL ARITHMETIC OPERATIONS!
                     if lexeme[i][0] in arithmetic: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
                         #arithmetic counter  for indexing
                         an_counter = 0
