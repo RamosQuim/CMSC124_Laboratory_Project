@@ -221,7 +221,7 @@ def symbolTable(str):
     # print("\nSymbol table:")
     # for j in symbol_table:
     #     print(f"identifier: {j[0]}          value: {j[1]}")
-    it.clear()
+    # it.clear()
     return symbol_table
 
 

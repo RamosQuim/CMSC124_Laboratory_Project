@@ -15,6 +15,7 @@ def syntax(text):
     success = 1
 
     comparison = ['BOTH SAEM', 'DIFFRINT']
+    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     varAssignment_literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
@@ -739,7 +740,74 @@ def syntax(text):
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                             break
-
+                    #ARITHMETIC OPERATIONS SYNTAX - FOR ALL ARITHMETIC OPERATIONS!
+                    if lexeme[i][0] in arithmetic: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
+                        #arithmetic counter  for indexing
+                        an_counter = 0
+                        operation_counter = 0
+                        arithmetic_index = 0
+                        if len(lexeme) < 4:
+                            success = 0
+                            syntaxResult+= (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y>')
+                            break
+                        else:
+                            #loop para macater yung more than 1 operations
+                            while arithmetic_index < len(lexeme)-1:
+                                #this is for hahving another 
+                                if lexeme[arithmetic_index][1] == 'Arithmetic Operation':
+                                    #mag add lang siya ng indexx?
+                                    arithmetic_index += 1
+                                    operation_counter += 1
+                                # this one if may AN !!
+                                elif lexeme[arithmetic_index][1] == "Parameter Delimiter":
+                                    #before ng "AN"
+                                    if lexeme[arithmetic_index-1][1] != "NUMBR Literal":
+                                        if lexeme[arithmetic_index-1][1] != "NUMBAR Literal":
+                                            if lexeme[arithmetic_index-1][1] != "String Delimiter":
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y>')
+                                                success = 0
+                                                break
+                                    #after ng "AN"
+                                    if lexeme[arithmetic_index+1][1] != "NUMBR Literal":
+                                        if lexeme[arithmetic_index+1][1] != "NUMBAR Literal":
+                                            if lexeme[arithmetic_index+1][1] != 'String Delimiter':
+                                                if lexeme[arithmetic_index+1][1] != 'Arithmetic Operation':
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y>')
+                                                    success = 0
+                                                    break                                    
+                                    
+                                    arithmetic_index +=1
+                                    an_counter += 1
+                                #this is for catering the operands!!
+                                else:
+                                    #proceed to if else ganern!! 
+                                    #if lexeme[arithmetic_index]   
+                                    if lexeme[arithmetic_index][1] != "NUMBR Literal":
+                                        if lexeme[arithmetic_index][1] != "NUMBAR Literal":
+                                            if lexeme[arithmetic_index][1] != "String Delimiter":
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t{lexeme[i][0]} only accepts NUMBR, NUMBAR, and YARN!')
+                                                success = 0
+                                                break
+                                            #if yarn nga siya
+                                            else:
+                                                if lexeme[arithmetic_index+1][0].isnumeric() == False:
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tYARN is not a NUMBR or NUMBAR!')
+                                                    success = 0
+                                                    break
+                                                if lexeme[arithmetic_index+2][1] != "String Delimiter":
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tYARN should start and end with " "')
+                                                    success = 0
+                                                    break                                                                                                        
+                                                arithmetic_index += 3
+                                        else:
+                                            arithmetic_index +=1
+                                    else:
+                                        arithmetic_index +=1
+                            if an_counter != operation_counter:
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tTotal no. of {lexeme[i][0]} should be equal to AN')
+                                success = 0
+                                break   
+                            break
                                 
                         
                            
