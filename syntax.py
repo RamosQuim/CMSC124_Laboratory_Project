@@ -722,7 +722,24 @@ def syntax(text):
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} should be a type literal.')
                                             break
-                          
+
+                    #IS NOW A
+                    if lexeme[i][0] == 'IS NOW A':
+                        # print(lexeme)
+                        if len(lexeme) == 3:
+                            if lexeme[i-1][0] not in varidents:
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} should be a variable identifier.')
+                                break
+                            if lexeme[i+1][1] != 'Type Literal':
+                                success = 0
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} should be a type literal.')
+                                break
+                        else:
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
+                            break
+
                                 
                         
                            
