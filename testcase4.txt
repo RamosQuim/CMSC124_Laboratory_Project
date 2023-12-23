@@ -1,22 +1,10 @@
 HAI
-BTW this will print hello world
-    HOW IZ I printHello1
-        VISIBLE "Hello, World"
-        VISIBLE Hi Crush
-        VISIBLE 1234
-        VISIBLE
-        VISIBLE 123  "HELLO"
-        UPPIN YR temp
-    IF U SAY SO
-    I IZ printHello1
-    SUM OF 12.2 AN 32
-    SUM OF AN 32
-    SUM OF SUM OF 65 AN 50.2
-    SUM OF "123" AN 123
-    SUM OF SUM OF 1 AN 2.33 AN 3 
-    SUM OF SUM OF SUM OF "123" AN 23 AN 53.2 AN 12
-    DIFF OF SUM OF DIFF OF "123" AN 23 AN 53.2 AN 12
-    DIFF OF "a" AN 30
-    DIFF OF "123" AN 30
-    DIFF OF AN 32
+WAZZUP
+	I HAS A var1 ITZ 1
+	I HAS A var2 ITZ WIN
+	I HAS A var3 ITZ 123.123
+BUHBYE
+	VISIBLE var1
+	VISIBLE var2
+	VISIBLE var3
 KTHXBYE

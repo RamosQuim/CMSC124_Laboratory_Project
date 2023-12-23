@@ -77,7 +77,7 @@ def semantics(text):
                         semanticsResult += f'FAIL\n'
                     else:
                         semanticsResult += f'FAIL\n'
-                elif lexeme[i][0] == 'NOT':
+                elif lexeme[i][0] == 'NOT' and len(lexeme) == 2:
                     # print(lexeme[i])
                     if lexeme[i+1][0] == 'WIN':
                         semanticsResult += f'FAIL\n'
