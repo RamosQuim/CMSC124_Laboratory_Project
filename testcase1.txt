@@ -68,14 +68,22 @@ HAI
         I HAS A var2 ITZ 12
         I HAS A var3 ITZ WIN
         I HAS A var4 ITZ FAIL
+<<<<<<< HEAD
         I HAS A var5 ITZ 3.141765
+=======
+        I HAS A var5 ITZ ""
+>>>>>>> ce0c9ab (updating the value in symbol table when type-casting of values)
         I HAS A var6 ITZ "1234"
     BUHBYE
     var1 IS NOW A YARN
     var2 IS NOW A YARN
     var3 IS NOW A YARN
     var4 IS NOW A YARN
+<<<<<<< HEAD
     var5 IS NOW A NUMBR
+=======
+    var5 IS NOW A YARN
+>>>>>>> ce0c9ab (updating the value in symbol table when type-casting of values)
     var6 IS NOW A YARN
 KTHXBYE
 
