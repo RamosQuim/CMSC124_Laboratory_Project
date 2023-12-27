@@ -204,7 +204,9 @@ def symbolTable(str1):
                 last_occurrence_startIndex = match.start()
                 end_index = match.end()
             
-            if re.search('NUMBAR',str1[end_index+1:]): #convert to float 
+            # print(str1[end_index+1:end_index+5])
+            
+            if str1[end_index+1:end_index+7].rstrip().lstrip() == 'NUMBAR': #convert to float 
                 check = 0
                 for j in symbol_table:
                     if j[0] == token[0]:
@@ -215,7 +217,10 @@ def symbolTable(str1):
                             if k[0] == j[1]:
                                 # print(k[0])
                                 t = k[1]
-                                if t == 'NUMBR Literal':
+                                if t == 'NUMBAR Literal':
+                                    j[1] = j[1]
+                                    break
+                                elif t == 'NUMBR Literal':
                                     # print('numbr')
                                     j[1] = float(j[1])
                                     break
@@ -246,7 +251,7 @@ def symbolTable(str1):
                             break
 
 
-            elif re.search('NUMBR',str1[end_index+1:]): #convert to int 
+            elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'NUMBR': #convert to int 
                 check = 0
                 for j in symbol_table:
                     if j[0] == token[0]:
@@ -257,11 +262,15 @@ def symbolTable(str1):
                             if k[0] == j[1]:
                                 # print(k[0])
                                 t = k[1]
-                                if t == 'NUMBAR Literal':
-                                    # print('numbr')
+                                print(t, j[0], j[1])
+                                if t == 'NUMBR Literal':
                                     j[1] = int(j[1])
+                                elif t == 'NUMBAR Literal':
+                                    # print('numbr')
+                                    j[1] = int(float(j[1]))
                                     break
                                 elif t == 'TROOF Literal':
+                                    print('yey')
                                     if j[1] == 'WIN':
                                         # print('win')
                                         j[1] = 1
@@ -286,7 +295,8 @@ def symbolTable(str1):
                             temp_arr.append(0)
                             symbol_table.append(temp_arr)
                             break
-            elif re.search('TROOF',str1[end_index+1:]): #convert to bool 
+
+            elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'TROOF': #convert to bool 
                 check = 0
                 for j in symbol_table:
                     if j[0] == token[0]:
@@ -330,7 +340,7 @@ def symbolTable(str1):
                             symbol_table.append(temp_arr)
                             break
 
-            elif re.search('YARN',str1[end_index+1:]): #convert to string 
+            elif str1[end_index+1:end_index+5].rstrip().lstrip() == 'YARN': #convert to string 
                 check = 0
                 for j in symbol_table:
                     if j[0] == token[0]:
