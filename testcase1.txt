@@ -61,3 +61,30 @@ HAI
 	var1 R MAEK
 	var1 R MAEK VAR YARN
 KTHXBYE
+
+HAI
+    WAZZUP
+        I HAS A var1
+        I HAS A var2 ITZ 12
+        I HAS A var3 ITZ WIN
+        I HAS A var4 ITZ FAIL
+        I HAS A var5 ITZ ""
+        I HAS A var6 ITZ "1234"
+    BUHBYE
+    var1 IS NOW A YARN
+    var2 IS NOW A YARN
+    var3 IS NOW A YARN
+    var4 IS NOW A YARN
+    var5 IS NOW A YARN
+    var6 IS NOW A YARN
+KTHXBYE
+
+
+    var1 IS NOW A NUMBAR
+    var2 IS NOW A NUMBAR
+    var3 IS NOW A NUMBAR
+    var4 IS NOW A NUMBAR
+    var5 IS NOW A NUMBAR
+    var6 IS NOW A NUMBAR
+KTHXBYE
+

@@ -739,6 +739,7 @@ def syntax(text):
                     if lexeme[i][0] == 'IS NOW A':
                         # print(lexeme)
                         if len(lexeme) == 3:
+                            # print(lexeme[i-1][0])
                             if lexeme[i-1][0] not in varidents:
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} should be a variable identifier.')
