@@ -1,7 +1,9 @@
 import keywords
+import syntax
 
 def semantics(text):
     semanticsResult = ''
+    varidents = syntax.getVaridents(text)
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
