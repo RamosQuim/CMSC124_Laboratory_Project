@@ -2,7 +2,7 @@ import keywords
 
 #note: 
 #VARIABLE ASSIGNMENT USING R = wala pang syntax para sa expression
-
+varidents = {}
 def isfloat(num):
     try:
         float(num)
@@ -10,16 +10,19 @@ def isfloat(num):
     except ValueError:
         return False
 
+def getVaridents(text):
+    syntax(text)
+    return varidents
+
 def syntax(text):
+    global varidents
     syntaxResult = ''
     success = 1
-
     comparison = ['BOTH SAEM', 'DIFFRINT']
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     varAssignment_literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
-    varidents = []
     hasHai = -1
     hasKthxbye = -1
     hasWazzup = -1
@@ -80,7 +83,15 @@ def syntax(text):
                                 success = 0
                                 break
                         hasVarDec = 1
-                        varidents.append(lexeme[i+1][0])
+                        if len(lexeme) == 2:
+                            varidents[lexeme[i+1][0]] = 'NOOB'
+                        elif len(lexeme) == 4:
+                            if isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) != 0:
+                                varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
+                            elif isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) == 0:
+                                varidents[lexeme[i+1][0]] = int(float(lexeme[i+3][0]))         # if NUMBR
+                            else:
+                                varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF or YARN
                         break
                     else:
                         if lexeme[i][0] != 'I HAS A' and lexeme[i][0] != 'BUHBYE' and lexeme[i][0] != 'KTHXBYE' and hasWazzup == 0 and hasBuhbye == -1: 

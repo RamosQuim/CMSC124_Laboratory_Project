@@ -184,9 +184,21 @@ def symbolTable(str):
                 else:
                     for i in symbol_table:
                         if i[0] != lexeme[a][0]:
-
                             arr.append(lexeme[a][0])
                             arr.append(value)
+                            symbol_table.append(arr)
+                        else:
+                            break
+            else:
+                if len(symbol_table) == 0:
+                    arr.append(lexeme[a][0])
+                    arr.append('NOOB')
+                    symbol_table.append(arr)
+                else:
+                    for i in symbol_table:
+                        if i[0] != lexeme[a][0]:
+                            arr.append(lexeme[a][0])
+                            arr.append('NOOB')
                             symbol_table.append(arr)
                         else:
                             break
@@ -222,7 +234,10 @@ def symbolTable(str):
     
     if len(it) != 0:
         symbol_table.insert(0, ['IT', j])
-        symbol_table.pop()
+    else:
+        symbol_table.insert(0, ['IT', 'NOOB'])
+    symbol_table.pop()
+
 
     # print("\nSymbol table:")
     # for j in symbol_table:
