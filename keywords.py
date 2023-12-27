@@ -61,6 +61,7 @@ token_patterns = {
     r'\s*DIFF OF\s+': 'Arithmetic Operation',
     r'\s*PRODUKT OF\s+': 'Arithmetic Operation',
     r'\s*QUOSHUNT OF\s+': 'Arithmetic Operation',
+    r'\s*MOD OF\s+': 'Arithmetic Operation',
     r'\s*BIGGR OF\s+': 'Arithmetic Operation',
     r'\s*SMALLR OF\s+': 'Arithmetic Operation',
     r'\s*BOTH OF\s+': 'Boolean Operation',

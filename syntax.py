@@ -14,7 +14,6 @@ def syntax(text):
     syntaxResult = ''
     success = 1
 
-    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     comparison = ['BOTH SAEM', 'DIFFRINT']
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
@@ -26,9 +25,11 @@ def syntax(text):
     hasWazzup = -1
     hasBuhbye = -1
     hasVarDec = 0
+    wtfchecker = -1
+    omgchecker = -1
+    omgwtfchecker = -1
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
-        print(lexeme)
         if lexeme is not None:
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
@@ -740,15 +741,24 @@ def syntax(text):
                                 break
                         else:
                             success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i][0]} is not a variable identifier.')
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                             break
-                        elif lexeme[i+2][1] != 'Variable Identifier' or lexeme[i+2][1] != 'TROOF Literal' or lexeme[i+2][1] != 'NUMBAR Literal' or lexeme[i+2][1] != 'NUMBR Literal' or lexeme[i+2][1] != 'YARN Literal':
+                    # #ARITHMETIC OPERATIONS SYNTAX - FOR ALL ARITHMETIC OPERATIONS!
+                    if lexeme[i][0] in arithmetic: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
+                        #arithmetic counter  for indexing
+                        an_counter = 0
+                        operation_counter = 0
+                        arithmetic_index = 0
+                        if len(lexeme) < 4:
                             success = 0
                             syntaxResult+= (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y>')
                             break
                         else:
                             #loop para macater yung more than 1 operations
-                            while arithmetic_index < len(lexeme)-1:
+                            print(f"lexeme: {lexeme}")
+                            while arithmetic_index < len(lexeme):
+                                print(f"arithmetic index : {arithmetic_index}")
+                                print(f"len(lexeme)-1 = {len(lexeme)} ")
                                 #this is for hahving another 
                                 if lexeme[arithmetic_index][1] == 'Arithmetic Operation':
                                     #mag add lang siya ng indexx?
@@ -757,10 +767,11 @@ def syntax(text):
                                 # this one if may AN !!
                                 elif lexeme[arithmetic_index][1] == "Parameter Delimiter":
                                     #before ng "AN"
+                                    an_counter += 1
                                     if lexeme[arithmetic_index-1][1] != "NUMBR Literal":
                                         if lexeme[arithmetic_index-1][1] != "NUMBAR Literal":
                                             if lexeme[arithmetic_index-1][1] != "String Delimiter":
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y>')
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR, and YARN only')
                                                 success = 0
                                                 break
                                     #after ng "AN"
@@ -768,12 +779,12 @@ def syntax(text):
                                         if lexeme[arithmetic_index+1][1] != "NUMBAR Literal":
                                             if lexeme[arithmetic_index+1][1] != 'String Delimiter':
                                                 if lexeme[arithmetic_index+1][1] != 'Arithmetic Operation':
-                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y>')
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR, and YARN only')
                                                     success = 0
                                                     break                                    
                                     
                                     arithmetic_index +=1
-                                    an_counter += 1
+                                    
                                 #this is for catering the operands!!
                                 else:
                                     #proceed to if else ganern!! 
@@ -800,19 +811,59 @@ def syntax(text):
                                     else:
                                         arithmetic_index +=1
                             if an_counter != operation_counter:
+                                print(f"an_counter: {an_counter}")
+                                print(f"operation_counter: {operation_counter}")
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tTotal no. of {lexeme[i][0]} should be equal to AN')
                                 success = 0
                                 break   
                             break
-                                
-                        
-                           
-                            
+                    #SWITCH CASES STATEMENTS
+                    wtfchecker = -1
+                    if lexeme[i][0] == 'WTF?':
+                        #omgcounter=i
+                        wtfchecker = 1
+                        omgchecker = -1
+                        omgwtfchecker = -1
+                        #while lexeme[omgcounter][0] != "OMGWTF":
+                    #OMG STATEMENTS 
+                    if lexeme[i][0] == "OMG":
+                        if wtfchecker == 1: 
+                            if lexeme[i+1][1] != "String Delimeter": #check the sting
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by Value Literal')
+                                success = 0
+                                break
+                            else: #check the actual value
+                                if lexeme[i+2][1] != "YARN Literal":
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Invalid Value Literal')
+                                    success = 0
+                                    break
+                                else:
+                                    if lexeme[i+3][1] != "String Delimeter": #check the closing string
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by Value Literal')
+                                        success = 0
+                                        break
+                                    else:
+                                        #check yung next!!    
+                                        omgchecker = 1
+                        else:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                            success = 0
+                            break                                    
 
+                    if lexeme[i][0] == "OMGWTF?":
+                        if omgchecker == 1:
+                            omgwtfchecker = 1
+                        else:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                            success = 0
+                            break   
 
-                        
-                        
-                        
+                    if lexeme[i][0] == 'OIC':
+                        if omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                            success = 0
+                            break        
+
                 else:
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')
                     success = 0

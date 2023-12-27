@@ -785,7 +785,129 @@ if success == 1:
     print('>> No syntax errors.')       
 '''
 
-                                
+                #THIS PART IS FOR THE COMPUTATIONS!!
+                elif lexeme[i][0] in arithmetic:
+                    print(lexeme)
+                    arithmetic_index = 0
+                    operation_list = []
+                    values_list = []
+                    result = 0
+                    while arithmetic_index < len(lexeme):
+                        if lexeme[arithmetic_index][0] in arithmetic:
+                            operation_list.append(lexeme[arithmetic_index][0])
+                        elif lexeme[arithmetic_index][1] == "NUMBR Literal" or lexeme[arithmetic_index][1] == "NUMBAR Literal" or lexeme[arithmetic_index][1] == "YARN Literal":
+                            values_list.append(float(lexeme[arithmetic_index][0]))
+                        arithmetic_index +=1
+                    
+                    #if hindi proportion yung number of 
+                    if len(values_list)/2 != len(operation_list): 
+                        print("complex")
+                        while len(operation_list) != 0:
+
+                            if len(values_list)!= 1:
+                                if operation_list[-1] == 'SUM OF':
+                                    result = result + values_list[-2]+values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                                elif operation_list[-1] == 'DIFF OF':
+                                    result = result + values_list[-2] - values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                                elif operation_list[-1] == 'PRODUKT OF':
+                                    result = result + values_list[-2] * values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                                elif operation_list[-1] == 'QUOSHUNT OF':
+                                    result = result + values_list[-2] / values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                                elif operation_list[-1] == 'MOD OF':
+                                    result = result + values_list[-2] % values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                                elif operation_list[-1] == 'BIGGR OF':
+                                    if values_list[-2] > values_list[-1]:
+                                        result = result + values_list[-2] 
+                                    else:
+                                        result = result + values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                                elif operation_list[-1] == 'SMALLR OF':
+                                    if values_list[-2] < values_list[-1]:
+                                        result = result + values_list[-2] 
+                                    else:
+                                        result = result + values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                                    values_list.pop(-1)
+                            else:
+                                if operation_list[-1] == 'SUM OF':
+                                    result = result+values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)                                    
+                                elif operation_list[-1] == 'DIFF OF':
+                                    result = result - values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)                                
+                                elif operation_list[-1] == 'PRODUKT OF':
+                                    result = result * values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)                                
+                                elif operation_list[-1] == 'QUOSHUNT OF':
+                                    result = result / values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)                                
+                                elif operation_list[-1] == 'MOD OF':
+                                    result = result % values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)                                
+                                elif operation_list[-1] == 'BIGGR OF':
+                                    if result > values_list[-1]:
+                                        result = result 
+                                    else:
+                                        result = values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)                                
+                                elif operation_list[-1] == 'SMALLR OF':
+                                    if result < values_list[-1]:
+                                        result = result 
+                                    else:
+                                        result = values_list[-1]
+                                    operation_list.pop(-1)
+                                    values_list.pop(-1)
+                        #semanticsResult += f"{result}\n"
+                    # if saktuhan lang yung results
+                    else:
+                        if operation_list[-1] == 'SUM OF':
+                            result = values_list[-2]+values_list[-1]
+                        elif operation_list[-1] == 'DIFF OF':
+                            result = values_list[-2] - values_list[-1]
+                        elif operation_list[-1] == 'PRODUKT OF':
+                            result = values_list[-2] * values_list[-1]
+                        elif operation_list[-1] == 'QUOSHUNT OF':
+                            result = values_list[-2] / values_list[-1]
+                        elif operation_list[-1] == 'MOD OF':
+                            result = values_list[-2] % values_list[-1]
+                        elif operation_list[-1] == 'BIGGR OF':
+                            if values_list[-2] > values_list[-1]:
+                                result = values_list[-2] 
+                            else:
+                                result = values_list[-1]
+                        elif operation_list[-1] == 'SMALLR OF':
+                            if values_list[-2] < values_list[-1]:
+                                result = values_list[-2] 
+                            else:
+                                result = values_list[-1]
+                    #','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
+                    print(f"operation list: {operation_list}")
+                    print(f"values list: {values_list}")
+                    semanticsResult += f"{result}\n"                                
 
 
                              
