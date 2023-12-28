@@ -754,6 +754,7 @@ def syntax(text):
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                             break
+                        
                     # #ARITHMETIC OPERATIONS SYNTAX - FOR ALL ARITHMETIC OPERATIONS!
                     if lexeme[i][0] in arithmetic: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
                         #arithmetic counter  for indexing
@@ -778,19 +779,53 @@ def syntax(text):
                                 # this one if may AN !!
                                 elif lexeme[arithmetic_index][1] == "Parameter Delimiter":
                                     #before ng "AN"
+                                    print("here")
+                                    print(f"varidents: {varidents}")
                                     an_counter += 1
                                     if lexeme[arithmetic_index-1][1] != "NUMBR Literal":
                                         if lexeme[arithmetic_index-1][1] != "NUMBAR Literal":
-                                            if lexeme[arithmetic_index-1][1] != "String Delimiter":
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR, and YARN only')
+                                            if lexeme[arithmetic_index-1][1] == "Identifier":
+                                                print(f"varidents: {varidents}")
+                                                if lexeme[arithmetic_index-1][0] not in varidents:
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable is not existing')
+                                                    success = 0
+                                                    break
+                                                else:
+                                                    #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
+                                                    if str(varidents[lexeme[arithmetic_index-1][0]]).isnumeric() == False:
+                                                        print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
+                                                        try:
+                                                            float_val = float(varidents[lexeme[arithmetic_index-1][0]])
+                                                        except ValueError:
+                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
+                                                            success = 0
+                                                            break                                                         
+                                            elif lexeme[arithmetic_index-1][1] != "String Delimiter":
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR,YARN  and Variables only')
                                                 success = 0
                                                 break
                                     #after ng "AN"
                                     if lexeme[arithmetic_index+1][1] != "NUMBR Literal":
                                         if lexeme[arithmetic_index+1][1] != "NUMBAR Literal":
-                                            if lexeme[arithmetic_index+1][1] != 'String Delimiter':
+                                            if lexeme[arithmetic_index+1][1] == "Identifier":
+                                                print(f"varidents: {varidents}")
+                                                if lexeme[arithmetic_index+1][0] not in varidents:
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable is not existing')
+                                                    success = 0
+                                                    break
+                                                else:
+                                                    #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
+                                                    if str(varidents[lexeme[arithmetic_index+1][0]]).isnumeric() == False:
+                                                        print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
+                                                        try:
+                                                            float_val = float(varidents[lexeme[arithmetic_index+1][0]])
+                                                        except ValueError:
+                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
+                                                            success = 0
+                                                            break  
+                                            elif lexeme[arithmetic_index+1][1] != 'String Delimiter':
                                                 if lexeme[arithmetic_index+1][1] != 'Arithmetic Operation':
-                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR, and YARN only')
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR, YARN, and Variables only')
                                                     success = 0
                                                     break                                    
                                     
@@ -798,12 +833,30 @@ def syntax(text):
                                     
                                 #this is for catering the operands!!
                                 else:
-                                    #proceed to if else ganern!! 
-                                    #if lexeme[arithmetic_index]   
+                                    #proceed to if else ganern!!  
                                     if lexeme[arithmetic_index][1] != "NUMBR Literal":
                                         if lexeme[arithmetic_index][1] != "NUMBAR Literal":
-                                            if lexeme[arithmetic_index][1] != "String Delimiter":
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t{lexeme[i][0]} only accepts NUMBR, NUMBAR, and YARN!')
+                                            if lexeme[arithmetic_index][1] == "Identifier":
+                                                print(f"varidents: {varidents}")
+                                                if lexeme[arithmetic_index][0] not in varidents:
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable is not existing')
+                                                    success = 0
+                                                    break
+                                                else:
+                                                    #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
+                                                    if str(varidents[lexeme[arithmetic_index][0]]).isnumeric() == False:
+                                                        print(f"varidents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
+                                                        try:
+                                                            float_val = float(varidents[lexeme[arithmetic_index][0]])
+                                                            arithmetic_index +=1  #added this para di magkaroon ng inifnity loop
+                                                        except ValueError:
+                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
+                                                            success = 0
+                                                            break
+                                                    else:
+                                                        arithmetic_index +=1                                                  
+                                            elif lexeme[arithmetic_index][1] != "String Delimiter":
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t{lexeme[i][0]} only accepts NUMBR, NUMBAR, YARN and Variables!')
                                                 success = 0
                                                 break
                                             #if yarn nga siya
@@ -821,9 +874,7 @@ def syntax(text):
                                             arithmetic_index +=1
                                     else:
                                         arithmetic_index +=1
-                            if an_counter != operation_counter:
-                                print(f"an_counter: {an_counter}")
-                                print(f"operation_counter: {operation_counter}")
+                            if an_counter != operation_counter and success != 0:
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tTotal no. of {lexeme[i][0]} should be equal to AN')
                                 success = 0
                                 break   

@@ -101,12 +101,17 @@ def semantics(text):
                         if lexeme[remover_index][1] == "String Delimiter":
                              lexeme.pop(remover_index)
                              remover_index = remover_index - 1
-                        elif lexeme[remover_index][1] == 'NUMBAR Literal' or lexeme[remover_index][1] == 'YARN Literal':
-                            print('PASOK DITO ')
-                            float_value = float(lexeme[remover_index][0])
-                            int_value = int(float_value)
-                            if float_value != int_value:
-                                is_float = True
+                        elif lexeme[remover_index][1] == 'NUMBAR Literal' or lexeme[remover_index][1] == 'YARN Literal' or lexeme[remover_index][1] == 'Identifier':
+                            if lexeme[remover_index][1] == 'Identifier':
+                                float_value = float(varidents[lexeme[remover_index][0]])
+                                int_value = int(float_value)
+                                if float_value != int_value:
+                                    is_float = True
+                            else:
+                                float_value = float(lexeme[remover_index][0])
+                                int_value = int(float_value)
+                                if float_value != int_value:
+                                    is_float = True
                         remover_index = remover_index + 1
                     print(lexeme)
                     arithmetic_index = 0
@@ -118,29 +123,106 @@ def semantics(text):
                     while arithmetic_index < len(lexeme):
                         #THIS IS FOR CHECKING IF MAY KATABI BA SIYA OR WALA NA OPERATION
                         print(f"currently pointed to: {lexeme[arithmetic_index][0]}")
+                        print(f"varidents: {varidents}")
                         if lexeme[arithmetic_index][0] in arithmetic:
                             if lexeme[arithmetic_index+1][0] not in arithmetic:
                                 if lexeme[arithmetic_index+3][0] not in arithmetic:
                                     if lexeme[arithmetic_index][0] == 'SUM OF':
-                                        result = float(lexeme[arithmetic_index+1][0])+float(lexeme[arithmetic_index+3][0])
+                                        #this is created to cater the variables!!!
+                                        #print(f"lexeme[arithmetic_index+1][0]: {lexeme[arithmetic_index+1][0]}")
+                                        #print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])+float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])+float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            result = float(lexeme[arithmetic_index+1][0])+float(varidents[lexeme[arithmetic_index+3][0]])
+                                        else:
+                                            result = float(lexeme[arithmetic_index+1][0])+float(lexeme[arithmetic_index+3][0])
                                     elif lexeme[arithmetic_index][0] == 'DIFF OF':
-                                        result = float(lexeme[arithmetic_index+1][0]) - float(lexeme[arithmetic_index+3][0])
+                                        #this is created to cater the variables!!!
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])-float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])-float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            result = float(lexeme[arithmetic_index+1][0])-float(varidents[lexeme[arithmetic_index+3][0]])
+                                        else:
+                                            result = float(lexeme[arithmetic_index+1][0]) - float(lexeme[arithmetic_index+3][0])
                                     elif lexeme[arithmetic_index][0] == 'PRODUKT OF':
-                                        result = float(lexeme[arithmetic_index+1][0]) * float(lexeme[arithmetic_index+3][0])
+                                        #this is created to cater the variables!!!
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])*float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])*float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            result = float(lexeme[arithmetic_index+1][0])*float(varidents[lexeme[arithmetic_index+3][0]])
+                                        else:
+                                            result = float(lexeme[arithmetic_index+1][0]) * float(lexeme[arithmetic_index+3][0])
                                     elif lexeme[arithmetic_index][0] == 'QUOSHUNT OF':
-                                        result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
+                                        #this is created to cater the variables!!!
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            result = float(lexeme[arithmetic_index+1][0]) / float(varidents[lexeme[arithmetic_index+3][0]])
+                                        else:
+                                            result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
                                     elif lexeme[arithmetic_index][0] == 'MOD OF':
-                                        result = float(lexeme[arithmetic_index+1][0]) % float(lexeme[arithmetic_index+3][0])
+                                        #this is created to cater the variables!!!
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            result = float(lexeme[arithmetic_index+1][0]) % float(varidents[lexeme[arithmetic_index+3][0]])
+                                        else:
+                                            result = float(lexeme[arithmetic_index+1][0]) % float(lexeme[arithmetic_index+3][0])
                                     elif lexeme[arithmetic_index][0] == 'BIGGR OF':
-                                        if float(lexeme[arithmetic_index+1][0]) > float(lexeme[arithmetic_index+3][0]):
-                                            result = float(lexeme[arithmetic_index+1][0])
+                                        #this is created to cater the variables!!!
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            if float(varidents[lexeme[arithmetic_index+1][0]]) > float(varidents[lexeme[arithmetic_index+3][0]]):
+                                                result = float(varidents[lexeme[arithmetic_index+1][0]])
+                                            else:
+                                                result = float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            if float(varidents[lexeme[arithmetic_index+1][0]]) > float(lexeme[arithmetic_index+3][0]):
+                                                result = float(varidents[lexeme[arithmetic_index+1][0]])
+                                            else:
+                                                result = float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            if float(lexeme[arithmetic_index+1][0]) > float(varidents[lexeme[arithmetic_index+3][0]]):
+                                                result = float(lexeme[arithmetic_index+1][0]) 
+                                            else:
+                                                result = float(varidents[lexeme[arithmetic_index+3][0]])
                                         else:
-                                            result = float(lexeme[arithmetic_index+3][0])
+                                            if float(lexeme[arithmetic_index+1][0]) > float(lexeme[arithmetic_index+3][0]):
+                                                result = float(lexeme[arithmetic_index+1][0])
+                                            else:
+                                                result = float(lexeme[arithmetic_index+3][0])
                                     elif lexeme[arithmetic_index][0] == 'SMALLR OF':
-                                        if float(lexeme[arithmetic_index+1][0]) < float(lexeme[arithmetic_index+3][0]):
-                                            result = float(lexeme[arithmetic_index+1][0]) 
+                                        #this is created to cater the variables!!!
+                                        if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            if float(varidents[lexeme[arithmetic_index+1][0]]) < float(varidents[lexeme[arithmetic_index+3][0]]):
+                                                result = float(varidents[lexeme[arithmetic_index+1][0]])
+                                            else:
+                                                result = float(varidents[lexeme[arithmetic_index+3][0]])
+                                        elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                                            if float(varidents[lexeme[arithmetic_index+1][0]]) < float(lexeme[arithmetic_index+3][0]):
+                                                result = float(varidents[lexeme[arithmetic_index+1][0]])
+                                            else:
+                                                result = float(lexeme[arithmetic_index+3][0])
+                                        elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                                            if float(lexeme[arithmetic_index+1][0]) < float(varidents[lexeme[arithmetic_index+3][0]]):
+                                                result = float(lexeme[arithmetic_index+1][0]) 
+                                            else:
+                                                result = float(varidents[lexeme[arithmetic_index+3][0]])
                                         else:
-                                            result = float(lexeme[arithmetic_index+3][0])
+                                            if float(lexeme[arithmetic_index+1][0]) < float(lexeme[arithmetic_index+3][0]):
+                                                result = float(lexeme[arithmetic_index+1][0]) 
+                                            else:
+                                                result = float(lexeme[arithmetic_index+3][0])
                                     arithmetic_index = arithmetic_index + 4
                                 else:
                                     operation_list.append(lexeme[arithmetic_index][0])
@@ -158,21 +240,44 @@ def semantics(text):
                         elif lexeme[arithmetic_index][0] == 'AN':
                             if lexeme[arithmetic_index+1][0] not in arithmetic:
                                 if operation_list[-1] == 'SUM OF':
-                                    result = result + float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        result = result + float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        result = result + float(lexeme[arithmetic_index+1][0])
                                 elif operation_list[-1] == 'DIFF OF':
-                                    result = result - float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        result = result - float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        result = result - float(lexeme[arithmetic_index+1][0])
                                 elif operation_list[-1] == 'PRODUKT OF':
-                                    result = result * float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        result = result * float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        result = result * float(lexeme[arithmetic_index+1][0])
                                 elif operation_list[-1] == 'QUOSHUNT OF':
-                                    result = result * float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        result = result / float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        result = result / float(lexeme[arithmetic_index+1][0])
                                 elif operation_list[-1] == 'MOD OF':
-                                    result = result % float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        result = result % float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        result = result % float(lexeme[arithmetic_index+1][0])
                                 elif operation_list[-1] == 'BIGGR OF':
-                                    if result < float(lexeme[arithmetic_index+1][0]):
-                                        result = float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        if result < float(varidents[lexeme[arithmetic_index+1][0]]):
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        if result < float(lexeme[arithmetic_index+1][0]):
+                                            result = float(lexeme[arithmetic_index+1][0])
                                 elif operation_list[-1] == 'SMALLR OF':
-                                    if result > float(lexeme[arithmetic_index+1][0]):
-                                        result = float(lexeme[arithmetic_index+1][0])
+                                    if lexeme[arithmetic_index+1][1] == "Identifier":
+                                        if result > float(varidents[lexeme[arithmetic_index+1][0]]):  
+                                            result = float(varidents[lexeme[arithmetic_index+1][0]])
+                                    else:
+                                        if result > float(lexeme[arithmetic_index+1][0]):  
+                                            result = float(lexeme[arithmetic_index+1][0])
                                 operation_list.pop(-1)                                        
                                 arithmetic_index = arithmetic_index +2
                             else:
@@ -194,28 +299,21 @@ def semantics(text):
                         print(f"i: {i}")
                         print(f"result: {result}")
                         if operation_list[-(1+i)] == 'SUM OF':
-                            result = values_list[-(1+i)] + result  
-                            print("1\n")   
+                            result = values_list[-(1+i)] + result   
                         elif operation_list[-(1+i)] == 'DIFF OF':
-                            result = values_list[-(1+i)] - result
-                            print("2\n")    
+                            result = values_list[-(1+i)] - result 
                         elif operation_list[-(1+i)] == 'PRODUKT OF':
-                            result = values_list[-(1+i)] * result
-                            print("3\n")                             
+                            result = values_list[-(1+i)] * result                           
                         elif operation_list[-(1+i)] == 'QUOSHUNT OF':
-                            result = values_list[-(1+i)] / result 
-                            print("4\n")                     
+                            result = values_list[-(1+i)] / result                  
                         elif operation_list[-(1+i)] == 'MOD OF':
-                            result = values_list[-(1+i)] % result 
-                            print("5\n")                         
+                            result = values_list[-(1+i)] % result                      
                         elif operation_list[-(1+i)] == 'BIGGR OF':
                             if values_list[-(1+i)] > result:
-                                result = values_list[-(1+i)]
-                            print("6\n")                          
+                                result = values_list[-(1+i)]                       
                         elif operation_list[-(1+i)] == 'SMALLR OF':
                             if values_list[-(1+i)] < result:
                                 result = values_list[-(1+i)]
-                            print("7\n") 
                         print(f"current i: {i}")
                         print(f"current result:{result}")
                         if is_onelement == 1:
