@@ -114,13 +114,11 @@ token_patterns = {
 def lex(str):
     compiled_lex.clear()
     # global compiled_lex
-    # compiled_lex = []
     varidents = []
     code = str
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
         tokens = lexer.tokenize()
-        
         for i in range(0, len(tokens)):
             
             temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
@@ -143,6 +141,7 @@ def lex(str):
             if i != len(tokens):
                 if tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
+                        varidents.append(tokens[i+1].value)
                         tokens[i+1].type = 'Variable Identifier'
                 elif tokens[i].type == 'Loop Keyword':
                     if tokens[i+1].type == 'Identifier':
@@ -151,7 +150,7 @@ def lex(str):
                     if tokens[i+1].type == 'Identifier':
                         tokens[i+1].type = 'Function Identifier'
                 elif tokens[i].type == 'Identifier' and tokens[i].value.lstrip().rstrip() in varidents:
-                        tokens[i].type = 'Variable Identifier'
+                    tokens[i].type = 'Variable Identifier'
 
         # print('\n\nTokens:')
         for token in tokens:
@@ -159,7 +158,179 @@ def lex(str):
         
         # print(compiled_lex)
         return compiled_lex
-    
+
+def nmbar(tk):  
+                # print(tk)
+                check = 0
+                for j in symbol_table:
+                    # print('haha')
+                    if j[0] == tk:
+                        # print('meron')
+                        # print(token[0])
+                        check = 1
+                        for k in compiled_lex:
+                            # print(k[0])
+                            if k[0] == j[1]:
+                                print(k[0])
+                                # print(k[0])
+                                t = k[1]
+                                if t == 'NUMBAR Literal':
+                                    j[1] = j[1]
+                                    break
+                                elif t == 'NUMBR Literal':
+                                    # print('numbr')
+                                    j[1] = float(j[1])
+                                    break
+                                elif t == 'TROOF Literal':
+                                    if j[1] == 'WIN':
+                                        # print('win')
+                                        j[1] = 1.0
+                                        break
+                                    elif j[1] == 'FAIL':
+                                        # print('fail')
+                                        j[1] = 0.0
+                                        break
+                                elif t == 'YARN Literal':
+                                    if re.search(r'^\d+$', j[1]):
+                                       j[1] = float(j[1])
+                                       break
+                        break
+                #for noob variables or uninitialized
+                if check == 0: 
+                    # print('noob')
+                    temp_arr = [] 
+                    for a in compiled_lex:
+                        if a[0] == tk:
+                            # print('noob')
+                            #check if the variable is declared uninitialized
+                            temp_arr.append(tk)
+                            temp_arr.append(0.0)
+                            symbol_table.append(temp_arr)
+                            break
+
+def nmbr(tk):
+                print(tk)
+                check = 0
+                for j in symbol_table:
+                    if j[0] == tk:
+                        # print(token[0])
+                        check = 1
+                        for k in compiled_lex:
+                            # print(k[0])
+                            if k[0] == j[1]:
+                                # print(k[0])
+                                t = k[1]
+                                # print(t, j[0], j[1])
+                                if t == 'NUMBR Literal':
+                                    j[1] = int(j[1])
+                                elif t == 'NUMBAR Literal':
+                                    # print('numbr')
+                                    j[1] = int(float(j[1]))
+                                    break
+                                elif t == 'TROOF Literal':
+                                    # print('yey')
+                                    if j[1] == 'WIN':
+                                        # print('win')
+                                        j[1] = 1
+                                        break
+                                    elif j[1] == 'FAIL':
+                                        # print('fail')
+                                        j[1] = 0
+                                        break
+                                elif t == 'YARN Literal':
+                                    if re.search(r'^\d+$', j[1]):
+                                       j[1] = int(j[1])
+                                       break
+                        break
+                #for noob variables or uninitialized
+                if check == 0: 
+                    temp_arr = [] 
+                    for a in compiled_lex:
+                        if a[0] == tk:
+                            # print('noob')
+
+                            #check if the variable is declared uninitialized
+                            temp_arr.append(tk)
+                            temp_arr.append(0)
+                            symbol_table.append(temp_arr)
+                            break
+
+def trf(tk):
+                print(tk)
+                check = 0
+                for j in symbol_table:
+                    if j[0] == tk:
+                        # print(token[0])
+                        check = 1
+                        for k in compiled_lex:
+                            # print(k[0])
+                            if k[0] == j[1]:
+                                print(k[0])
+                                t = k[1]
+                                if t == 'NUMBAR Literal':
+                                    if j[1] == 0.0:
+                                    # print('numbr')
+                                        j[1] = "FAIL"
+                                    else:
+                                        j[1] = "WIN"
+                                    break
+                                elif t == 'NUMBR Literal':
+                                    if j[1] == 0:
+                                    # print('numbr')
+                                        j[1] = "FAIL"
+                                    else:
+                                        j[1] = "WIN"
+                                    break
+                                elif t == 'YARN Literal':
+                                    if j[1] == "" or j[1] == " ":
+                                        j[1] = "FAIL"
+                                    else:
+                                        j[1] = "WIN"
+                                    break
+                        break
+                #for noob variables or uninitialized
+                if check == 0: 
+                    temp_arr = [] 
+                    for a in compiled_lex:
+                        if a[0] == tk:
+                            # print('noob')
+                            #check if the variable is declared uninitialized
+                            temp_arr.append(tk)
+                            temp_arr.append("FAIL")
+                            symbol_table.append(temp_arr)
+                            break
+
+def yrn(tk):
+                print(tk)
+                check = 0
+                for j in symbol_table:
+                    if j[0] == tk:
+                        # print(token[0])
+                        check = 1
+                        for k in compiled_lex:
+                            if k[0] == j[1]:
+                                t = k[1]
+                                if t == 'NUMBAR Literal':
+                                    j[1] = str(round(float(j[1]),2))
+                                    break
+                                elif t == 'NUMBR Literal':
+                                    new = str(j[1])
+                                    j[1] = new
+                                    break
+                        break
+                #for noob variables or uninitialized
+                if check == 0: 
+                    temp_arr = [] 
+                    for a in compiled_lex:
+                        if a[0] == tk:
+                            # print('noob')
+                            #check if the variable is declared uninitialized
+                            temp_arr.append(tk)
+                            temp_arr.append("")
+                            # print(type(j[1]))
+                            symbol_table.append(temp_arr)
+                            break
+
 def symbolTable(str1):
     symbol_table.clear()
     it = []
@@ -247,7 +418,7 @@ def symbolTable(str1):
                     temp_arr = [] 
                     for a in compiled_lex:
                         if a[0] == token[0]:
-                            print('noob')
+                            # print('noob')
                             #check if the variable is declared uninitialized
                             temp_arr.append(token[0])
                             temp_arr.append(0.0)
@@ -298,6 +469,8 @@ def symbolTable(str1):
                             temp_arr.append(token[0])
                             temp_arr.append(0)
                             symbol_table.append(temp_arr)
+                        if i[0] == token[0]:
+                            checker = 1
                             break
 
             elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'TROOF': #convert to bool 
@@ -400,10 +573,11 @@ def symbolTable(str1):
                                     break
                     it.append(temp)
                     # temp.clear()
-    
-    for element in it[0]:       # removing '+' delimiter
-        if element == '+':
-            it[0].remove('+')
+
+    if len(it) > 0:
+        for element in it[len(it)-1]:       # removing '+' delimiter
+            if element == '+':
+                it[len(it)-1].remove('+')
 
     j = ""   
     for k in it[len(it)-1:len(it)]:
@@ -418,6 +592,7 @@ def symbolTable(str1):
 
 
 def connect_UI(str):
+    compiled_lex.clear()
     compiled_lex.clear()
     return lex(str)
     
