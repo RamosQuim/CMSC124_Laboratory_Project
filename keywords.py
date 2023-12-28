@@ -143,7 +143,6 @@ def lex(str):
             if i != len(tokens):
                 if tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
-                        varidents.append(tokens[i+1].value.lstrip().rstrip())
                         tokens[i+1].type = 'Variable Identifier'
                 elif tokens[i].type == 'Loop Keyword':
                     if tokens[i+1].type == 'Identifier':
