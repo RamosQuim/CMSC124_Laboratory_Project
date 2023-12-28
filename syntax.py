@@ -653,13 +653,6 @@ def syntax(text):
                     #  #FOR VARIABLE ASSIGNMENT USING R AND R WITH MAEK
                     # wala pang ano para sa expression
                     if lexeme[i][0] == 'R':
-                        # print(lexeme) #r
-                        # print(lexeme[i])
-                        # print(len(lexeme))
-                        # print(lexeme[i+1][0]) #maek
-                        
-                        # print(lexeme[i-1][0]) #var
-                        # print(lexeme[i+2][0]) #maek
                         
                         if len(lexeme) == 3:
 
@@ -681,15 +674,14 @@ def syntax(text):
                                     success = 0
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [MAEK | Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
                                     break 
-                            if lexeme[i+2][0] not in varidents:
+                            if lexeme[i+2][0] != lexeme[i-1][0]:
                                 success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} is not a variable identifier.')
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} and {lexeme[i-1][0]} should be same variable when recasting.')
                                 break
                             if lexeme[i+3][1] != 'Type Literal':
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+3][0]} should be a type literal.')
                                 break
-
                         else:
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
@@ -714,6 +706,10 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                                 break
                             elif lexeme[i-1][0] == 'R' and len(lexeme) == 5:
+                                if lexeme[i-2][0] != lexeme[i+1][0]:
+                                    success = 0
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-2][0]} and {lexeme[i+1][0]} should be same variable for recasting.')
+                                    break
 
                                 if lexeme[i+2][1] != 'Type Literal':
                                     success = 0
