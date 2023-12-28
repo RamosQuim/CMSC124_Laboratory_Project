@@ -114,6 +114,7 @@ def lex(str):
     compiled_lex.clear()
     # global compiled_lex
     # compiled_lex = []
+    varidents = []
     code = str
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
@@ -149,6 +150,8 @@ def lex(str):
                 elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
                     if tokens[i+1].type == 'Identifier':
                         tokens[i+1].type = 'Function Identifier'
+                elif tokens[i].type == 'Identifier' and tokens[i].value.lstrip().rstrip() in varidents:
+                        tokens[i].type = 'Variable Identifier'
 
         # print('\n\nTokens:')
         for token in tokens:
