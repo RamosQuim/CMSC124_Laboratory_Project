@@ -218,414 +218,414 @@ def syntax(text):
                         
                         break
 
-                    ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
-                    if lexeme[i][0] == 'ALL OF':
-                        boolean_index = 1
-                        if len(lexeme) <= 5:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tALL OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
-                            break
-                        while boolean_index < len(lexeme)-2:
-                            if lexeme[boolean_index][0] not in booleans:
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index][0]} is not a finite boolean keyword.')
-                                break
-                            else:
-                                ##BOOLEAN SYNTAX - BOTH OF
-                                if boolean_index+3 >= len(lexeme):
-                                    success = 0
-                                    if lexeme[boolean_index][0] != 'NOT':
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
-                                    else:
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL]')
-                                    break
-                                else:
-                                    if lexeme[boolean_index][0] == "BOTH OF":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        if lexeme[boolean_index+2][0] != 'AN':
-                                            success = 0
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                            break
+                    # ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
+                    # if lexeme[i][0] == 'ALL OF':
+                    #     boolean_index = 1
+                    #     if len(lexeme) <= 5:
+                    #         success = 0
+                    #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tALL OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
+                    #         break
+                    #     while boolean_index < len(lexeme)-2:
+                    #         if lexeme[boolean_index][0] not in booleans:
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index][0]} is not a finite boolean keyword.')
+                    #             break
+                    #         else:
+                    #             ##BOOLEAN SYNTAX - BOTH OF
+                    #             if boolean_index+3 >= len(lexeme):
+                    #                 success = 0
+                    #                 if lexeme[boolean_index][0] != 'NOT':
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
+                    #                 else:
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL]')
+                    #                 break
+                    #             else:
+                    #                 if lexeme[boolean_index][0] == "BOTH OF":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if lexeme[boolean_index+2][0] != 'AN':
+                    #                         success = 0
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #                         break
                                     
-                                        if lexeme[boolean_index+3][0] != 'WIN':
-                                            if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+3][0] != 'FAIL':
-                                            if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+4) < len(lexeme)):
-                                            if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 5
-                                    elif lexeme[boolean_index][0] == "EITHER OF":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        if lexeme[boolean_index+2][0] != 'AN':
-                                            success = 0
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                            break
+                    #                     if lexeme[boolean_index+3][0] != 'WIN':
+                    #                         if lexeme[boolean_index+3][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+3][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+3][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+4) < len(lexeme)):
+                    #                         if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 5
+                    #                 elif lexeme[boolean_index][0] == "EITHER OF":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if lexeme[boolean_index+2][0] != 'AN':
+                    #                         success = 0
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #                         break
                                     
-                                        if lexeme[boolean_index+3][0] != 'WIN':
-                                            if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+3][0] != 'FAIL':
-                                            if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+4) < len(lexeme)):
-                                            if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 5
-                                    elif lexeme[boolean_index][0] == "WON OF":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        if lexeme[boolean_index+2][0] != 'AN':
-                                            success = 0
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                            break
+                    #                     if lexeme[boolean_index+3][0] != 'WIN':
+                    #                         if lexeme[boolean_index+3][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+3][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+3][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+4) < len(lexeme)):
+                    #                         if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 5
+                    #                 elif lexeme[boolean_index][0] == "WON OF":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if lexeme[boolean_index+2][0] != 'AN':
+                    #                         success = 0
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #                         break
                                     
-                                        if lexeme[boolean_index+3][0] != 'WIN':
-                                            if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+3][0] != 'FAIL':
-                                            if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+4) < len(lexeme)) and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
-                                            if lexeme[boolean_index+4][0] != 'AN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 5
-                                    elif lexeme[boolean_index][0] == "NOT":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+2) < len(lexeme)):
-                                            if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 3
-                        else:
-                            if lexeme[len(lexeme)-1][0] != 'MKAY':
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\tALL OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
-                                break
-                        break
+                    #                     if lexeme[boolean_index+3][0] != 'WIN':
+                    #                         if lexeme[boolean_index+3][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+3][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+3][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+4) < len(lexeme)) and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
+                    #                         if lexeme[boolean_index+4][0] != 'AN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 5
+                    #                 elif lexeme[boolean_index][0] == "NOT":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+2) < len(lexeme)):
+                    #                         if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 3
+                    #     else:
+                    #         if lexeme[len(lexeme)-1][0] != 'MKAY':
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\tALL OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
+                    #             break
+                    #     break
 
-                    ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                    if lexeme[i][0] == 'ANY OF':
-                        boolean_index = 1
-                        if len(lexeme) <= 5:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
-                            break
-                        while boolean_index < len(lexeme)-2:
-                            if lexeme[boolean_index][0] not in booleans:
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index][0]} is not a finite boolean keyword.')
-                                break
-                            else:
-                                ##BOOLEAN SYNTAX - BOTH OF
-                                if boolean_index+3 >= len(lexeme):
-                                    success = 0
-                                    if lexeme[boolean_index][0] != 'NOT':
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
-                                    else:
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL]')
-                                    break
-                                else:
-                                    if lexeme[boolean_index][0] == "BOTH OF":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        if lexeme[boolean_index+2][0] != 'AN':
-                                            success = 0
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                            break
+                    # ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
+                    # if lexeme[i][0] == 'ANY OF':
+                    #     boolean_index = 1
+                    #     if len(lexeme) <= 5:
+                    #         success = 0
+                    #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
+                    #         break
+                    #     while boolean_index < len(lexeme)-2:
+                    #         if lexeme[boolean_index][0] not in booleans:
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index][0]} is not a finite boolean keyword.')
+                    #             break
+                    #         else:
+                    #             ##BOOLEAN SYNTAX - BOTH OF
+                    #             if boolean_index+3 >= len(lexeme):
+                    #                 success = 0
+                    #                 if lexeme[boolean_index][0] != 'NOT':
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
+                    #                 else:
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL]')
+                    #                 break
+                    #             else:
+                    #                 if lexeme[boolean_index][0] == "BOTH OF":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if lexeme[boolean_index+2][0] != 'AN':
+                    #                         success = 0
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #                         break
                                     
-                                        if lexeme[boolean_index+3][0] != 'WIN':
-                                            if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+3][0] != 'FAIL':
-                                            if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+4) < len(lexeme)):
-                                            if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 5
-                                    elif lexeme[boolean_index][0] == "EITHER OF":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        if lexeme[boolean_index+2][0] != 'AN':
-                                            success = 0
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                            break
+                    #                     if lexeme[boolean_index+3][0] != 'WIN':
+                    #                         if lexeme[boolean_index+3][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+3][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+3][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+4) < len(lexeme)):
+                    #                         if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 5
+                    #                 elif lexeme[boolean_index][0] == "EITHER OF":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if lexeme[boolean_index+2][0] != 'AN':
+                    #                         success = 0
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #                         break
                                     
-                                        if lexeme[boolean_index+3][0] != 'WIN':
-                                            if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+3][0] != 'FAIL':
-                                            if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+4) < len(lexeme)):
-                                            if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 5
-                                    elif lexeme[boolean_index][0] == "WON OF":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        if lexeme[boolean_index+2][0] != 'AN':
-                                            success = 0
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                            break
+                    #                     if lexeme[boolean_index+3][0] != 'WIN':
+                    #                         if lexeme[boolean_index+3][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+3][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+3][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+4) < len(lexeme)):
+                    #                         if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 5
+                    #                 elif lexeme[boolean_index][0] == "WON OF":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if lexeme[boolean_index+2][0] != 'AN':
+                    #                         success = 0
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #                         break
                                     
-                                        if lexeme[boolean_index+3][0] != 'WIN':
-                                            if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+3][0] != 'FAIL':
-                                            if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+4) < len(lexeme)) and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
-                                            if lexeme[boolean_index+4][0] != 'AN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 5
-                                    elif lexeme[boolean_index][0] == "NOT":
-                                        if lexeme[boolean_index+1][0] != 'WIN':
-                                            if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
-                                        elif lexeme[boolean_index+1][0] != 'FAIL':
-                                            if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
-                                        if ((boolean_index+2) < len(lexeme)):
-                                            if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
-                                                break
-                                        boolean_index += 3
-                        else:
-                            if lexeme[len(lexeme)-1][0] != 'MKAY':
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
-                                break
-                        break
+                    #                     if lexeme[boolean_index+3][0] != 'WIN':
+                    #                         if lexeme[boolean_index+3][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+3][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+3][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+4) < len(lexeme)) and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
+                    #                         if lexeme[boolean_index+4][0] != 'AN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+4][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 5
+                    #                 elif lexeme[boolean_index][0] == "NOT":
+                    #                     if lexeme[boolean_index+1][0] != 'WIN':
+                    #                         if lexeme[boolean_index+1][0] != 'FAIL':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                    #                             break
+                    #                     elif lexeme[boolean_index+1][0] != 'FAIL':
+                    #                         if lexeme[boolean_index+1][0] != 'WIN':
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                    #                             break
+                    #                     if ((boolean_index+2) < len(lexeme)):
+                    #                         if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
+                    #                             success = 0
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                    #                             break
+                    #                     boolean_index += 3
+                    #     else:
+                    #         if lexeme[len(lexeme)-1][0] != 'MKAY':
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
+                    #             break
+                    #     break
 
-                    ##BOOLEAN SYNTAX - BOTH OF
-                    if lexeme[i][0] == "BOTH OF":
-                        if len(lexeme) > 4 or len(lexeme) <= 3:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 4:
-                            if lexeme[i+1][0] != 'WIN':
-                                if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                            elif lexeme[i+1][0] != 'FAIL':
-                                if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                    # ##BOOLEAN SYNTAX - BOTH OF
+                    # if lexeme[i][0] == "BOTH OF":
+                    #     if len(lexeme) > 4 or len(lexeme) <= 3:
+                    #         success = 0
+                    #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                    #         break
+                    #     elif len(lexeme) == 4:
+                    #         if lexeme[i+1][0] != 'WIN':
+                    #             if lexeme[i+1][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #         elif lexeme[i+1][0] != 'FAIL':
+                    #             if lexeme[i+1][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
                             
-                            if lexeme[i+2][0] != 'AN':
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                break
+                    #         if lexeme[i+2][0] != 'AN':
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #             break
                         
-                            if lexeme[i+3][0] != 'WIN':
-                                if lexeme[i+3][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                                break
-                            elif lexeme[i+3][0] != 'FAIL':
-                                if lexeme[i+3][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                                break
-                    #BOOLEAN SYNTAX - EITHER OF
-                    if lexeme[i][0] == "EITHER OF":
-                        if len(lexeme) > 4 or len(lexeme) <= 3:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 4:
-                            if lexeme[i+1][0] != 'WIN':
-                                if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                            elif lexeme[i+1][0] != 'FAIL':
-                                if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                    #         if lexeme[i+3][0] != 'WIN':
+                    #             if lexeme[i+3][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #             break
+                    #         elif lexeme[i+3][0] != 'FAIL':
+                    #             if lexeme[i+3][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #             break
+                    # #BOOLEAN SYNTAX - EITHER OF
+                    # if lexeme[i][0] == "EITHER OF":
+                    #     if len(lexeme) > 4 or len(lexeme) <= 3:
+                    #         success = 0
+                    #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                    #         break
+                    #     elif len(lexeme) == 4:
+                    #         if lexeme[i+1][0] != 'WIN':
+                    #             if lexeme[i+1][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #         elif lexeme[i+1][0] != 'FAIL':
+                    #             if lexeme[i+1][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
                             
-                            if lexeme[i+2][0] != 'AN':
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                break
+                    #         if lexeme[i+2][0] != 'AN':
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #             break
                         
-                            if lexeme[i+3][0] != 'WIN':
-                                if lexeme[i+3][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                                break
-                            elif lexeme[i+3][0] != 'FAIL':
-                                if lexeme[i+3][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                                break
+                    #         if lexeme[i+3][0] != 'WIN':
+                    #             if lexeme[i+3][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #             break
+                    #         elif lexeme[i+3][0] != 'FAIL':
+                    #             if lexeme[i+3][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #             break
                     
-                    ##BOOLEAN SYNTAX - WON OF
-                    if lexeme[i][0] == "WON OF":
-                        if len(lexeme) > 4 or len(lexeme) <= 3:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 4:
-                            if lexeme[i+1][0] != 'WIN':
-                                if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                            elif lexeme[i+1][0] != 'FAIL':
-                                if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                    # ##BOOLEAN SYNTAX - WON OF
+                    # if lexeme[i][0] == "WON OF":
+                    #     if len(lexeme) > 4 or len(lexeme) <= 3:
+                    #         success = 0
+                    #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                    #         break
+                    #     elif len(lexeme) == 4:
+                    #         if lexeme[i+1][0] != 'WIN':
+                    #             if lexeme[i+1][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #         elif lexeme[i+1][0] != 'FAIL':
+                    #             if lexeme[i+1][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
                             
-                            if lexeme[i+2][0] != 'AN':
-                                success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
-                                break
+                    #         if lexeme[i+2][0] != 'AN':
+                    #             success = 0
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
+                    #             break
                         
-                            if lexeme[i+3][0] != 'WIN':
-                                if lexeme[i+3][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                                break
-                            elif lexeme[i+3][0] != 'FAIL':
-                                if lexeme[i+3][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                                break
+                    #         if lexeme[i+3][0] != 'WIN':
+                    #             if lexeme[i+3][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #             break
+                    #         elif lexeme[i+3][0] != 'FAIL':
+                    #             if lexeme[i+3][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #             break
                     
-                    ##BOOLEAN SYNTAX - NOT
-                    if lexeme[i][0] == "NOT":
-                        if len(lexeme) > 3 or len(lexeme) < 2: 
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tNOT [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 2:
-                            if lexeme[i+1][0] != 'WIN':
-                                if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                            elif lexeme[i+1][0] != 'FAIL':
-                                if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                    # ##BOOLEAN SYNTAX - NOT
+                    # if lexeme[i][0] == "NOT":
+                    #     if len(lexeme) > 3 or len(lexeme) < 2: 
+                    #         success = 0
+                    #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tNOT [WIN|FAIL]')
+                    #         break
+                    #     elif len(lexeme) == 2:
+                    #         if lexeme[i+1][0] != 'WIN':
+                    #             if lexeme[i+1][0] != 'FAIL':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
+                    #         elif lexeme[i+1][0] != 'FAIL':
+                    #             if lexeme[i+1][0] != 'WIN':
+                    #                 success = 0
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                    #                 break
 
                     ## CONCATENATION BLOCK SYNTAX - SMOOSH
                     if lexeme[i][0] == 'SMOOSH':
