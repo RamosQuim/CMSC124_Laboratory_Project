@@ -157,14 +157,18 @@ def lex(str):
         return compiled_lex
 
 def nmbar(tk):  
+                # print(tk)
                 check = 0
                 for j in symbol_table:
+                    # print('haha')
                     if j[0] == tk:
+                        # print('meron')
                         # print(token[0])
                         check = 1
                         for k in compiled_lex:
                             # print(k[0])
                             if k[0] == j[1]:
+                                print(k[0])
                                 # print(k[0])
                                 t = k[1]
                                 if t == 'NUMBAR Literal':
@@ -190,10 +194,11 @@ def nmbar(tk):
                         break
                 #for noob variables or uninitialized
                 if check == 0: 
+                    # print('noob')
                     temp_arr = [] 
                     for a in compiled_lex:
                         if a[0] == tk:
-                            print('noob')
+                            # print('noob')
                             #check if the variable is declared uninitialized
                             temp_arr.append(tk)
                             temp_arr.append(0.0)
@@ -201,6 +206,7 @@ def nmbar(tk):
                             break
 
 def nmbr(tk):
+                print(tk)
                 check = 0
                 for j in symbol_table:
                     if j[0] == tk:
@@ -211,7 +217,7 @@ def nmbr(tk):
                             if k[0] == j[1]:
                                 # print(k[0])
                                 t = k[1]
-                                print(t, j[0], j[1])
+                                # print(t, j[0], j[1])
                                 if t == 'NUMBR Literal':
                                     j[1] = int(j[1])
                                 elif t == 'NUMBAR Literal':
@@ -219,7 +225,7 @@ def nmbr(tk):
                                     j[1] = int(float(j[1]))
                                     break
                                 elif t == 'TROOF Literal':
-                                    print('yey')
+                                    # print('yey')
                                     if j[1] == 'WIN':
                                         # print('win')
                                         j[1] = 1
@@ -238,7 +244,8 @@ def nmbr(tk):
                     temp_arr = [] 
                     for a in compiled_lex:
                         if a[0] == tk:
-                            print('noob')
+                            # print('noob')
+
                             #check if the variable is declared uninitialized
                             temp_arr.append(tk)
                             temp_arr.append(0)
@@ -246,6 +253,7 @@ def nmbr(tk):
                             break
 
 def trf(tk):
+                print(tk)
                 check = 0
                 for j in symbol_table:
                     if j[0] == tk:
@@ -282,7 +290,7 @@ def trf(tk):
                     temp_arr = [] 
                     for a in compiled_lex:
                         if a[0] == tk:
-                            print('noob')
+                            # print('noob')
                             #check if the variable is declared uninitialized
                             temp_arr.append(tk)
                             temp_arr.append("FAIL")
@@ -290,6 +298,7 @@ def trf(tk):
                             break
 
 def yrn(tk):
+                print(tk)
                 check = 0
                 for j in symbol_table:
                     if j[0] == tk:
@@ -311,7 +320,7 @@ def yrn(tk):
                     temp_arr = [] 
                     for a in compiled_lex:
                         if a[0] == tk:
-                            print('noob')
+                            # print('noob')
                             #check if the variable is declared uninitialized
                             temp_arr.append(tk)
                             temp_arr.append("")
@@ -371,29 +380,42 @@ def symbolTable(str1):
             
             if str1[end_index+1:end_index+7].rstrip().lstrip() == 'NUMBAR': #convert to float 
                 nmbar(token[0])
+                break
             elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'NUMBR': #convert to int 
                 nmbr(token[0])
+                break
             elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'TROOF': #convert to bool 
                 trf(token[0])
+                break
             elif str1[end_index+1:end_index+5].rstrip().lstrip() == 'YARN': #convert to string 
                 yrn(token[0])
+                break
 
-            #for R MAEK RECASTING
-            m = re.search(r'(\S+)\s+R\s+MAEK\s+(.+)', str1) 
+            #for R MAEK RECASTING r'\b'+token[0]+r'\b IS NOW A'
+            m = re.finditer(r'\b'+token[0]+r'\b R MAEK', str1)
+            last_occurrence_startIndex = -1
+            e = -1
+            for match in m:
+                print(match)
+                last_occurrence_startIndex = match.start()
+                e = match.end()
             
-            if m != None:
-                print('yey')
-                before_word = m.group(1)
-                next_words = m.group(2)
-                if re.search(fr'\b{before_word}\b', next_words): #check if same variable
-                    if re.search(fr'\bNUMBAR\b', next_words):
-                       nmbar(before_word)
-                    elif re.search(fr'\bNUMBR\b', next_words):
-                       nmbr(before_word)
-                    elif re.search(fr'\bYARN\b', next_words):
-                       yrn(before_word)
-                    elif re.search(fr'\TROOF\b', next_words):
-                       trf(before_word)
+            length = len(token[0]) + 1
+
+            print(str1[e+length:e+7].rstrip().lstrip())
+            if str1[e+length:e+length+7].rstrip().lstrip() == 'NUMBAR':
+                       print('float')
+                       nmbar(token[0])
+                        
+            elif str1[e+length:e+length+6].rstrip().lstrip() == 'NUMBR':
+                       print('int')
+                       nmbr(token[0])
+            elif str1[e+length:e+length+5].rstrip().lstrip() == 'YARN':
+                       print('str')
+                       yrn(token[0])
+            elif str1[e+length:e+length+6].rstrip().lstrip() == 'TROOF':
+                       print('bool')
+                       trf(token[0])
             
 
         elif token[0] == 'VISIBLE':
