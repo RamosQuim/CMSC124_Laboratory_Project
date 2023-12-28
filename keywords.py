@@ -76,6 +76,7 @@ token_patterns = {
     r'\s*A\s+': 'Typecasting Operation',                   
     r'\s*IS NOW A\s+': 'Typecasting Operation',
     r'\s*VISIBLE\s+': 'Output Keyword',
+    r'\s*\+\s+': 'Output Delimiter',
     r'\s*GIMMEH\s+': 'Input Keyword',
     r'\s*O\sRLY\?\s+': 'If-then Keyword',
     r'\s*YA RLY\s+': 'If-then Keyword',
@@ -216,6 +217,8 @@ def symbolTable(str):
                         c = 0
                         if v[0] == '"' and v[len(v)-1] == '"':
                             temp.append(v)
+                        elif v.replace(".", "").isnumeric() or v == 'WIN' or v == 'FAIL' or v == '+':
+                            temp.append(v)
                         else:
                             for j in symbol_table:
                                 if j[0].split() == v.split():
@@ -224,6 +227,10 @@ def symbolTable(str):
                                     break
                     it.append(temp)
                     # temp.clear()
+    
+    for element in it[0]:       # removing '+' delimiter
+        if element == '+':
+            it[0].remove('+')
 
     j = ""  
     for k in it[len(it)-1:len(it)]:
