@@ -924,8 +924,24 @@ def syntax(text):
                         if omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
                             success = 0
-                            break        
+                            break     
 
+                    #THIS ONE IS CREATED FOR THE GIMMEH INPUT!!
+                    if lexeme[i][0] == 'GIMMEH':
+                        print(f"varidents:{varidents}")
+                        if len(lexeme[i])<2:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t GIMMEH should be followed by a Variable')
+                            success = 0
+                            break
+                        elif lexeme[i+1][0] not in varidents:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t GIMMEH should be followed by a Variable')
+                            success = 0
+                            break
+                        elif len(lexeme[i])>2:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t GIMMEH should only have a Variable')
+                            success = 0
+                            break                         
+                        
                 else:
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')
                     success = 0

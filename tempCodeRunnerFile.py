@@ -11,10 +11,7 @@ import keywords
 import syntax
 import semantics
 
-global input_checker, input_user
-
 input_checker = 0
-input_user = ""
 
 # this will readd the file and store the content in textEditor
 def filename():
@@ -30,22 +27,17 @@ def filename():
    
     file.close()
 
-#get the input checker (needed para sa pag infinite loop niya)
+#get the input checker
 def get_inputchecker():
     temp = input_checker
     input_checker = 0  # this is to created para pag nag 1 siya ay magrereset siya hehe
     return temp
-
-#pass the input to the semantics
-def pass_input():
-    return input_user
 
 #THIS PART WILL ASK THE USER FOR THE INPUT
 def get_user_input():
     input = sd.askstring("Input", "Enter variable value: ")
     if input is not None:
         console.insert(tk.END, f"\nUser input: {input}\n")
-        input_user = input
         input_checker = 1
 
 #this will be responsible for
