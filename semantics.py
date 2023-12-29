@@ -1,6 +1,7 @@
 import keywords
 import syntax
-import ui 
+import for_input
+# import ui 
 
 def semantics(text):
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
@@ -333,14 +334,16 @@ def semantics(text):
 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
                 elif lexeme[i][0] == 'GIMMEH':
-                    #loop lang siya hanggang wala pang input si user! (do nothing)
-                    while ui.get_inputchecker() != 1:
-                        #ui.get_inputchecker
-                        print("hey")
-                    print("success")
-                    #dapat yung input_value ay yung value na nilagay ni user :< 
-                    input_value = ui.pass_input()
-                    varidents[lexeme[i][1]] = str(input_value)
+                    # #loop lang siya hanggang wala pang input si user! (do nothing)
+                    # while ui.get_inputchecker() != 1:
+                    #     #ui.get_inputchecker
+                    #     print("hey")
+                    # print("success")
+                    # #dapat yung input_value ay yung value na nilagay ni user :<
+                    # resolved na :>>
+                    input_value = for_input.get_user_input()
+                    varidents[lexeme[i+1][0]] = str(input_value)
+                    semanticsResult += f"{lexeme[i+1][0]} is: {varidents[lexeme[i+1][0]]}\n"
             lexeme.clear()
     
     return semanticsResult
