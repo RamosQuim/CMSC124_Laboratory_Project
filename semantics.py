@@ -20,6 +20,7 @@ def semantics(text):
     global explicit_typecast
     explicit_typecast = ""
     varidents = syntax.getVaridents(text)
+    literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     # print(varidents)
     
     for h in range(0, len(text.splitlines())):
