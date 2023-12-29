@@ -2,18 +2,25 @@ import keywords
 import syntax
 
 modified_varidents = {}
+explicit_typecast = ""
 varidents = {}
+
+def getExplicitTypecast(text):
+   
+    semantics(text)
+    return explicit_typecast
 
 def getVaridents(text):
     semantics(text)
-    print(modified_varidents)
     return modified_varidents
 
 def semantics(text):
     semanticsResult = ''
     global varidents
+    global explicit_typecast
+    explicit_typecast = ""
     varidents = syntax.getVaridents(text)
-    print(varidents)
+    # print(varidents)
     
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
@@ -455,16 +462,16 @@ def semantics(text):
                             # print(lexeme[i+1][0].isnumeric())
                                 if lexeme[i+1][0].isnumeric():
                                     varidents[j] = int(lexeme[i+1][0])
-                                    print(varidents)
+                                    # print(varidents)
                                     modified_varidents[lexeme[i-1][0]] = int(lexeme[i+1][0])
                                 else:
                                     if convertFloat(lexeme[i+1][0]):
                                         varidents[j] = float(lexeme[i+1][0])
-                                        print(varidents)
+                                        # print(varidents)
                                         modified_varidents[lexeme[i-1][0]] = float(lexeme[i+1][0])
                                     elif lexeme[i+1][0] == 'WIN' or lexeme[i+1][0] == 'FAIL':
                                         varidents[j] = lexeme[i+1][0]
-                                        print(varidents)
+                                        # print(varidents)
                                         modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
                                     else:
                                         for k in varidents:
@@ -473,14 +480,63 @@ def semantics(text):
                                                 modified_varidents[lexeme[i-1][0]] = varidents[k]
                                                 break
                     elif len(lexeme) == 5:
-                        print(varidents)
+                        # print(varidents)
                         for j in varidents:
                             if lexeme[i-1][0] == j:
                                 if lexeme[i+1][0] == '"' and lexeme[i+3][0] == '"':
                                     varidents[j] = lexeme[i+2][0]
                                     modified_varidents[lexeme[i-1][0]] = str(lexeme[i+2][0])
                     
-                    # varidents[lexeme[i-1][0]] = lexeme[i+1][0]
+                elif lexeme[i][0] == 'MAEK':
+                    if len(lexeme) == 3 or len(lexeme) == 4 :
+                        for j in varidents:
+                            if j == lexeme[i+1][0]:
+                                if varidents[j] == 'NOOB':
+                                    if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                        explicit_typecast = ""
+                                    elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                        explicit_typecast = "0.0"
+                                    elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                        explicit_typecast = "0"
+                                    elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                        explicit_typecast = "FAIL"
+                                else:
+                                    if str(varidents[j]).isnumeric():
+                                        if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                            explicit_typecast = str(varidents[j])
+                                        elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                            explicit_typecast = float(varidents[j])
+                                        elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                            explicit_typecast = int(float(varidents[j]))
+                                    elif convertFloat(varidents[j]):
+                                        if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                            explicit_typecast = str(varidents[j])
+                                        elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                            explicit_typecast = float(varidents[j])
+                                        elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                            explicit_typecast = int(float(varidents[j]))
+                                    elif varidents[j] == 'WIN':
+                                        if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                            explicit_typecast = str(varidents[j])
+                                        elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                            explicit_typecast = '1.0'
+                                        elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                            explicit_typecast = '1'
+                                        elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                            explicit_typecast = varidents[j]
+                                    elif varidents[j] == 'FAIL':
+                                        if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                            explicit_typecast = str(varidents[j])
+                                        elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                            explicit_typecast = '0.0'
+                                        elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                            explicit_typecast = '0'
+                                        elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                            explicit_typecast = varidents[j]
+                                
+
+
+                                
             lexeme.clear()
     
     return semanticsResult

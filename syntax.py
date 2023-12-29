@@ -134,6 +134,7 @@ def syntax(text):
                     #                 success = 0
 
                     ## COMPARISON SYNTAX - BOTH SAEM
+                    # print(lexeme[i][0])
                     if lexeme[i][0] == 'BOTH SAEM':
                         if len(lexeme) != 4 and len(lexeme) != 7:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
@@ -710,18 +711,18 @@ def syntax(text):
                         elif len(lexeme) == 5:
                             if lexeme[i+1][0] != '"' and lexeme[i+3][0] != '"':
 
-                                if lexeme[i-1][0] not in varidents:
+                                if lexeme[i-1][0] not in varidents or varidents[lexeme[i-1][0]] == 'NOOB':
                                     success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not a variable identifier.')
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not a variable identifier or is an uninitialized variable.')
                                     break
                                 if lexeme[i+1][1] not in varAssignment_literals and lexeme[i+1][0] not in varidents:
                                     if lexeme[i+1][0] != 'MAEK':
                                         success = 0
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [MAEK | Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
                                         break 
-                                if lexeme[i+2][0] != lexeme[i-1][0]:
+                                if lexeme[i+2][0] != lexeme[i-1][0] or varidents[lexeme[i+2][0]] == 'NOOB':
                                     success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} and {lexeme[i-1][0]} should be same variable when recasting.')
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} and {lexeme[i-1][0]} should be same variable when recasting and must be initialized.')
                                     break
                                 if lexeme[i+3][1] != 'Type Literal':
                                     success = 0
@@ -742,9 +743,9 @@ def syntax(text):
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                             break
                         else:
-                            if lexeme[i+1][0] not in varidents:
+                            if lexeme[i+1][0] not in varidents :
                                 success = 0
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} should be a variable identifier.')
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} should be a variable identifier and must be initialized.')
                                 break
 
                             if lexeme[i-1][0] == 'R' and len(lexeme) == 4:
@@ -782,7 +783,7 @@ def syntax(text):
                         # print(lexeme)
                         if len(lexeme) == 3:
                             # print(lexeme[i-1][0])
-                            if lexeme[i-1][0] not in varidents:
+                            if lexeme[i-1][0] not in varidents or varidents[lexeme[i-1][0]] == 'NOOB':
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} should be a variable identifier.')
                                 break
