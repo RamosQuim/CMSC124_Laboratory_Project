@@ -10,8 +10,8 @@ WAZZUP
 BUHBYE
 	var1 R MAEK var1 YARN
 	var3 R 5
-	var R 101.300
-	jaja R 1.0
+	var R var2
+	jaja R var
 	sion R "some"
 	quim R WIN
 	lexgo R 5.0
