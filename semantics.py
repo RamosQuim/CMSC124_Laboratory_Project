@@ -42,51 +42,400 @@ def semantics(text):
                         semanticsResult += f'WIN\n'
                     else:
                         semanticsResult += f'FAIL\n'
-
+                ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
+                elif lexeme[i][0] == 'ALL OF':
+                    boolean_index = 1
+                    result = []
+                    while boolean_index < len(lexeme)-2:
+                        if lexeme[boolean_index][0] == "BOTH OF":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                            boolean_index += 5
+                        elif lexeme[boolean_index][0] == "EITHER OF":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN\n')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN\n')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN\n')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN\n')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                            boolean_index += 5
+                        elif lexeme[boolean_index][0] == "WON OF":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append(f'WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append(f'FAIL')
+                            boolean_index += 5
+                        elif lexeme[boolean_index][0] == "NOT":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL':
+                                    result.append(f'WIN')
+                            else:
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN':
+                                    result.append(f'FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL':
+                                    result.append(f'WIN')
+                            boolean_index += 3
+                    if 'FAIL' in result:
+                        semanticsResult += f'FAIL\n'
+                    else:
+                        semanticsResult += f'WIN\n'
+                    break
+                ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
+                elif lexeme[i][0] == 'ANY OF':
+                    boolean_index = 1
+                    result = []
+                    while boolean_index < len(lexeme)-2:
+                        if lexeme[boolean_index][0] == "BOTH OF":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                            boolean_index += 5
+                        elif lexeme[boolean_index][0] == "EITHER OF":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN\n')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN\n')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN\n')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN\n')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                            boolean_index += 5
+                        elif lexeme[boolean_index][0] == "WON OF":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN\n')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'TROOF Literal':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'WIN':
+                                    result.append('WIN\n')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and lexeme[boolean_index+3][0] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('WIN')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN\n')
+                                elif lexeme[boolean_index+1][0] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                            elif lexeme[boolean_index+1][1] == 'Identifier' and lexeme[boolean_index+3][1] == 'Identifier':
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'WIN' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('WIN')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'WIN':
+                                    result.append('WIN\n')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL' and varidents[lexeme[boolean_index+3][0]] == 'FAIL':
+                                    result.append('FAIL')
+                            boolean_index += 5
+                        elif lexeme[boolean_index][0] == "NOT":
+                            if lexeme[boolean_index+1][1] == 'TROOF Literal':
+                                if lexeme[boolean_index+1][0] == 'WIN':
+                                    result.append('FAIL')
+                                elif lexeme[boolean_index+1][0] == 'FAIL':
+                                    result.append('WIN')
+                            else:
+                                if varidents[lexeme[boolean_index+1][0]] == 'WIN':
+                                    result.append('FAIL')
+                                elif varidents[lexeme[boolean_index+1][0]] == 'FAIL':
+                                    result.append('WIN')
+                            boolean_index += 3
+                    if 'WIN' in result:
+                        semanticsResult += f'WIN\n'
+                    else:
+                        semanticsResult += f'FAIL\n'
+                    break
                 elif lexeme[i][0] == 'BOTH OF' and len(lexeme) == 4:
-                    # print(lexeme[i])
-                    if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                        semanticsResult += f'WIN\n'
-                    elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                        semanticsResult += f'FAIL\n'
-                    elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                        semanticsResult += f'FAIL\n'
-                    elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                        semanticsResult += f'FAIL\n'
-                    else:
-                        semanticsResult += f'FAIL\n'
+                    if lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'TROOF Literal':
+                        if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'FAIL\n'
+                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'Identifier' and lexeme[i+3][1] == 'TROOF Literal':
+                        if varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'FAIL\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'Identifier':
+                        if lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'FAIL\n'
+                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'Identifier' and lexeme[i+3][1] == 'Identifier':
+                        if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'FAIL\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
                 elif lexeme[i][0] == 'EITHER OF' and len(lexeme) == 4:
-                    # print(lexeme[i])
-                    if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                        semanticsResult += f'WIN\n'
-                    elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                        semanticsResult += f'WIN\n'
-                    elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                        semanticsResult += f'WIN\n'
-                    elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                        semanticsResult += f'FAIL\n'
-                    else:
-                        semanticsResult += f'FAIL\n'
+                    if lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'TROOF Literal':
+                        if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
+                            result.append('WIN\n')
+                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'Identifier' and lexeme[i+3][1] == 'TROOF Literal':
+                        if varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'WIN':
+                            result.append('WIN\n')
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'Identifier':
+                        if lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
+                            result.append('WIN\n')
+                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'Identifier' and lexeme[i+3][1] == 'Identifier':
+                        if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
+                            result.append('WIN\n')
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
                 elif lexeme[i][0] == 'WON OF' and len(lexeme) == 4:
-                    # print(lexeme[i])
-                    if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                        semanticsResult += f'FAIL\n'
-                    elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                        semanticsResult += f'WIN\n'
-                    elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                        semanticsResult += f'WIN\n'
-                    elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                        semanticsResult += f'FAIL\n'
-                    else:
-                        semanticsResult += f'FAIL\n'
+                    if lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'TROOF Literal':
+                        if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
+                            result.append('WIN\n')
+                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'Identifier' and lexeme[i+3][1] == 'TROOF Literal':
+                        if varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'WIN':
+                            result.append('WIN\n')
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'Identifier':
+                        if lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
+                            result.append('WIN\n')
+                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
+                    elif lexeme[i+1][1] == 'Identifier' and lexeme[i+3][1] == 'Identifier':
+                        if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'WIN\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
+                            result.append('WIN\n')
+                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
+                            semanticsResult += f'FAIL\n'
                 elif lexeme[i][0] == 'NOT' and len(lexeme) == 2:
-                    # print(lexeme[i])
-                    if lexeme[i+1][0] == 'WIN':
-                        semanticsResult += f'FAIL\n'
-                    elif lexeme[i+1][0] == 'FAIL':
-                        semanticsResult += f'WIN\n'
+                    if lexeme[i+1][1] == 'TROOF Literal':
+                        if lexeme[i+1][0] == 'WIN':
+                            semanticsResult += f'FAIL\n'
+                        elif lexeme[i+1][0] == 'FAIL':
+                            semanticsResult += f'WIN\n'
                     else:
-                        semanticsResult += f'FAIL\n'
+                        if varidents[lexeme[i+1][0]] == 'WIN':
+                            semanticsResult += f'FAIL\n'
+                        elif varidents[lexeme[i+1][0]] == 'FAIL':
+                            semanticsResult += f'WIN\n'
             lexeme.clear()
     
     return semanticsResult

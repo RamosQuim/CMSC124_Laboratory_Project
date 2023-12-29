@@ -243,14 +243,16 @@ def syntax(text):
                                     if lexeme[boolean_index][0] == "BOTH OF":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         if lexeme[boolean_index+2][0] != 'AN':
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -258,14 +260,16 @@ def syntax(text):
                                     
                                         if lexeme[boolean_index+3][0] != 'WIN':
                                             if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+3][0] != 'FAIL':
                                             if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+4) < len(lexeme)):
                                             if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
                                                 success = 0
@@ -275,14 +279,16 @@ def syntax(text):
                                     elif lexeme[boolean_index][0] == "EITHER OF":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         if lexeme[boolean_index+2][0] != 'AN':
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -290,14 +296,16 @@ def syntax(text):
                                     
                                         if lexeme[boolean_index+3][0] != 'WIN':
                                             if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+3][0] != 'FAIL':
                                             if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+4) < len(lexeme)):
                                             if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
                                                 success = 0
@@ -307,14 +315,16 @@ def syntax(text):
                                     elif lexeme[boolean_index][0] == "WON OF":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         if lexeme[boolean_index+2][0] != 'AN':
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -322,14 +332,16 @@ def syntax(text):
                                     
                                         if lexeme[boolean_index+3][0] != 'WIN':
                                             if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+3][0] != 'FAIL':
                                             if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+4) < len(lexeme)) and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
                                             if lexeme[boolean_index+4][0] != 'AN':
                                                 success = 0
@@ -339,14 +351,16 @@ def syntax(text):
                                     elif lexeme[boolean_index][0] == "NOT":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+2) < len(lexeme)):
                                             if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
                                                 success = 0
@@ -385,14 +399,16 @@ def syntax(text):
                                     if lexeme[boolean_index][0] == "BOTH OF":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         if lexeme[boolean_index+2][0] != 'AN':
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -400,14 +416,16 @@ def syntax(text):
                                     
                                         if lexeme[boolean_index+3][0] != 'WIN':
                                             if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+3][0] != 'FAIL':
                                             if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+4) < len(lexeme)):
                                             if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
                                                 success = 0
@@ -417,14 +435,16 @@ def syntax(text):
                                     elif lexeme[boolean_index][0] == "EITHER OF":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         if lexeme[boolean_index+2][0] != 'AN':
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -432,14 +452,16 @@ def syntax(text):
                                     
                                         if lexeme[boolean_index+3][0] != 'WIN':
                                             if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+3][0] != 'FAIL':
                                             if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of EITHER OF must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+4) < len(lexeme)):
                                             if lexeme[boolean_index+4][0] != 'AN' and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
                                                 success = 0
@@ -449,14 +471,16 @@ def syntax(text):
                                     elif lexeme[boolean_index][0] == "WON OF":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         if lexeme[boolean_index+2][0] != 'AN':
                                             success = 0
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -464,14 +488,16 @@ def syntax(text):
                                     
                                         if lexeme[boolean_index+3][0] != 'WIN':
                                             if lexeme[boolean_index+3][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+3][0] != 'FAIL':
                                             if lexeme[boolean_index+3][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+3][0] not in varidents or varidents[lexeme[boolean_index+3][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\t Operands of WON OF must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+4) < len(lexeme)) and (lexeme[boolean_index+4][0] != 'MKAY' and boolean_index+4 != len(lexeme)-1):
                                             if lexeme[boolean_index+4][0] != 'AN':
                                                 success = 0
@@ -481,14 +507,16 @@ def syntax(text):
                                     elif lexeme[boolean_index][0] == "NOT":
                                         if lexeme[boolean_index+1][0] != 'WIN':
                                             if lexeme[boolean_index+1][0] != 'FAIL':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                                                    break
                                         elif lexeme[boolean_index+1][0] != 'FAIL':
                                             if lexeme[boolean_index+1][0] != 'WIN':
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
-                                                break
+                                                if lexeme[boolean_index+1][0] not in varidents or varidents[lexeme[boolean_index+1][0]] == 'NOOB':
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tOperands of NOT must be either WIN OR FAIL.')
+                                                    break
                                         if ((boolean_index+2) < len(lexeme)):
                                             if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
                                                 success = 0
@@ -511,14 +539,16 @@ def syntax(text):
                         elif len(lexeme) == 4:
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                             elif lexeme[i+1][0] != 'FAIL':
                                 if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                             
                             if lexeme[i+2][0] != 'AN':
                                 success = 0
@@ -527,15 +557,17 @@ def syntax(text):
                         
                             if lexeme[i+3][0] != 'WIN':
                                 if lexeme[i+3][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+3][0] not in varidents or varidents[lexeme[i+3][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                                 break
                             elif lexeme[i+3][0] != 'FAIL':
                                 if lexeme[i+3][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+3][0] not in varidents or varidents[lexeme[i+3][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                                 break
                     #BOOLEAN SYNTAX - EITHER OF
                     if lexeme[i][0] == "EITHER OF":
@@ -546,14 +578,16 @@ def syntax(text):
                         elif len(lexeme) == 4:
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                             elif lexeme[i+1][0] != 'FAIL':
                                 if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                             
                             if lexeme[i+2][0] != 'AN':
                                 success = 0
@@ -562,15 +596,17 @@ def syntax(text):
                         
                             if lexeme[i+3][0] != 'WIN':
                                 if lexeme[i+3][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+3][0] not in varidents or varidents[lexeme[i+3][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                                 break
                             elif lexeme[i+3][0] != 'FAIL':
                                 if lexeme[i+3][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+3][0] not in varidents or varidents[lexeme[i+3][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                                 break
                     
                     ##BOOLEAN SYNTAX - WON OF
@@ -582,15 +618,17 @@ def syntax(text):
                         elif len(lexeme) == 4:
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                             elif lexeme[i+1][0] != 'FAIL':
                                 if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
-                            
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
+                                
                             if lexeme[i+2][0] != 'AN':
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tThere is a need for AN to indicate "and".')
@@ -598,15 +636,17 @@ def syntax(text):
                         
                             if lexeme[i+3][0] != 'WIN':
                                 if lexeme[i+3][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+3][0] not in varidents or varidents[lexeme[i+3][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                                 break
                             elif lexeme[i+3][0] != 'FAIL':
                                 if lexeme[i+3][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+3][0] not in varidents or varidents[lexeme[i+3][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                                 break
                     
                     ##BOOLEAN SYNTAX - NOT
@@ -618,14 +658,16 @@ def syntax(text):
                         elif len(lexeme) == 2:
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
                             elif lexeme[i+1][0] != 'FAIL':
                                 if lexeme[i+1][0] != 'WIN':
-                                    success = 0
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                    break
+                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
 
                     ## CONCATENATION BLOCK SYNTAX - SMOOSH
                     if lexeme[i][0] == 'SMOOSH':

@@ -114,6 +114,7 @@ def lex(str):
     compiled_lex.clear()
     # global compiled_lex
     # compiled_lex = []
+    varidents = []
     code = str
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
@@ -141,6 +142,7 @@ def lex(str):
             if i != len(tokens):
                 if tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
+                        varidents.append(tokens[i+1].value.lstrip().rstrip())
                         tokens[i+1].type = 'Variable Identifier'
                 elif tokens[i].type == 'Loop Keyword':
                     if tokens[i+1].type == 'Identifier':
@@ -148,6 +150,8 @@ def lex(str):
                 elif tokens[i].type == 'Function Keyword' or tokens[i].type == 'Function Call':
                     if tokens[i+1].type == 'Identifier':
                         tokens[i+1].type = 'Function Identifier'
+                elif tokens[i].type == 'Identifier' and tokens[i].value.lstrip().rstrip() in varidents:
+                        tokens[i].type = 'Variable Identifier'
 
         # print('\n\nTokens:')
         for token in tokens:
@@ -206,7 +210,6 @@ def nmbar(tk):
                             break
 
 def nmbr(tk):
-                print(tk)
                 check = 0
                 for j in symbol_table:
                     if j[0] == tk:
@@ -253,7 +256,6 @@ def nmbr(tk):
                             break
 
 def trf(tk):
-                print(tk)
                 check = 0
                 for j in symbol_table:
                     if j[0] == tk:
@@ -298,7 +300,6 @@ def trf(tk):
                             break
 
 def yrn(tk):
-                print(tk)
                 check = 0
                 for j in symbol_table:
                     if j[0] == tk:
@@ -396,25 +397,19 @@ def symbolTable(str1):
             last_occurrence_startIndex = -1
             e = -1
             for match in m:
-                print(match)
                 last_occurrence_startIndex = match.start()
                 e = match.end()
             
             length = len(token[0]) + 1
 
-            print(str1[e+length:e+7].rstrip().lstrip())
             if str1[e+length:e+length+7].rstrip().lstrip() == 'NUMBAR':
-                       print('float')
                        nmbar(token[0])
                         
             elif str1[e+length:e+length+6].rstrip().lstrip() == 'NUMBR':
-                       print('int')
                        nmbr(token[0])
             elif str1[e+length:e+length+5].rstrip().lstrip() == 'YARN':
-                       print('str')
                        yrn(token[0])
             elif str1[e+length:e+length+6].rstrip().lstrip() == 'TROOF':
-                       print('bool')
                        trf(token[0])
             
 
