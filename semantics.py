@@ -2,6 +2,7 @@ import keywords
 import syntax
 
 modified_varidents = {}
+varidents = {}
 
 def getVaridents(text):
     semantics(text)
@@ -10,6 +11,7 @@ def getVaridents(text):
 
 def semantics(text):
     semanticsResult = ''
+    global varidents
     varidents = syntax.getVaridents(text)
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     
@@ -467,13 +469,48 @@ def semantics(text):
                             semanticsResult += f'FAIL\n'
                         elif varidents[lexeme[i+1][0]] == 'FAIL':
                             semanticsResult += f'WIN\n'
-                elif lexeme[i][0] == 'R' and len(lexeme) == 3:
-                    # if lexeme[i+1][0] :#check type of the value to be assigned to variable
-                    for j in varidents:
-                        if lexeme[i-1][0] == j:
-                            modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
+                elif lexeme[i][0] == 'R':
+                    if len(lexeme) == 3:
+
+                        for j in varidents:
+                            if lexeme[i-1][0] == j:
+                            # print(lexeme[i+1][0].isnumeric())
+                                if lexeme[i+1][0].isnumeric():
+                                    varidents[j] = int(lexeme[i+1][0])
+                                    print(varidents)
+                                    modified_varidents[lexeme[i-1][0]] = int(lexeme[i+1][0])
+                                else:
+                                    if convertFloat(lexeme[i+1][0]):
+                                        varidents[j] = float(lexeme[i+1][0])
+                                        print(varidents)
+                                        modified_varidents[lexeme[i-1][0]] = float(lexeme[i+1][0])
+                                    elif lexeme[i+1][0] == 'WIN' or lexeme[i+1][0] == 'FAIL':
+                                        varidents[j] = lexeme[i+1][0]
+                                        print(varidents)
+                                        modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
+                                    else:
+                                        for k in varidents:
+                                            if lexeme[i+1][0] == k:
+                                                varidents[j] = varidents[k]
+                                                modified_varidents[lexeme[i-1][0]] = varidents[k]
+                                                break
+                    elif len(lexeme) == 5:
+                        print(varidents)
+                        for j in varidents:
+                            if lexeme[i-1][0] == j:
+                                if lexeme[i+1][0] == '"' and lexeme[i+3][0] == '"':
+                                    varidents[j] = lexeme[i+2][0]
+                                    modified_varidents[lexeme[i-1][0]] = str(lexeme[i+2][0])
                     
                     # varidents[lexeme[i-1][0]] = lexeme[i+1][0]
             lexeme.clear()
     
     return semanticsResult
+
+
+def convertFloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False

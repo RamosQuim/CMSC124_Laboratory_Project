@@ -451,10 +451,12 @@ def symbolTable(str1):
     it.clear()
 
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
+    compiled_keys = set(entry[0] for entry in compiled_lex)
     for e in semantics_varidents:
         for j in symbol_table:
             if e == j[0]:
                 if semantics_varidents[e] != j[1]: #change value of the current variables in the symbol table
+                    
                     j[1] = semantics_varidents[e]
                 break
     
