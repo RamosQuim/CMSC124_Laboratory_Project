@@ -1,5 +1,6 @@
 import re
 import sys
+import semantics
 
 compiled_lex = []
 symbol_table = []
@@ -331,6 +332,8 @@ def yrn(tk):
 
 def symbolTable(str1):
     symbol_table.clear()
+
+         
     it = []
     
     # print(lex(str))
@@ -446,6 +449,27 @@ def symbolTable(str1):
     if len(it) != 0:
         symbol_table.insert(0, ['IT', j])
     it.clear()
+
+    semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
+    for e in semantics_varidents:
+        for j in symbol_table:
+            if e == j[0]:
+                if semantics_varidents[e] != j[1]: #change value of the current variables in the symbol table
+                    j[1] = semantics_varidents[e]
+                break
+    
+    #for noob or uninitialized variables that have value now because of R operation
+    #add this noob variable to symbol table together with their values
+    sem_keys = set(semantics_varidents.keys())
+    symbol_table_keys = set(entry[0] for entry in symbol_table)
+    missing_keys = sem_keys - symbol_table_keys
+
+    for key in missing_keys:
+            arr = []
+            arr.append(key)
+            arr.append(semantics_varidents[key])
+            symbol_table.append(arr)
+            
     return symbol_table
 
 

@@ -1,9 +1,18 @@
 import keywords
 import syntax
 
+modified_varidents = {}
+
+def getVaridents(text):
+    semantics(text)
+    print(modified_varidents)
+    return modified_varidents
+
 def semantics(text):
     semanticsResult = ''
     varidents = syntax.getVaridents(text)
+    print(varidents)
+    
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
@@ -436,6 +445,13 @@ def semantics(text):
                             semanticsResult += f'FAIL\n'
                         elif varidents[lexeme[i+1][0]] == 'FAIL':
                             semanticsResult += f'WIN\n'
+                elif lexeme[i][0] == 'R' and len(lexeme) == 3:
+                    # if lexeme[i+1][0] :#check type of the value to be assigned to variable
+                    for j in varidents:
+                        if lexeme[i-1][0] == j:
+                            modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
+                    
+                    # varidents[lexeme[i-1][0]] = lexeme[i+1][0]
             lexeme.clear()
     
     return semanticsResult

@@ -1,10 +1,18 @@
 HAI
 WAZZUP
+	I HAS A jaja
+	I HAS A sion
+	I HAS A quim
 	I HAS A var1 ITZ 1
 	I HAS A var2 ITZ WIN
 	I HAS A var3 ITZ 123.123
+	I HAS A var
 BUHBYE
-	VISIBLE var1
-	VISIBLE var2
-	VISIBLE var3
+	var1 R MAEK var1 YARN
+	var3 R 5
+	var R 101.300
+	jaja R 1.0
+	sion R 1.0
+	quim R 1.0
+	lexgo R 5.0
 KTHXBYE
