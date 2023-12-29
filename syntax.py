@@ -222,20 +222,20 @@ def syntax(text):
                     ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
                     if lexeme[i][0] == 'ALL OF':
                         boolean_index = 1
-                        if len(lexeme) <= 5:
+                        if len(lexeme) < 5:
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tALL OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
                             break
                         while boolean_index < len(lexeme)-2:
-                            if lexeme[boolean_index][0] not in booleans:
+                            if lexeme[boolean_index][0] not in booleans and lexeme[boolean_index][0] not in varidents and lexeme[boolean_index][1] not in literals:
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index][0]} is not a finite boolean keyword.')
                                 break
                             else:
                                 ##BOOLEAN SYNTAX - BOTH OF
-                                if boolean_index+3 >= len(lexeme):
+                                if boolean_index+3 >= len(lexeme) or boolean_index+2 >= len(lexeme):
                                     success = 0
-                                    if lexeme[boolean_index][0] != 'NOT':
+                                    if lexeme[boolean_index][0] != 'NOT' or lexeme[boolean_index][0] not in varidents:
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
                                     else:
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL]')
@@ -368,6 +368,25 @@ def syntax(text):
                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
                                                 break
                                         boolean_index += 3
+                                    elif lexeme[boolean_index][0] in varidents:
+                                        if varidents[lexeme[boolean_index][0]] == 'NOOB':
+                                            success = 0
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tVariable must be initialized.')
+                                            break
+                                        if ((boolean_index+1) < len(lexeme)):
+                                            if lexeme[boolean_index+1][0] != 'AN' and (lexeme[boolean_index+1][0] != 'MKAY' and boolean_index+1 != len(lexeme)-1):
+                                                success = 0
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+1][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                                                break
+                                        boolean_index += 2
+                                    elif lexeme[boolean_index][1] in literals:
+                                        if ((boolean_index+1) < len(lexeme)):
+                                            if lexeme[boolean_index+1][0] != 'AN' and (lexeme[boolean_index+1][0] != 'MKAY' and boolean_index+1 != len(lexeme)-1):
+                                                success = 0
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+1][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                                                break
+                                        boolean_index += 2
+                                        
                         else:
                             if lexeme[len(lexeme)-1][0] != 'MKAY':
                                 success = 0
@@ -378,20 +397,20 @@ def syntax(text):
                     ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
                     if lexeme[i][0] == 'ANY OF':
                         boolean_index = 1
-                        if len(lexeme) <= 5:
+                        if len(lexeme) < 5:
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
                             break
                         while boolean_index < len(lexeme)-2:
-                            if lexeme[boolean_index][0] not in booleans:
+                            if lexeme[boolean_index][0] not in booleans and lexeme[boolean_index][0] not in varidents and lexeme[boolean_index][1] not in literals:
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index][0]} is not a finite boolean keyword.')
                                 break
                             else:
                                 ##BOOLEAN SYNTAX - BOTH OF
-                                if boolean_index+3 >= len(lexeme):
+                                if boolean_index+3 >= len(lexeme) or boolean_index+2 >= len(lexeme):
                                     success = 0
-                                    if lexeme[boolean_index][0] != 'NOT':
+                                    if lexeme[boolean_index][0] != 'NOT' or lexeme[boolean_index][0] not in varidents:
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
                                     else:
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL]')
@@ -524,13 +543,31 @@ def syntax(text):
                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+2][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
                                                 break
                                         boolean_index += 3
+                                    elif lexeme[boolean_index][0] in varidents:
+                                        if varidents[lexeme[boolean_index][0]] == 'NOOB':
+                                            success = 0
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tVariable must be initialized.')
+                                            break
+                                        if ((boolean_index+1) < len(lexeme)):
+                                            if lexeme[boolean_index+1][0] != 'AN' and (lexeme[boolean_index+1][0] != 'MKAY' and boolean_index+1 != len(lexeme)-1):
+                                                success = 0
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+1][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                                                break
+                                        boolean_index += 2
+                                    elif lexeme[boolean_index][1] in literals:
+                                        if ((boolean_index+1) < len(lexeme)):
+                                            if lexeme[boolean_index+1][0] != 'AN' and (lexeme[boolean_index+1][0] != 'MKAY' and boolean_index+1 != len(lexeme)-1):
+                                                success = 0
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[boolean_index+1][0]} is recognized incorrectly. Perhaps you need an "AN" keyword?')
+                                                break
+                                        boolean_index += 2
+                                        
                         else:
                             if lexeme[len(lexeme)-1][0] != 'MKAY':
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
                                 break
                         break
-
                     ##BOOLEAN SYNTAX - BOTH OF
                     if lexeme[i][0] == "BOTH OF":
                         if len(lexeme) > 4 or len(lexeme) <= 3:

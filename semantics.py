@@ -64,7 +64,7 @@ def semantics(text):
                 elif lexeme[i][0] == 'ALL OF':
                     boolean_index = 1
                     result = []
-                    while boolean_index < len(lexeme)-2:
+                    while boolean_index <= len(lexeme)-2:
                         if lexeme[boolean_index][0] == "BOTH OF":
                             if lexeme[boolean_index+1][1] == 'TROOF Literal' and lexeme[boolean_index+3][1] == 'TROOF Literal':
                                 if lexeme[boolean_index+1][0] == 'WIN' and lexeme[boolean_index+3][0] == 'WIN':
@@ -191,6 +191,17 @@ def semantics(text):
                                 elif varidents[lexeme[boolean_index+1][0]] == 'FAIL':
                                     result.append(f'WIN')
                             boolean_index += 3
+                        elif lexeme[boolean_index][0] in varidents:
+                            result.append(varidents[lexeme[boolean_index][0]])
+                            boolean_index += 2
+                        elif lexeme[boolean_index][1] in literals:
+                            if lexeme[boolean_index][1] == 'TROOF Literal':
+                                result.append(lexeme[boolean_index][0])
+                            elif f'{int(float(lexeme[boolean_index][0]))}' != '0':
+                                result.append('WIN')
+                            else:
+                                result.append('FAIL')
+                            boolean_index += 2
                     if 'FAIL' in result:
                         semanticsResult += f'FAIL\n'
                     else:
@@ -327,6 +338,17 @@ def semantics(text):
                                 elif varidents[lexeme[boolean_index+1][0]] == 'FAIL':
                                     result.append('WIN')
                             boolean_index += 3
+                        elif lexeme[boolean_index][0] in varidents:
+                            result.append(varidents[lexeme[boolean_index][0]])
+                            boolean_index += 2
+                        elif lexeme[boolean_index][1] in literals:
+                            if lexeme[boolean_index][1] == 'TROOF Literal':
+                                result.append(lexeme[boolean_index][0])
+                            elif f'{int(float(lexeme[boolean_index][0]))}' != '0':
+                                result.append('WIN')
+                            else:
+                                result.append('FAIL')
+                            boolean_index += 2
                     if 'WIN' in result:
                         semanticsResult += f'WIN\n'
                     else:
