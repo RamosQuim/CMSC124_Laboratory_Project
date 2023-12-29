@@ -380,16 +380,16 @@ def symbolTable(str1):
             
             if str1[end_index+1:end_index+7].rstrip().lstrip() == 'NUMBAR': #convert to float 
                 nmbar(token[0])
-                break
+                
             elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'NUMBR': #convert to int 
                 nmbr(token[0])
-                break
+                
             elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'TROOF': #convert to bool 
                 trf(token[0])
-                break
+                
             elif str1[end_index+1:end_index+5].rstrip().lstrip() == 'YARN': #convert to string 
                 yrn(token[0])
-                break
+                
 
             #for R MAEK RECASTING r'\b'+token[0]+r'\b IS NOW A'
             m = re.finditer(r'\b'+token[0]+r'\b R MAEK', str1)
