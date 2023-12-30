@@ -210,6 +210,7 @@ def nmbar(tk):
                             temp_arr.append(0.0)
                             symbol_table.append(temp_arr)
                             break
+                
 
 def nmbr(tk):
                 check = 0
@@ -244,18 +245,7 @@ def nmbr(tk):
                                        j[1] = int(j[1])
                                        break
                         break
-                #for noob variables or uninitialized
-                if check == 0: 
-                    temp_arr = [] 
-                    for a in compiled_lex:
-                        if a[0] == tk:
-                            # print('noob')
-
-                            #check if the variable is declared uninitialized
-                            temp_arr.append(tk)
-                            temp_arr.append(0)
-                            symbol_table.append(temp_arr)
-                            break
+               
 
 def trf(tk):
                 check = 0
@@ -318,26 +308,11 @@ def yrn(tk):
                                     j[1] = new
                                     break
                         break
-                #for noob variables or uninitialized
-                if check == 0: 
-                    temp_arr = [] 
-                    for a in compiled_lex:
-                        if a[0] == tk:
-                            # print('noob')
-                            #check if the variable is declared uninitialized
-                            temp_arr.append(tk)
-                            temp_arr.append("")
-                            # print(type(j[1]))
-                            symbol_table.append(temp_arr)
-                            break
+                
 
 def symbolTable(str1):
     symbol_table.clear()
-
-         
     it = []
-    
-    # print(lex(str))
 
     for token in lex(str1):
         # print(token[0], token[1])
@@ -418,13 +393,13 @@ def symbolTable(str1):
             
 
         elif token[0] == 'VISIBLE':
-            if len(it) == 0:
+            # if len(it) == 0:
 
-                matches = re.finditer(r'\b'+token[0]+r'\b', str1)
+                matches = re.finditer(r'\b'+token[0]+r'\b', str)
                 for match in matches:
                     last_occurrence_startIndex = match.start()
                     end_index = match.end()
-                    whole = str1[end_index+1:]
+                    whole = str[end_index+1:]
                     value = (re.match(r'(.*)[^ \n]*',whole)[0]).split()
                     temp = []
                     for v in value:
@@ -442,10 +417,15 @@ def symbolTable(str1):
                     it.append(temp)
                     # temp.clear()
 
+        elif token[0] == 'MAEK':
+            ex_typecast = semantics.getExplicitTypecast(str1)
+            it.append(ex_typecast)
+    
     it[0] = [item for item in it[0] if item != '+'] # removing all '+'
 
     j = ""  
     for k in it[len(it)-1:len(it)]:
+            # print
         for i in range(0, len(k)):
             j += k[i]
             j += " "
@@ -455,7 +435,7 @@ def symbolTable(str1):
     it.clear()
 
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
-    compiled_keys = set(entry[0] for entry in compiled_lex)
+    
     for e in semantics_varidents:
         for j in symbol_table:
             if e == j[0]:
@@ -464,17 +444,18 @@ def symbolTable(str1):
                     j[1] = semantics_varidents[e]
                 break
     
-    #for noob or uninitialized variables that have value now because of R operation
-    #add this noob variable to symbol table together with their values
+            #for noob or uninitialized variables that have value now because of R operation
+            #add this noob variable to symbol table together with their values
     sem_keys = set(semantics_varidents.keys())
     symbol_table_keys = set(entry[0] for entry in symbol_table)
     missing_keys = sem_keys - symbol_table_keys
 
     for key in missing_keys:
-            arr = []
-            arr.append(key)
-            arr.append(semantics_varidents[key])
-            symbol_table.append(arr)
+        arr = []
+        arr.append(key)
+        arr.append(semantics_varidents[key])
+        symbol_table.append(arr)
+    
             
     return symbol_table
 
