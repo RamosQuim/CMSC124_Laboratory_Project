@@ -11,6 +11,7 @@ def getExplicitTypecast(text):
 
 def getVaridents(text):
     semantics(text)
+    print(modified_varidents, "semantics")
     return modified_varidents
 
 def semantics(text):
@@ -18,6 +19,7 @@ def semantics(text):
     global varidents
     global explicit_typecast
     explicit_typecast.clear()
+    modified_varidents.clear()
     varidents = syntax.getVaridents(text)
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     # print(varidents)

@@ -12,10 +12,12 @@ def isfloat(num):
 
 def getVaridents(text):
     syntax(text)
+    print(varidents, "syntax")
     return varidents
 
 def syntax(text):
     global varidents
+    varidents.clear()
     syntaxResult = ''
     success = 1
     comparison = ['BOTH SAEM', 'DIFFRINT']

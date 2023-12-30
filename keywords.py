@@ -419,22 +419,21 @@ def symbolTable(str1):
 
         elif token[0] == 'MAEK':
             ex_typecast = semantics.getExplicitTypecast(str1)
-            if ex_typecast != 0:
+            if len(ex_typecast) != 0:
                 for i in ex_typecast:
                     it.append(str(i))
     
-    it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
-
-    j = ""  
-    for k in it[len(it)-1:len(it)]:
-            # print
-        for i in range(0, len(k)):
-            j += k[i]
-            j += " "
-    
     if len(it) != 0:
+        it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
+
+        j = ""  
+        for k in it[len(it)-1:len(it)]:
+            # print
+            for i in range(0, len(k)):
+                j += k[i]
+                j += " "
         symbol_table.insert(0, ['IT', j])
-    it.clear()
+        it.clear()
 
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     
