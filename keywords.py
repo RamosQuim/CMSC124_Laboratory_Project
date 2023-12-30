@@ -419,9 +419,11 @@ def symbolTable(str1):
 
         elif token[0] == 'MAEK':
             ex_typecast = semantics.getExplicitTypecast(str1)
-            it.append(ex_typecast)
+            if ex_typecast != 0:
+                for i in ex_typecast:
+                    it.append(str(i))
     
-    it[0] = [item for item in it[0] if item != '+'] # removing all '+'
+    it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
 
     j = ""  
     for k in it[len(it)-1:len(it)]:

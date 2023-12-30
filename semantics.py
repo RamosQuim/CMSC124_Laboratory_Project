@@ -2,11 +2,10 @@ import keywords
 import syntax
 
 modified_varidents = {}
-explicit_typecast = ""
+explicit_typecast = []
 varidents = {}
 
 def getExplicitTypecast(text):
-   
     semantics(text)
     return explicit_typecast
 
@@ -18,7 +17,7 @@ def semantics(text):
     semanticsResult = ''
     global varidents
     global explicit_typecast
-    explicit_typecast = ""
+    explicit_typecast.clear()
     varidents = syntax.getVaridents(text)
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     # print(varidents)
@@ -516,46 +515,56 @@ def semantics(text):
                             if j == lexeme[i+1][0]:
                                 if varidents[j] == 'NOOB':
                                     if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                        explicit_typecast = ""
+                                        explicit_typecast.append("")
                                     elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                        explicit_typecast = "0.0"
+                                        explicit_typecast.append("0.0")
                                     elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                        explicit_typecast = "0"
+                                        explicit_typecast.append("0")
                                     elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
-                                        explicit_typecast = "FAIL"
+                                        explicit_typecast.append("FAIL")
+                                    elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                        explicit_typecast.append("NOOB")
                                 else:
                                     if str(varidents[j]).isnumeric():
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast = str(varidents[j])
+                                            explicit_typecast.append(str(varidents[j]))
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast = float(varidents[j])
+                                            explicit_typecast.append(float(varidents[j]))
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast = int(float(varidents[j]))
+                                            explicit_typecast.append(int(float(varidents[j])))
+                                        elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                            explicit_typecast.append("NOOB")
                                     elif convertFloat(varidents[j]):
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast = str(varidents[j])
+                                            explicit_typecast.append(str(varidents[j]))
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast = float(varidents[j])
+                                            explicit_typecast.append(float(varidents[j]))
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast = int(float(varidents[j]))
+                                            explicit_typecast.append(int(float(varidents[j])))
+                                        elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                            explicit_typecast.append("NOOB")
                                     elif varidents[j] == 'WIN':
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast = str(varidents[j])
+                                            explicit_typecast.append(str(varidents[j]))
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast = '1.0'
+                                            explicit_typecast.append('1.0')
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast = '1'
+                                            explicit_typecast.append('1')
                                         elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
-                                            explicit_typecast = varidents[j]
+                                            explicit_typecast.append(varidents[j])
+                                        elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                            explicit_typecast.append("NOOB")
                                     elif varidents[j] == 'FAIL':
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast = str(varidents[j])
+                                            explicit_typecast.append(str(varidents[j]))
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast = '0.0'
+                                            explicit_typecast.append('0.0')
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast = '0'
+                                            explicit_typecast.append('0')
                                         elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
                                             explicit_typecast = varidents[j]
+                                        elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                            explicit_typecast.append("NOOB")
                                 
 
 
