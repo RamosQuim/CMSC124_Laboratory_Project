@@ -393,13 +393,13 @@ def symbolTable(str1):
             
 
         elif token[0] == 'VISIBLE':
-            # if len(it) == 0:
+            if len(it) == 0:
 
-                matches = re.finditer(r'\b'+token[0]+r'\b', str)
+                matches = re.finditer(r'\b'+token[0]+r'\b', str1)
                 for match in matches:
                     last_occurrence_startIndex = match.start()
                     end_index = match.end()
-                    whole = str[end_index+1:]
+                    whole = str1[end_index+1:]
                     value = (re.match(r'(.*)[^ \n]*',whole)[0]).split()
                     temp = []
                     for v in value:
