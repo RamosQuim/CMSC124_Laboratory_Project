@@ -1,18 +1,34 @@
 HAI
 WAZZUP
-	I HAS A jaja
-	I HAS A sion
-	I HAS A quim
-	I HAS A var1 ITZ 1
-	I HAS A var2 ITZ WIN
-	I HAS A var3 ITZ 123.123
+	I HAS A var3 ITZ WIN
+	I HAS A var4 ITZ FAIL
 	I HAS A var
+	I HAS A var2
+	I HAS A hello ITZ FAIL
+	I HAS A var5
+	I HAS A e
+	I HAS A e2
+	I HAS A e3
+	I HAS A w
+	I HAS A w2
+	I HAS A w3
+	I HAS A n
+	I HAS A n2
+	I HAS A n3
 BUHBYE
-	var1 R MAEK var1 YARN
-	var3 R 5
-	var R var2
-	jaja R var
-	sion R "some"
-	quim R WIN
-	lexgo R 5.0
+	var5 R BOTH OF WIN AN FAIL
+	var2 R BOTH OF var4 AN hello
+	var R BOTH OF var3 AN WIN
+
+	e R EITHER OF WIN AN FAIL
+	e2 R EITHER OF var4 AN hello
+	e3 R EITHER OF var3 AN WIN
+
+	w R WON OF WIN AN FAIL
+	w2 R WON OF var4 AN hello
+	w3 R WON OF var3 AN WIN
+
+	n R NOT FAIl
+	n2 R NOT var4
+	n3 R NOT var3
 KTHXBYE

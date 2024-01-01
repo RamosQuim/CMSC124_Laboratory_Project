@@ -438,6 +438,7 @@ def symbolTable(str1):
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     
     for e in semantics_varidents:
+        # print(e)
         for j in symbol_table:
             if e == j[0]:
                 if semantics_varidents[e] != j[1]: #change value of the current variables in the symbol table
@@ -447,16 +448,16 @@ def symbolTable(str1):
     
             #for noob or uninitialized variables that have value now because of R operation
             #add this noob variable to symbol table together with their values
-    sem_keys = set(semantics_varidents.keys())
-    symbol_table_keys = set(entry[0] for entry in symbol_table)
-    missing_keys = sem_keys - symbol_table_keys
-
-    for key in missing_keys:
-        arr = []
-        arr.append(key)
-        arr.append(semantics_varidents[key])
-        symbol_table.append(arr)
-    
+    sem_keys = semantics_varidents.keys()
+    # print(sem_keys)
+     
+    for k in sem_keys:
+        # print(k)
+        if (k not in i[0] for i in symbol_table):
+            arr = []
+            arr.append(k)
+            arr.append(semantics_varidents[k])
+            symbol_table.append(arr)
             
     return symbol_table
 

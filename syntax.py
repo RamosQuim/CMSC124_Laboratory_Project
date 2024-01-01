@@ -12,7 +12,7 @@ def isfloat(num):
 
 def getVaridents(text):
     syntax(text)
-    print(varidents, "syntax")
+    # print(varidents, "syntax")
     return varidents
 
 def syntax(text):
@@ -38,7 +38,7 @@ def syntax(text):
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
                 
             for i in range(0, len(lexeme)):
-                # print(lexeme)
+                # print(lexeme[i][0])
                 ## PROGRAM BLOCK SYNTAX - HAI
                 if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
                     hasHai = 0
@@ -138,24 +138,41 @@ def syntax(text):
                     ## COMPARISON SYNTAX - BOTH SAEM
                     # print(lexeme[i][0])
                     if lexeme[i][0] == 'BOTH SAEM':
-                        if len(lexeme) != 4 and len(lexeme) != 7:
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
-                            success = 0
-                            break
-                        elif isfloat(lexeme[i+1][0]) == False:
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
-                            success = 0
-                            break
-                        elif len(lexeme) == 4:
+                        # /print(lexeme, "syntax")
+                        # print(varidents)
+                        
+
+                        if isfloat(lexeme[i+1][0]) == False:
+                            # print("pasok")
+                            if lexeme[i+1][0] not in varidents:
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                                success = 0
+                                break
+                            else:
+                                if isfloat(varidents[lexeme[i+1][0]]) == False:
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
+                                    success = 0
+                                    break
+
+                        
+                        if len(lexeme) == 4 or (len(lexeme) == 6 and lexeme[i-1][0] == 'R'):
                             if lexeme[i+2][0] != 'AN':
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
                                 success = 0
                                 break
+                            
                             elif isfloat(lexeme[i+3][0]) == False:
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
-                                success = 0
-                                break
-                        elif len(lexeme) == 7:
+                                if lexeme[i+3][0] not in varidents:
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                                    success = 0
+                                    break
+                                else:
+                                    if isfloat(varidents[lexeme[i+3][0]]) == False:
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
+                                        success = 0
+                                        break
+                                
+                        elif len(lexeme) == 7 or (len(lexeme) == 9 and lexeme[i-1][0] == 'R'):
                             if lexeme[i+2][0] != 'AN':
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
                                 success = 0
@@ -164,7 +181,7 @@ def syntax(text):
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
                                 success = 0
                                 break
-                            elif isfloat(lexeme[i+4][0]) == False:
+                            elif isfloat(lexeme[i+4][0]) == False and  lexeme[i+4][0] != lexeme[i+1][0]:
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
                                 success = 0
                                 break
@@ -173,22 +190,33 @@ def syntax(text):
                                 success = 0
                                 break
                             elif isfloat(lexeme[i+6][0]) == False:
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                success = 0
-                                break
-                        
-                        break
+                                if lexeme[i+6][0] not in varidents:
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                                    success = 0
+                                    break
+                                else:
+                                    if isfloat(varidents[lexeme[i+6][0]]) == False:
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                                        success = 0
+                                        break
+                        else:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+                            success = 0
+                            break  
                     ## COMPARISON SYNTAX - DIFFRINT
                     if lexeme[i][0] == 'DIFFRINT':
-                        if len(lexeme) != 4 and len(lexeme) != 7:
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tDIFFRINT <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
-                            success = 0
-                            break
-                        elif isfloat(lexeme[i+1][0]) == False or isfloat(lexeme[i+1][0]) == False:
+                        # if len(lexeme) != 4 and len(lexeme) != 7:
+                        #     if len(lexeme) == 6 and lexeme[i-1][0] != 'R':
+                        #         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+                        #         success = 0
+                        #         break
+                            
+                        if isfloat(lexeme[i+1][0]) == False or isfloat(lexeme[i+1][0]) == False:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tDIFFRINT only accepts NUMBR or NUMBAR type')
                             success = 0
                             break
-                        elif len(lexeme) == 4:
+                        
+                        if len(lexeme) == 4 or (len(lexeme) == 6 and lexeme[i-1][0] == 'R'):
                             if lexeme[i+2][0] != 'AN':
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
                                 success = 0
@@ -197,7 +225,7 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tDIFFRINT only accepts NUMBR or NUMBAR type')
                                 success = 0
                                 break
-                        elif len(lexeme) == 7:
+                        elif len(lexeme) == 7 or (len(lexeme) == 9 and lexeme[i-1][0] == 'R'):
                             if lexeme[i+2][0] != 'AN':
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
                                 success = 0
@@ -218,8 +246,10 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
                                 success = 0
                                 break
-                        
-                        break
+                        else:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+                            success = 0
+                            break
 
                     ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
                     if lexeme[i][0] == 'ALL OF':
@@ -570,13 +600,14 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\tANY OF <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
                                 break
                         break
+
                     ##BOOLEAN SYNTAX - BOTH OF
                     if lexeme[i][0] == "BOTH OF":
-                        if len(lexeme) > 4 or len(lexeme) <= 3:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 4:
+                        # print(len(lexeme))
+                        # print(lexeme[i][0])
+                        # if len(lexeme) > 4 or len(lexeme) <= 3:
+                            
+                        if len(lexeme) == 4 or lexeme[i-1][0] == 'R':
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
                                     if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
@@ -609,13 +640,19 @@ def syntax(text):
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
                                         break
                                 break
+                        # elif lexeme[i-1][0] == 'R':
+                        else:
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                            break
+
                     #BOOLEAN SYNTAX - EITHER OF
                     if lexeme[i][0] == "EITHER OF":
-                        if len(lexeme) > 4 or len(lexeme) <= 3:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 4:
+                        # if len(lexeme) > 4 or len(lexeme) <= 3:
+                        #     success = 0
+                        #     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                        #     break
+                        if len(lexeme) == 4 or lexeme[i-1][0] == 'R':
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
                                     if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
@@ -648,14 +685,18 @@ def syntax(text):
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
                                         break
                                 break
+                        else:
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                            break
                     
                     ##BOOLEAN SYNTAX - WON OF
                     if lexeme[i][0] == "WON OF":
-                        if len(lexeme) > 4 or len(lexeme) <= 3:
-                            success = 0
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
-                            break
-                        elif len(lexeme) == 4:
+                        # if len(lexeme) > 4 or len(lexeme) <= 3:
+                        #     success = 0
+                        #     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                        #     break
+                        if len(lexeme) == 4 or lexeme[i-1][0] == 'R':
                             if lexeme[i+1][0] != 'WIN':
                                 if lexeme[i+1][0] != 'FAIL':
                                     if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
@@ -688,26 +729,35 @@ def syntax(text):
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Operands of BOTH OF must be either WIN OR FAIL.')
                                         break
                                 break
+                        else:
+                            success = 0
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH OF [WIN|FAIL] AN [WIN|FAIL]')
+                            break
                     
                     ##BOOLEAN SYNTAX - NOT
                     if lexeme[i][0] == "NOT":
-                        if len(lexeme) > 3 or len(lexeme) < 2: 
+                        # print(lexeme)
+                        # print(lexeme[i][0], lexeme[i-1][0])
+                        # if len(lexeme) > 3 or len(lexeme) < 2: 
+                        #     success = 0
+                        #     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tNOT [WIN|FAIL]')
+                        #     break
+                        if len(lexeme) == 2 or lexeme[i-1][0] == 'R':
+                            # print('pasok')
+                            if lexeme[i+1][0] != 'WIN' and lexeme[i+1][0] != 'FAIL' and (lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB'):
+                                        success = 0
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                                        break
+                            # elif lexeme[i+1][0] != 'FAIL':
+                            #     if lexeme[i+1][0] != 'WIN':
+                            #         if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
+                            #             success = 0
+                            #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
+                            #             break
+                        else:
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tNOT [WIN|FAIL]')
                             break
-                        elif len(lexeme) == 2:
-                            if lexeme[i+1][0] != 'WIN':
-                                if lexeme[i+1][0] != 'FAIL':
-                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
-                                        success = 0
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                        break
-                            elif lexeme[i+1][0] != 'FAIL':
-                                if lexeme[i+1][0] != 'WIN':
-                                    if lexeme[i+1][0] not in varidents or varidents[lexeme[i+1][0]] == 'NOOB':
-                                        success = 0
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tOperands of BOTH OF must be either WIN OR FAIL.')
-                                        break
 
                     ## CONCATENATION BLOCK SYNTAX - SMOOSH
                     if lexeme[i][0] == 'SMOOSH':
@@ -768,7 +818,7 @@ def syntax(text):
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+3][0]} should be a type literal.')
                                     break
                             break
-                        else:
+                        elif len(lexeme) <= 2 :
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                             break
