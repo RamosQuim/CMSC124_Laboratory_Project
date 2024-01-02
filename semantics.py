@@ -987,10 +987,7 @@ def semantics(text):
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
                     semanticsResult += f"{lexeme[i+1][0]} is: {varidents[lexeme[i+1][0]]}\n"
-                        if varidents[lexeme[i+1][0]] == 'WIN':
-                            semanticsResult += f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL':
-                            semanticsResult += f'WIN\n'
+                    
                 #R
                 elif lexeme[i][0] == 'R':
                     if len(lexeme) == 3:
