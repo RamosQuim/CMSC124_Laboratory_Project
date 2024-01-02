@@ -3,4 +3,5 @@ HAI
     IM IN YR print10 UPPIN YR temp TIL BOTH SAEM temp AN 10
         VISIBLE
     IM OUTTA YR print10
+                    
 KTHXBYE

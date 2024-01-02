@@ -5,15 +5,13 @@ from  tkinter import ttk
 import tkinter.font as font
 from tkinter import scrolledtext
 from tkinter import filedialog as fd
+import tkinter.simpledialog as sd
 import ctypes as ct
 import keywords
 import syntax
 import semantics
 
-global input_checker, input_user
-
 input_checker = 0
-input_user = ""
 
 # this will readd the file and store the content in textEditor
 def filename():
@@ -28,6 +26,19 @@ def filename():
     textEditor.insert("end", file.read(), ("centered",))
    
     file.close()
+
+#get the input checker
+def get_inputchecker():
+    temp = input_checker
+    input_checker = 0  # this is to created para pag nag 1 siya ay magrereset siya hehe
+    return temp
+
+#THIS PART WILL ASK THE USER FOR THE INPUT
+def get_user_input():
+    input = sd.askstring("Input", "Enter variable value: ")
+    if input is not None:
+        console.insert(tk.END, f"\nUser input: {input}\n")
+        input_checker = 1
 
 #this will be responsible for
 def analyzetext():
@@ -120,7 +131,10 @@ symbolTable.heading("value",text="Value",anchor=CENTER)
 
 
 executeButton = tk.Button(root, text='EXECUTE', font=font.Font(size = 10), bd=1, bg='#365963', fg='white',command=lambda:analyzetext())
-executeButton.grid(row=3, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
+executeButton.grid(row=3, column=0, padx=5, pady=5, columnspan=2, sticky="NSEW")
+
+getInputButton = tk.Button(root, text='ADD INPUT', font=font.Font(size = 10), bd=1, bg='#365963', fg='white',command=lambda:get_user_input())
+getInputButton.grid(row=3, column=2, padx=5, pady=5, columnspan=3, sticky="NSEW")
 
 console = scrolledtext.ScrolledText(root, wrap = tk.WORD, height = 15, fg='white', bg='#193433')
 console.grid(row=4, column=0, padx=5, pady=5, columnspan=3, sticky="NSEW")
