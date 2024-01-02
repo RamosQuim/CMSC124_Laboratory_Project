@@ -285,16 +285,16 @@ def trf(tk):
                                     break
                         break
                 #for noob variables or uninitialized
-                if check == 0: 
-                    temp_arr = [] 
-                    for a in compiled_lex:
-                        if a[0] == tk:
-                            # print('noob')
-                            #check if the variable is declared uninitialized
-                            temp_arr.append(tk)
-                            temp_arr.append("FAIL")
-                            symbol_table.append(temp_arr)
-                            break
+                # if check == 0: 
+                #     temp_arr = [] 
+                #     for a in compiled_lex:
+                #         if a[0] == tk:
+                #             # print('noob')
+                #             #check if the variable is declared uninitialized
+                #             temp_arr.append(tk)
+                #             temp_arr.append("FAIL")
+                #             symbol_table.append(temp_arr)
+                #             break
 
 def yrn(tk):
                 check = 0
