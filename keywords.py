@@ -402,6 +402,7 @@ def symbolTable(str1):
                     end_index = match.end()
                     whole = str1[end_index+1:]
                     value = (re.match(r'(.*)[^ \n]*',whole)[0]).split()
+                    print(value)
                     temp = []
                     for v in value:
                         c = 0
@@ -415,6 +416,7 @@ def symbolTable(str1):
                                     c = 1
                                     temp.append(j[1])
                                     break
+                    print(temp)
                     it.append(temp)
                     # temp.clear()
 
