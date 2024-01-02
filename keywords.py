@@ -36,6 +36,8 @@ class LOLLexer:
             if match:
                 value = match.group(0)
                 self.current_position += len(value)
+                if token_type == 'YARN Literal':
+                    value = value.replace('"',"")
                 return Token(token_type, value)     #returns the Token
         return None
 
@@ -110,7 +112,8 @@ token_patterns = {
     r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*': 'Identifier',           
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
     r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
-    r'\s*\"[^\"]*\"\s*': 'YARN Literal',                  
+    # r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',    
+    r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',             
 }
 
 def lex(str):
@@ -160,6 +163,7 @@ def lex(str):
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
         
+        # print(compiled_lex)
         # print(compiled_lex)
         return compiled_lex
 
@@ -257,7 +261,7 @@ def trf(tk):
                         for k in compiled_lex:
                             # print(k[0])
                             if k[0] == j[1]:
-                                print(k[0])
+                                # print(k[0])
                                 t = k[1]
                                 if t == 'NUMBAR Literal':
                                     if j[1] == 0.0:
@@ -401,14 +405,18 @@ def symbolTable(str1):
                     last_occurrence_startIndex = match.start()
                     end_index = match.end()
                     whole = str1[end_index+1:]
-                    value = (re.match(r'(.*)[^ \n]*',whole)[0]).split()
-                    print(value)
+                    value = (re.match(r'\"?.*\"?[^\n]*',whole)[0]).split(' + ')
+                    # value = re.match(r'\"?\w+\s*\w*[^ ]\"?[ ^\n]', whole)[0](.*)? r'\s*\"[^\"]*\"\+?\s*'
+
+                    # print(value)
                     temp = []
                     for v in value:
                         c = 0
                         if v[0] == '"' and v[len(v)-1] == '"':
-                            temp.append(v)
+                            # print(v)
+                            temp.append(v.replace('"', ''))
                         elif v.replace(".", "").isnumeric() or v == 'WIN' or v == 'FAIL' or v == '+':
+                            # print(v)
                             temp.append(v)
                         else:
                             for j in symbol_table:
@@ -416,7 +424,7 @@ def symbolTable(str1):
                                     c = 1
                                     temp.append(j[1])
                                     break
-                    print(temp)
+                    # print(temp)
                     it.append(temp)
                     # temp.clear()
 
@@ -427,41 +435,45 @@ def symbolTable(str1):
                     it.append(str(i))
     
     if len(it) != 0:
-        it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
+        # it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
 
         j = ""  
         for k in it[len(it)-1:len(it)]:
             # print
             for i in range(0, len(k)):
-                j += k[i]
-                j += " "
+                if k[i] != '+':
+                     
+                    j += k[i]
+                    j += " "
         symbol_table.insert(0, ['IT', j])
         it.clear()
 
-    semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
+    #need ayusin syntax for expression
+    # semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     
-    for e in semantics_varidents:
-        # print(e)
-        for j in symbol_table:
-            if e == j[0]:
-                if semantics_varidents[e] != j[1]: #change value of the current variables in the symbol table
+    # for e in semantics_varidents:
+    #     # print(e)
+    #     for j in symbol_table:
+    #         if e == j[0]:
+    #             if semantics_varidents[e] != j[1]: #change value of the current variables in the symbol table
                     
-                    j[1] = semantics_varidents[e]
-                break
+    #                 j[1] = semantics_varidents[e]
+    #             break
     
             #for noob or uninitialized variables that have value now because of R operation
             #add this noob variable to symbol table together with their values
-    sem_keys = semantics_varidents.keys()
+    # sem_keys = semantics_varidents.keys()
     # print(sem_keys)
      
-    for k in sem_keys:
-        # print(k)
-        if (k not in i[0] for i in symbol_table):
-            arr = []
-            arr.append(k)
-            arr.append(semantics_varidents[k])
-            symbol_table.append(arr)
+    # for k in sem_keys:
+    #     # print(k)
+    #     if (k not in i[0] for i in symbol_table):
+    #         arr = []
+    #         arr.append(k)
+    #         arr.append(semantics_varidents[k])
+    #         symbol_table.append(arr)
             
+    # return symbol_table
     return symbol_table
 
 

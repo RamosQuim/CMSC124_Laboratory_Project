@@ -30,8 +30,7 @@ HAI
 KTHXBYE
 
 HAI 
-    VISIBLE "hello" + "hi"
-    
+    VISIBLE "hello" + "hi" + "hello world"
 KTHXBYE
 
 VISIBLE BOTH SAEM 5 AN 6 +
