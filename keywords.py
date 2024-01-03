@@ -449,29 +449,25 @@ def symbolTable(str1):
         it.clear()
 
     #need ayusin syntax for expression
-    # semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
+    semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     
-    # for e in semantics_varidents:
-    #     # print(e)
-    #     for j in symbol_table:
-    #         if e == j[0]:
-    #             if semantics_varidents[e] != j[1]: #change value of the current variables in the symbol table
-                    
-    #                 j[1] = semantics_varidents[e]
-    #             break
-    
-            #for noob or uninitialized variables that have value now because of R operation
-            #add this noob variable to symbol table together with their values
-    # sem_keys = semantics_varidents.keys()
-    # print(sem_keys)
-     
-    # for k in sem_keys:
-    #     # print(k)
-    #     if (k not in i[0] for i in symbol_table):
-    #         arr = []
-    #         arr.append(k)
-    #         arr.append(semantics_varidents[k])
-    #         symbol_table.append(arr)
+    sem_keys = semantics_varidents.keys()                
+    matchkeys = [key for key in sem_keys if any(key == sublist[0] for sublist in symbol_table)]
+
+    for k in symbol_table:
+        if k[0] in matchkeys:
+            if k[1] != semantics_varidents[k[0]]:
+                k[1] = semantics_varidents[k[0]]
+                semantics_varidents.pop(k[0])
+
+    # print(semantics_varidents)
+
+    if len(semantics_varidents) != 0:
+        for k in semantics_varidents:
+            arr = []
+            arr.append(k)
+            arr.append(semantics_varidents[k])
+            symbol_table.append(arr)
             
     # return symbol_table
     return symbol_table

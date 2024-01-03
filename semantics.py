@@ -247,7 +247,7 @@ def booleanAnalyzer(lexeme):
     boolean_list = []
     boolean_operands = []
     while boolean_index < len(lexeme):
-        print(boolean_index, lexeme[boolean_index][0])
+        # print(boolean_index, lexeme[boolean_index][0])
         if lexeme[boolean_index][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
             boolean_list.append(lexeme[boolean_index][0])
             if lexeme[boolean_index+1][1] == 'TROOF Literal':
@@ -344,7 +344,7 @@ def booleanAnalyzer(lexeme):
             boolean_index += 2
     
     answer = ''
-    print(boolean_list, boolean_operands)
+    # print(boolean_list, boolean_operands)
     if len(boolean_list) == 0:
         answer = boolean_operands[0]
     else:
@@ -408,7 +408,7 @@ def getExplicitTypecast(text):
 
 def getVaridents(text):
     if syntax.syntax(text) == '>> No syntax errors.':
-        print("pasok", modified_varidents)
+        # print("pasok", modified_varidents)
         semantics(text)
 
         return modified_varidents
@@ -421,6 +421,7 @@ def semantics(text):
     explicit_typecast.clear()
     modified_varidents.clear()
     varidents = syntax.getVaridents(text)
+    # print(varidents)
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     # print(varidents)
     
@@ -1031,7 +1032,7 @@ def semantics(text):
                 #R
                 elif lexeme[i][0] == 'R':
                     if len(lexeme) == 3:
-
+                        # print(varidents, lexeme[i-1][0], lexeme[i+1][0])
                         for j in varidents:
                             if lexeme[i-1][0] == j:
                                 # print(lexeme[i+1][0])
@@ -1045,16 +1046,19 @@ def semantics(text):
                                         varidents[j] = float(lexeme[i+1][0])
                                         # print(varidents)
                                         modified_varidents[lexeme[i-1][0]] = float(lexeme[i+1][0])
-                                    elif lexeme[i+1][0] == 'WIN' or lexeme[i+1][0] == 'FAIL':
+                                    elif lexeme[i+1][0] in varidents:
+                                        for k in varidents:
+                                            if lexeme[i+1][0] == k:
+                                                # print(k, varidents[k], lexeme[i-1][0])
+                                                # print(k, varidents[k][0])
+                                                varidents[lexeme[i-1][0]] = varidents[k]
+                                                modified_varidents[lexeme[i-1][0]] = varidents[k]
+                                                break
+                                    else:
                                         varidents[j] = lexeme[i+1][0]
                                         # print(varidents)
                                         modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
-                                    else:
-                                        for k in varidents:
-                                            if lexeme[i+1][0] == k:
-                                                varidents[j] = varidents[k]
-                                                modified_varidents[lexeme[i-1][0]] = varidents[k]
-                                                break
+                                        
                                 
                     elif len(lexeme) == 5:
                         # print(varidents)

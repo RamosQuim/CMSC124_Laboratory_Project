@@ -263,7 +263,7 @@ def booleanSyntax(lexeme, h, i):
                 elif lexeme[boolean_index][1] in literals:
                     boolean_index += 1
             else:
-                print(lexeme[boolean_index][0])
+                # print(lexeme[boolean_index][0])
                 success = 0
                 return (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>\n\tIncorrect format, see correct syntax. \n\t{lexeme[i][0]} [WIN|FAIL] AN [WIN|FAIL]')
     return None        
@@ -342,6 +342,7 @@ def syntax(text):
                         if len(lexeme) == 2:
                             varidents[lexeme[i+1][0]] = 'NOOB'
                         elif len(lexeme) == 4:
+
                             if isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) != 0:
                                 varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
                             elif isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) == 0:
@@ -461,7 +462,7 @@ def syntax(text):
                         else:
                             # print('yey')
                             if lexeme[i-1][0] == "VISIBLE":
-                                print(lexeme)
+                                # print(lexeme)
                                 if len(lexeme) == 5:
                                     if lexeme[i+2][0] != 'AN':
                                         syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
@@ -1112,7 +1113,7 @@ def syntax(text):
                                     success = 0
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
                                     break
-                            varidents[lexeme[i-1][0]] = lexeme[i+1]
+                            # varidents[lexeme[i-1][0]] = lexeme[i+1]
                         elif len(lexeme) == 5:
                             if lexeme[i+1][0] != '"' and lexeme[i+3][0] != '"':
 
