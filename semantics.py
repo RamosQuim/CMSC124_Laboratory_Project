@@ -1132,7 +1132,10 @@ def semantics(text):
                     # resolved na :>>
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
+                    
                     semanticsResult += f"{lexeme[i+1][0]} is: {varidents[lexeme[i+1][0]]}\n"
+                    modified_varidents[lexeme[i+1][0]] = str(input_value)
+                    break
                     
                 #R
                 elif lexeme[i][0] == 'R':

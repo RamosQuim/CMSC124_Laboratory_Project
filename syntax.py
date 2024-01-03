@@ -405,10 +405,12 @@ def syntax(text):
                                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'ITZ' keyword?")
                                 success = 0
                                 break
-                            elif len(lexeme) < 4 or (lexeme[i+3][1] not in varAssignment_literals and lexeme[i+3][1] != 'Variable Identifier'):
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tITZ must have a literal or variable identifier')
-                                success = 0
-                                break
+                            elif len(lexeme) < 4:
+                                if (lexeme[i+3][1] not in varAssignment_literals and lexeme[i+3][1] != 'Variable Identifier'):
+                                    if lexeme[i+3][1] not in literals and lexeme[i+3][1] != 'NOOB': 
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tITZ must have a literal or variable identifier')
+                                        success = 0
+                                        break
                         hasVarDec = 1
                         if len(lexeme) == 2:
                             varidents[lexeme[i+1][0]] = 'NOOB'
