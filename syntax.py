@@ -31,10 +31,10 @@ def arithmeticSyntax(h,arithmetic, lexeme):
             #break
         else:
             #loop para macater yung more than 1 operations
-            print(f"lexeme: {lexeme}")
+            # print(f"lexeme: {lexeme}")
             while arithmetic_index < len(lexeme):
-                print(f"arithmetic index : {arithmetic_index}")
-                print(f"len(lexeme)-1 = {len(lexeme)} ")
+                # print(f"arithmetic index : {arithmetic_index}")
+                # print(f"len(lexeme)-1 = {len(lexeme)} ")
                 #this is for hahving another 
                 if lexeme[arithmetic_index][1] == 'Arithmetic Operation':
                     #mag add lang siya ng index 
@@ -48,7 +48,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                         if lexeme[arithmetic_index-1][1] != "NUMBAR Literal":
                             if lexeme[arithmetic_index-1][1] != "TROOF Literal":
                                 if lexeme[arithmetic_index-1][1] == "Identifier":
-                                    print(f"varidents: {varidents}")
+                                    # print(f"varidents: {varidents}")
                                     if lexeme[arithmetic_index-1][0] not in varidents:
                                         tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable is not existing')
                                         success = 0
@@ -56,7 +56,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                     else:
                                         #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
                                         if str(varidents[lexeme[arithmetic_index-1][0]]).isnumeric() == False:
-                                            print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
+                                            # print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
                                             try:
                                                 float_val = float(varidents[lexeme[arithmetic_index-1][0]])
                                             except ValueError:
@@ -72,7 +72,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                         if lexeme[arithmetic_index+1][1] != "NUMBAR Literal":
                             if lexeme[arithmetic_index+1][1] != "TROOF Literal":
                                 if lexeme[arithmetic_index+1][1] == "Identifier":
-                                    print(f"varidents: {varidents}")
+                                    # print(f"varidents: {varidents}")
                                     if lexeme[arithmetic_index+1][0] not in varidents:
                                         tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable is not existing')
                                         success = 0
@@ -80,7 +80,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                     else:
                                         #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
                                         if str(varidents[lexeme[arithmetic_index+1][0]]).isnumeric() == False:
-                                            print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
+                                            # print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
                                             try:
                                                 float_val = float(varidents[lexeme[arithmetic_index+1][0]])
                                             except ValueError:
@@ -101,7 +101,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                         if lexeme[arithmetic_index][1] != "NUMBAR Literal":
                             if lexeme[arithmetic_index][1] != "TROOF Literal":
                                 if lexeme[arithmetic_index][1] == "Identifier":
-                                    print(f"varidents: {varidents}")
+                                    # print(f"varidents: {varidents}")
                                     if lexeme[arithmetic_index][0] not in varidents:
                                         tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable is not existing')
                                         success = 0
@@ -109,7 +109,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                     else:
                                         #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
                                         if str(varidents[lexeme[arithmetic_index][0]]).isnumeric() == False:
-                                            print(f"varidents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
+                                            # print(f"varidents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
                                             try:
                                                 float_val = float(varidents[lexeme[arithmetic_index][0]])
                                                 arithmetic_index +=1  #added this para di magkaroon ng inifnity loop
@@ -141,7 +141,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                     else:
                         arithmetic_index +=1
             if an_counter != operation_counter and success != 0:
-                print(f"arithmetic_index: {arithmetic_index}")
+                # print(f"arithmetic_index: {arithmetic_index}")
                 tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[0][0]}>: \n\tTotal no. of {lexeme[0][0]} should be equal to AN')
                 success = 0
                 
@@ -154,58 +154,77 @@ def arithmeticSyntax(h,arithmetic, lexeme):
 def comparisonSyntax(lexeme, h, i):
         # comparison = ["BOTH SAEM", "DIFFRINT"]
         comparison_index = 0
-        print(lexeme[comparison_index][0])
-        print(len(lexeme))
+        check = 0
+        # print(lexeme[comparison_index][0])
+        # print(len(lexeme))
     # while comparison_index < len(lexeme):
     #     print(varidents)
         if isfloat(lexeme[comparison_index+1][0]) == False:
             if lexeme[comparison_index+1][0] not in varidents:
                 success =0
+                check = 1
                 return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
             else:
                 # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
                 if isfloat(varidents[lexeme[comparison_index+1][0]]) == False:
                     success =0
+                    check = 1
                     return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
 
         if len(lexeme) == 4:
             if lexeme[comparison_index+2][0] != 'AN':
                 success =0
+                check = 1
                 return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
             elif isfloat(lexeme[comparison_index+3][0]) == False:
                 if lexeme[comparison_index+3][0] not in varidents:
                     success =0
+                    check = 1
                     return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
                 else:
                 # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
                     if isfloat(varidents[lexeme[comparison_index+3][0]]) == False:
                         success =0
+                        check = 1
                         return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
         elif len(lexeme) == 7:
             if lexeme[comparison_index+2][0] != 'AN':
                 success =0
+                check = 1
                 return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
             elif lexeme[comparison_index+3][0] != 'SMALLR OF' and lexeme[comparison_index+3][0] != 'BIGGR OF':
                 success =0
+                check = 1
                 return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+2][0]}>: \n\t{lexeme[comparison_index+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
             elif isfloat(lexeme[comparison_index+4][0]) == False and lexeme[comparison_index+4][0] != lexeme[comparison_index+1][0]:
                 success =0
+                check = 1
                 return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} SMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
             elif lexeme[comparison_index+5][0] != 'AN':
                 success =0
+                check = 1
                 return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
             elif isfloat(lexeme[comparison_index+6][0]) == False:
                 if lexeme[comparison_index+6][0] not in varidents:
                     success =0
+                    check = 1
                     return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
                 else:
                 # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
                     if isfloat(varidents[lexeme[comparison_index+6][0]]) == False:
                         success =0
+                        check = 1
                         return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
         else:
             success =   0
+            check = 1
             return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[comparison_index][0]}<value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+
+        if check == 0:
+            return
+        
+
+
 
 def booleanSyntax(lexeme, h, i):
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
@@ -332,7 +351,7 @@ def booleanSyntax(lexeme, h, i):
                     else:
                         return (f'\n>> SyntaxError in line {h+1} near <{lexeme[boolean_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[boolean_index][0]} [WIN|FAIL] AN [WIN|FAIL]')
                 else:
-                    print(lexeme[boolean_index][0])
+                    # print(lexeme[boolean_index][0])
                     return (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>\n\tIncorrect format, see correct syntax. \n\t{lexeme[i][0]} [WIN|FAIL] AN [WIN|FAIL]')
         else:
             if len(standby_index) != 0:
@@ -450,9 +469,9 @@ def syntax(text):
                     #PRINTING
                     if lexeme[i][0] == 'VISIBLE':
                     #     # if less than
-                        print(f"lexeme in visible start: {lexeme}")
+                        # print(f"lexeme in visible start: {lexeme}")
                         if len(lexeme) < 2:
-                            print(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tVISIBLE must have a Variable Identifier, Literal, or an Expression')
+                            syntaxResult +=(f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tVISIBLE must have a Variable Identifier, Literal, or an Expression')
                             success = 0
                             break
                         else:
@@ -467,7 +486,7 @@ def syntax(text):
                                                 if lexeme[visible_indexcounter-1][1] != 'TROOF Literal':
                                                     if lexeme[visible_indexcounter-1][1] != 'String Delimiter':
                                                         if lexeme[visible_indexcounter-1][0] != "IT":
-                                                            print(f"lexeme[visible_indexcounter-1][0]:{lexeme[visible_indexcounter-1][0]}")
+                                                            # print(f"lexeme[visible_indexcounter-1][0]:{lexeme[visible_indexcounter-1][0]}")
                                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only1')
                                                             success = 0
                                                             break
@@ -489,28 +508,31 @@ def syntax(text):
                                         if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
                                             if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
                                                 if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
-                                                    if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
-                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
-                                                        success = 0
-                                                        break
-                                                    else:
-                                                        #THIS IS THE BOOLEANS
-                                                        temp = []
-                                                        tempcounter = visible_indexcounter
-                                                        while tempcounter < len(lexeme):
-                                                            if lexeme[tempcounter][1] == "Output Delimiter":
-                                                                break
-                                                            else:
-                                                                temp.append(lexeme[tempcounter])
-                                                                tempcounter+=1
-                                                        result = booleanSyntax(temp, h, i)
-                                                        #check kung ano yung irereturn
-                                                        if result is not None:
+                                                    if lexeme[visible_indexcounter][0] != "IT":
+                                                        if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
                                                             success = 0
-                                                            syntaxResult += result
                                                             break
-                                                        #move forward!
-                                                        visible_indexcounter = tempcounter
+                                                        else:
+                                                            #THIS IS THE BOOLEANS
+                                                            temp = []
+                                                            tempcounter = visible_indexcounter
+                                                            while tempcounter < len(lexeme):
+                                                                if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                    break
+                                                                else:
+                                                                    temp.append(lexeme[tempcounter])
+                                                                    tempcounter+=1
+                                                            result = booleanSyntax(temp, h, i)
+                                                            #check kung ano yung irereturn
+                                                            if result is not None:
+                                                                success = 0
+                                                                syntaxResult += result
+                                                                break
+                                                            #move forward!
+                                                            visible_indexcounter = tempcounter
+                                                    else:
+                                                        visible_indexcounter+=1
                                                 else:
                                                     #THIS IS THE COMPARISONS 
                                                     temp = []
@@ -555,127 +577,127 @@ def syntax(text):
                                         else:
                                             #move forward 
                                             visible_indexcounter +=3
-                            print("UMABOT SA END NG SYNTAX HUHU")
+                            # print("UMABOT SA END NG SYNTAX HUHU")
                             break
                     ## COMPARISON SYNTAX - BOTH SAEM
                     # print(lexeme[i][0])
-                    if lexeme[i][0] == 'BOTH SAEM':
-                        # print(lexeme[i-1][0])
-                        if isfloat(lexeme[i+1][0]) == False:
-                            # print("pasok")
-                            if lexeme[i+1][0] not in varidents:
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
-                                success = 0
-                                break
-                            else:
-                                if isfloat(varidents[lexeme[i+1][0]]) == False:
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
-                                    success = 0
-                                    break
+                    # if lexeme[i][0] == 'BOTH SAEM':
+                    #     # print(lexeme[i-1][0])
+                    #     if isfloat(lexeme[i+1][0]) == False:
+                    #         # print("pasok")
+                    #         if lexeme[i+1][0] not in varidents:
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                    #             success = 0
+                    #             break
+                    #         else:
+                    #             if isfloat(varidents[lexeme[i+1][0]]) == False:
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
+                    #                 success = 0
+                    #                 break
                         
-                        if lexeme[i-1][0] not in keyUsingExp:
-                            # check format of comparison
-                            if len(lexeme) == 4:
-                                if lexeme[i+2][0] != 'AN':
-                                    syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-                                    success = 0
-                                    break
+                    #     if lexeme[i-1][0] not in keyUsingExp:
+                    #         # check format of comparison
+                    #         if len(lexeme) == 4:
+                    #             if lexeme[i+2][0] != 'AN':
+                    #                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                    #                 success = 0
+                    #                 break
                             
-                                elif isfloat(lexeme[i+3][0]) == False:
-                                    if lexeme[i+3][0] not in varidents:
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
-                                        success = 0
-                                        break
-                                    else:
-                                        if isfloat(varidents[lexeme[i+3][0]]) == False:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
-                                            success = 0
-                                            break
+                    #             elif isfloat(lexeme[i+3][0]) == False:
+                    #                 if lexeme[i+3][0] not in varidents:
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                    #                     success = 0
+                    #                     break
+                    #                 else:
+                    #                     if isfloat(varidents[lexeme[i+3][0]]) == False:
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
+                    #                         success = 0
+                    #                         break
                                 
-                            elif len(lexeme) == 7 : #or (len(lexeme) == 9 and lexeme[i-1][0] == 'R')
-                                if lexeme[i+2][0] != 'AN':
-                                    syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-                                    success = 0
-                                    break
-                                elif lexeme[i+3][0] != 'SMALLR OF' and lexeme[i+3][0] != 'BIGGR OF':
-                                    syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
-                                    success = 0
-                                    break
-                                elif isfloat(lexeme[i+4][0]) == False and  lexeme[i+4][0] != lexeme[i+1][0]:
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                    success = 0
-                                    break
-                                elif lexeme[i+5][0] != 'AN':
-                                    syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-                                    success = 0
-                                    break
-                                elif isfloat(lexeme[i+6][0]) == False:
-                                    if lexeme[i+6][0] not in varidents:
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                        success = 0
-                                        break
-                                    else:
-                                        if isfloat(varidents[lexeme[i+6][0]]) == False:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                            success = 0
-                                            break
-                            else:
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
-                                success = 0
-                                break  
-                        else:
-                            # print('yey')
-                            if lexeme[i-1][0] == "VISIBLE":
-                                # print(lexeme)
-                                if len(lexeme) == 5:
-                                    if lexeme[i+2][0] != 'AN':
-                                        syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-                                        success = 0
-                                        break
+                    #         elif len(lexeme) == 7 : #or (len(lexeme) == 9 and lexeme[i-1][0] == 'R')
+                    #             if lexeme[i+2][0] != 'AN':
+                    #                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                    #                 success = 0
+                    #                 break
+                    #             elif lexeme[i+3][0] != 'SMALLR OF' and lexeme[i+3][0] != 'BIGGR OF':
+                    #                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
+                    #                 success = 0
+                    #                 break
+                    #             elif isfloat(lexeme[i+4][0]) == False and  lexeme[i+4][0] != lexeme[i+1][0]:
+                    #                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                    #                 success = 0
+                    #                 break
+                    #             elif lexeme[i+5][0] != 'AN':
+                    #                 syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                    #                 success = 0
+                    #                 break
+                    #             elif isfloat(lexeme[i+6][0]) == False:
+                    #                 if lexeme[i+6][0] not in varidents:
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                    #                     success = 0
+                    #                     break
+                    #                 else:
+                    #                     if isfloat(varidents[lexeme[i+6][0]]) == False:
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                    #                         success = 0
+                    #                         break
+                    #         else:
+                    #             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tBOTH SAEM <value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+                    #             success = 0
+                    #             break  
+                    #     else:
+                    #         # print('yey')
+                    #         if lexeme[i-1][0] == "VISIBLE":
+                    #             # print(lexeme)
+                    #             if len(lexeme) == 5:
+                    #                 if lexeme[i+2][0] != 'AN':
+                    #                     syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                    #                     success = 0
+                    #                     break
                             
-                                    elif isfloat(lexeme[i+3][0]) == False:
-                                        if lexeme[i+3][0] not in varidents:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
-                                            success = 0
-                                            break
-                                        else:
-                                            if isfloat(varidents[lexeme[i+3][0]]) == False:
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
-                                                success = 0
-                                                break
-                                elif len(lexeme) == 8:
-                                    if lexeme[i+2][0] != 'AN':
-                                        syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-                                        success = 0
-                                        break
-                                    elif lexeme[i+3][0] != 'SMALLR OF' and lexeme[i+3][0] != 'BIGGR OF':
-                                        syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
-                                        success = 0
-                                        break
-                                    elif isfloat(lexeme[i+4][0]) == False and  lexeme[i+4][0] != lexeme[i+1][0]:
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                        success = 0
-                                        break
-                                    elif lexeme[i+5][0] != 'AN':
-                                        syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-                                        success = 0
-                                        break
-                                    elif isfloat(lexeme[i+6][0]) == False:
-                                        if lexeme[i+6][0] not in varidents:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                            success = 0
-                                            break
-                                        else:
-                                            if isfloat(varidents[lexeme[i+6][0]]) == False:
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-                                                success = 0
-                                                break  
-                                else:
-                                    if len(lexeme) == 9 or len(lexeme) == 6:
-                                        if lexeme[i+7][0] == 'R' or lexeme[i+4][0] == 'R':
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i-1][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t"+" should be followed by any expression.')
-                                            success = 0
-                                            break 
+                    #                 elif isfloat(lexeme[i+3][0]) == False:
+                    #                     if lexeme[i+3][0] not in varidents:
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type')
+                    #                         success = 0
+                    #                         break
+                    #                     else:
+                    #                         if isfloat(varidents[lexeme[i+3][0]]) == False:
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tBOTH SAEM only accepts NUMBR or NUMBAR type variable')
+                    #                             success = 0
+                    #                             break
+                    #             elif len(lexeme) == 8:
+                    #                 if lexeme[i+2][0] != 'AN':
+                    #                     syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                    #                     success = 0
+                    #                     break
+                    #                 elif lexeme[i+3][0] != 'SMALLR OF' and lexeme[i+3][0] != 'BIGGR OF':
+                    #                     syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+2][0]}>: \n\t{lexeme[i+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
+                    #                     success = 0
+                    #                     break
+                    #                 elif isfloat(lexeme[i+4][0]) == False and  lexeme[i+4][0] != lexeme[i+1][0]:
+                    #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                    #                     success = 0
+                    #                     break
+                    #                 elif lexeme[i+5][0] != 'AN':
+                    #                     syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                    #                     success = 0
+                    #                     break
+                    #                 elif isfloat(lexeme[i+6][0]) == False:
+                    #                     if lexeme[i+6][0] not in varidents:
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                    #                         success = 0
+                    #                         break
+                    #                     else:
+                    #                         if isfloat(varidents[lexeme[i+6][0]]) == False:
+                    #                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
+                    #                             success = 0
+                    #                             break  
+                    #             else:
+                    #                 if len(lexeme) == 9 or len(lexeme) == 6:
+                    #                     if lexeme[i+7][0] == 'R' or lexeme[i+4][0] == 'R':
+                    #                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i-1][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t"+" should be followed by any expression.')
+                    #                         success = 0
+                    #                         break 
                                 
                     # ## COMPARISON SYNTAX - DIFFRINT
                     # if lexeme[i][0] == 'DIFFRINT':
@@ -753,7 +775,7 @@ def syntax(text):
                     #                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
                     #                     success = 0
                     #                     break
-                    #             # else:
+                    # #             # else:
                                     #check 'yung may +
 
                     ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
@@ -1045,7 +1067,10 @@ def syntax(text):
                         if result is not None:
                             success = 0
                             syntaxResult += result
+                        
                         break
+
+                   
 
                     ## CONCATENATION BLOCK SYNTAX - SMOOSH
                     if lexeme[i][0] == 'SMOOSH':
@@ -1079,8 +1104,22 @@ def syntax(text):
                                     success = 0
                                     syntaxResult += comparisonSyntax(lexeme[i+1:], h, i)
                                     break
-                                continue
-                        # elif lexeme [i+1][0] == "EITHER OF" or lexeme [i+1][0] == "EITHER OF"
+                                break
+                        elif lexeme[i+1][0] in booleans:
+                            result = booleanSyntax(lexeme[i+1:], h, i)
+                            if result is not None:
+                                success = 0
+                                syntaxResult += result
+                                
+                            break
+                            # continue //
+                        elif lexeme[i+1][0] in arithmetic:
+                            result = arithmeticSyntax(h,arithmetic,lexeme[i+1:])
+                            if result[0] == 0:
+                                syntaxResult += result[1]
+                                success = result[0]
+                                break
+                            break
                         
                         if len(lexeme) == 3:
                             if lexeme[i-1][0] not in varidents:
@@ -1088,10 +1127,12 @@ def syntax(text):
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not a variable identifier.')
                                 break
+                            
                             if lexeme[i+1][1] not in varAssignment_literals and lexeme[i+1][0] not in varidents:
                                     success = 0
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
                                     break
+                            
                             # varidents[lexeme[i-1][0]] = lexeme[i+1]
                         elif len(lexeme) == 5:
                             if lexeme[i+1][0] != '"' and lexeme[i+3][0] != '"':
@@ -1115,12 +1156,6 @@ def syntax(text):
                                     break
                             break
                         else:
-                            # if lexeme[i+1][0] == "BOTH SAEM" or lexeme[i+1][0] == "DIFFRINT":
-                            #     # print(lexeme[i+1:])
-                            #     syntaxResult += comparisonSyntax(lexeme[i+1:], h, i)
-                                
-                            
-                            # else:
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                                 break
@@ -1196,11 +1231,20 @@ def syntax(text):
                     if lexeme[i][0] in arithmetic: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
                         result = arithmeticSyntax(h,arithmetic,lexeme)
                         #this is to add pag may error po
-                        print(f"result: {result}")
+                        # print(f"result: {result}")
                         if result[0] == 0:
                             syntaxResult += result[1]
                             success = result[0]
-                            break
+                        break    
+                    
+                    if lexeme[i][0] in comparison:
+                        print(lexeme[i][0])
+                        result = comparisonSyntax(lexeme, h, i)
+                        if result is not None:
+                            success = 0
+                            syntaxResult += result
+                            
+                        break
 
                     #SWITCH CASES STATEMENTS
                     wtfchecker = -1

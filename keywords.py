@@ -335,8 +335,15 @@ def symbolTable(str1):
     symbol_table.clear()
     it = []
 
+    if len(it) == 0:
+                arr = []
+                arr.append('IT')   
+                arr.append('NOOB')
+                symbol_table.insert(0, arr)  
+
     for token in lex(str1):
         # print(token[0], token[1])
+        
 
         if token[1].rstrip().lstrip() == 'Variable Identifier':
             
@@ -414,7 +421,9 @@ def symbolTable(str1):
             
 
         elif token[0] == 'VISIBLE':
-            if len(it) == 0:
+
+            # if len(it) == 0:
+               
 
                 matches = re.finditer(r'\b'+token[0]+r'\b', str1)
                 for match in matches:
@@ -434,6 +443,8 @@ def symbolTable(str1):
                         elif v.replace(".", "").isnumeric() or v == 'WIN' or v == 'FAIL' or v == '+':
                             # print(v)
                             temp.append(v)
+                        elif v == 'IT':
+                            temp.append(symbol_table[0][1])
                         else:
                             for j in symbol_table:
                                 if j[0].split() == v.split():
@@ -450,9 +461,9 @@ def symbolTable(str1):
                 for i in ex_typecast:
                     it.append(str(i))
     
+    # print("it", it)
     if len(it) != 0:
-        # it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
-
+        
         j = ""  
         for k in it[len(it)-1:len(it)]:
             # print
@@ -461,8 +472,26 @@ def symbolTable(str1):
                      
                     j += k[i]
                     j += " "
-        symbol_table.insert(0, ['IT', j])
+        # symbol_table.insert(0, ['IT', j])
+        symbol_table[0][1] = j
         it.clear()
+    
+    # print("symbol table",symbol_table)
+
+    # if len(it) != 0:
+    #     # it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
+
+    #     j = ""  
+    #     for k in it[len(it)-1:len(it)]:
+    #         # print
+    #         for i in range(0, len(k)):
+    #             if k[i] != '+':
+                     
+    #                 j += k[i]
+    #                 j += " "
+    #     symbol_table.insert(0, ['IT', j])
+    #     it.clear()
+    
 
     #need ayusin syntax for expression
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
@@ -486,6 +515,7 @@ def symbolTable(str1):
                 symbol_table.append(arr)
             
     # return symbol_table
+    print(f"symbol_table: {symbol_table}")
     return symbol_table
 
 
@@ -493,6 +523,10 @@ def connect_UI(str):
     compiled_lex.clear()
     return lex(str)
     
+#IT VALUE GETTER
+def get_IT():
+     return symbol_table[0][1]
+     
 
 # # for accepting many input lines from user
 # def main():
