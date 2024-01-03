@@ -110,7 +110,7 @@ token_patterns = {
     r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*': 'Identifier',           
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
     r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
-    r'\s*\"[^\"]*\"\s*': 'YARN Literal',                  
+   r'\s*\"[^\"\n]*\"\s*': 'YARN Literal',                  
 }
 
 def lex(str):
@@ -131,7 +131,7 @@ def lex(str):
             # print(tokens[i+1].value)
             
             # print(temp)
-
+            print(f"temp: {temp}")
             if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
                 new = Token('String Delimiter', '"')
                 tokens[i].value = val[1:-1]
@@ -160,7 +160,7 @@ def lex(str):
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
         
-        # print(compiled_lex)
+        print(f"compiled_lex:{compiled_lex}")
         return compiled_lex
 
 def nmbar(tk):  
