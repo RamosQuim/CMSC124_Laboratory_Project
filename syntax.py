@@ -302,9 +302,10 @@ def booleanSyntax(lexeme, h, i):
                             continue
 
                         if isComplete == 0:
-                            isComplete = 1
                             if len(standby_index) != 0:
                                 standby_index.pop()
+                            if len(standby_index) == 0:
+                                isComplete = 1
 
                         if ((boolean_index+2) < len(lexeme)):
                             if lexeme[boolean_index+2][0] != 'AN' and boolean_index+2 != len(lexeme)-1:
@@ -748,6 +749,9 @@ def syntax(text):
                                         boolean_index += 1
                                         continue
 
+                                    if len(standby_index) != 0:
+                                        standby_index.pop()
+
                                     if ((boolean_index+2) < len(lexeme)):
                                         if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
                                             success = 0
@@ -886,6 +890,9 @@ def syntax(text):
                                     else:
                                         boolean_index += 1
                                         continue
+
+                                    if len(standby_index) != 0:
+                                        standby_index.pop()
 
                                     if ((boolean_index+2) < len(lexeme)):
                                         if lexeme[boolean_index+2][0] != 'AN' and (lexeme[boolean_index+2][0] != 'MKAY' and boolean_index+2 != len(lexeme)-1):
