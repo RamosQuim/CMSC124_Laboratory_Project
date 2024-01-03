@@ -487,28 +487,31 @@ def syntax(text):
                                         if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
                                             if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
                                                 if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
-                                                    if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
-                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
-                                                        success = 0
-                                                        break
-                                                    else:
-                                                        #THIS IS THE BOOLEANS
-                                                        temp = []
-                                                        tempcounter = visible_indexcounter
-                                                        while tempcounter < len(lexeme):
-                                                            if lexeme[tempcounter][1] == "Output Delimiter":
-                                                                break
-                                                            else:
-                                                                temp.append(lexeme[tempcounter])
-                                                                tempcounter+=1
-                                                        result = booleanSyntax(temp, h, i)
-                                                        #check kung ano yung irereturn
-                                                        if result is not None:
+                                                    if lexeme[visible_indexcounter][0] != "IT":
+                                                        if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
                                                             success = 0
-                                                            syntaxResult += result
                                                             break
-                                                        #move forward!
-                                                        visible_indexcounter = tempcounter
+                                                        else:
+                                                            #THIS IS THE BOOLEANS
+                                                            temp = []
+                                                            tempcounter = visible_indexcounter
+                                                            while tempcounter < len(lexeme):
+                                                                if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                    break
+                                                                else:
+                                                                    temp.append(lexeme[tempcounter])
+                                                                    tempcounter+=1
+                                                            result = booleanSyntax(temp, h, i)
+                                                            #check kung ano yung irereturn
+                                                            if result is not None:
+                                                                success = 0
+                                                                syntaxResult += result
+                                                                break
+                                                            #move forward!
+                                                            visible_indexcounter = tempcounter
+                                                    else:
+                                                        visible_indexcounter+=1
                                                 else:
                                                     #THIS IS THE COMPARISONS 
                                                     temp = []

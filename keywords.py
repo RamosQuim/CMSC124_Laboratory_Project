@@ -486,6 +486,7 @@ def symbolTable(str1):
                 symbol_table.append(arr)
             
     # return symbol_table
+    print(f"symbol_table: {symbol_table}")
     return symbol_table
 
 
@@ -493,6 +494,10 @@ def connect_UI(str):
     compiled_lex.clear()
     return lex(str)
     
+#IT VALUE GETTER
+def get_IT():
+     return symbol_table[0][1]
+     
 
 # # for accepting many input lines from user
 # def main():

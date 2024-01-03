@@ -1271,6 +1271,10 @@ def semantics(text):
                         elif lexeme[visible_index][0] in varidents:
                             temp_result += str(varidents[lexeme[visible_index][0]])
                             visible_index +=1
+                        #this is for IT
+                        elif lexeme[visible_index][0] == 'IT':
+                            temp_result += str(keywords.get_IT())
+                            visible_index+=1
                         elif lexeme[visible_index][0] in arithmetic:
                             #kunin ang lexeme until +
                             temp = []
@@ -1293,7 +1297,7 @@ def semantics(text):
                             #kunin ang lexeme until +
                             temp = []
                             temp_index = visible_index
-                            print(f"current lexeme: {lexeme}")
+                            print(f"current lexeme sa comparison: {lexeme}")
                             print(f"temp_index: {temp_index}")
                             while temp_index < len(lexeme):
                                 if lexeme[temp_index][1] == "Output Delimiter":
@@ -1304,12 +1308,13 @@ def semantics(text):
                                     temp_index+=1
                             temp_result += str(comparison_expression(temp))
                             visible_index = temp_index
+
                         #BOOLEANS
                         elif lexeme[visible_index][0] in booleans:
                             #kunin ang lexeme until +
                             temp = []
                             temp_index = visible_index
-                            print(f"current lexeme: {lexeme}")
+                            print(f"current lexeme sa booleans: {lexeme}")
                             print(f"temp_index: {temp_index}")
                             while temp_index < len(lexeme):
                                 if lexeme[temp_index][1] == "Output Delimiter":
@@ -1320,6 +1325,7 @@ def semantics(text):
                                     temp_index+=1
                             temp_result += str(fin_boolean_expression(temp))
                             visible_index = temp_index
+                            print(f"temp in booleans:{temp}")
                     semanticsResult += f"{temp_result}\n"
                     break
             lexeme.clear()
