@@ -1080,6 +1080,8 @@ def syntax(text):
                                     syntaxResult += comparisonSyntax(lexeme[i+1:], h, i)
                                     break
                                 continue
+                        # elif lexeme [i+1][0] == "EITHER OF" or lexeme [i+1][0] == "EITHER OF"
+                        
                         if len(lexeme) == 3:
                             if lexeme[i-1][0] not in varidents:
                                 # print('hello', lexeme[i-1][0])
