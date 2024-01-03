@@ -5,7 +5,7 @@ import for_input
 
 
 #this part is for the semantics of the arithmetic operations (SUM OF, DIFF OF, ETC.)
-def ArithmeticAnalyzer(varidents, arithmetic,lexeme): 
+def arithmeticAnalyzer(varidents, arithmetic,lexeme): 
     print(f'ARITHMETIC ANALYZER LEXEME: {lexeme}')           
     if lexeme[0][0] in arithmetic:
         remover_index = 0
@@ -47,14 +47,32 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                     if lexeme[arithmetic_index+3][0] not in arithmetic:
                         if lexeme[arithmetic_index][0] == 'SUM OF':
                             #this is created to cater the variables!!!
-                            #print(f"lexeme[arithmetic_index+1][0]: {lexeme[arithmetic_index+1][0]}")
-                            #print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
                             if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])+float(varidents[lexeme[arithmetic_index+3][0]])
                             elif lexeme[arithmetic_index+1][1] == 'Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])+float(lexeme[arithmetic_index+3][0])
                             elif lexeme[arithmetic_index+3][1] == 'Identifier':
                                 result = float(lexeme[arithmetic_index+1][0])+float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)+float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(1)+float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(0)+float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)+float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    result = float(1)+float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    result = float(0)+float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result =float(lexeme[arithmetic_index+1][0])+ float(1)
+                                else:
+                                    result = float(lexeme[arithmetic_index+1][0])+float(0)
                             else:
                                 result = float(lexeme[arithmetic_index+1][0])+float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'DIFF OF':
@@ -65,6 +83,26 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])-float(lexeme[arithmetic_index+3][0])
                             elif lexeme[arithmetic_index+3][1] == 'Identifier':
                                 result = float(lexeme[arithmetic_index+1][0])-float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)-float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(1)-float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(0)-float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)-float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    result = float(1)-float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    result = float(0)-float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result =float(lexeme[arithmetic_index+1][0])-float(1)
+                                else:
+                                    result = float(lexeme[arithmetic_index+1][0])-float(0)
                             else:
                                 result = float(lexeme[arithmetic_index+1][0]) - float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'PRODUKT OF':
@@ -75,6 +113,26 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])*float(lexeme[arithmetic_index+3][0])
                             elif lexeme[arithmetic_index+3][1] == 'Identifier':
                                 result = float(lexeme[arithmetic_index+1][0])*float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)*float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(1)*float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(0)*float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)*float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    result = float(1)*float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    result = float(0)*float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result =float(lexeme[arithmetic_index+1][0])*float(1)
+                                else:
+                                    result = float(lexeme[arithmetic_index+1][0])*float(0)
                             else:
                                 result = float(lexeme[arithmetic_index+1][0]) * float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'QUOSHUNT OF':
@@ -85,6 +143,26 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(lexeme[arithmetic_index+3][0])
                             elif lexeme[arithmetic_index+3][1] == 'Identifier':
                                 result = float(lexeme[arithmetic_index+1][0]) / float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)/float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(1)/float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(0)/float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)/float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    result = float(1)/float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    result = float(0)/float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result =float(lexeme[arithmetic_index+1][0])/float(1)
+                                else:
+                                    result = float(lexeme[arithmetic_index+1][0])/float(0)
                             else:
                                 result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'MOD OF':
@@ -95,6 +173,26 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(lexeme[arithmetic_index+3][0])
                             elif lexeme[arithmetic_index+3][1] == 'Identifier':
                                 result = float(lexeme[arithmetic_index+1][0]) % float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)%float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(1)%float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(0)%float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)%float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    result = float(1)%float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    result = float(0)%float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result =float(lexeme[arithmetic_index+1][0])%float(1)
+                                else:
+                                    result = float(lexeme[arithmetic_index+1][0])%float(0)
                             else:
                                 result = float(lexeme[arithmetic_index+1][0]) % float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'BIGGR OF':
@@ -114,6 +212,38 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                                     result = float(lexeme[arithmetic_index+1][0]) 
                                 else:
                                     result = float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    if  float(1) > float(lexeme[arithmetic_index+3][0]):
+                                        result = float(1)
+                                    else: 
+                                        result = float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    if  float(0) > float(lexeme[arithmetic_index+3][0]):
+                                        result = float(0)
+                                    else: 
+                                        result = float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    if float(lexeme[arithmetic_index+1][0]) < float(1):
+                                        result = float(1)
+                                    else:
+                                        result = float(lexeme[arithmetic_index+1][0]) 
+                                else:
+                                    if float(lexeme[arithmetic_index+1][0]) < float(0):
+                                        result = float(0)
+                                    else:
+                                        result = float(lexeme[arithmetic_index+1][0])
                             else:
                                 if float(lexeme[arithmetic_index+1][0]) > float(lexeme[arithmetic_index+3][0]):
                                     result = float(lexeme[arithmetic_index+1][0])
@@ -136,6 +266,38 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                                     result = float(lexeme[arithmetic_index+1][0]) 
                                 else:
                                     result = float(varidents[lexeme[arithmetic_index+3][0]])
+                            #THIS ONE IS FOR THE TROOFS
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(1)
+                                elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                                    result = float(0)
+                                elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                                    result = float(0)
+                            elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+1][0] == 'WIN':
+                                    if  float(1) < float(lexeme[arithmetic_index+3][0]):
+                                        result = float(1)
+                                    else: 
+                                        result = float(lexeme[arithmetic_index+3][0])
+                                else:
+                                    if  float(0) < float(lexeme[arithmetic_index+3][0]):
+                                        result = float(0)
+                                    else: 
+                                        result = float(lexeme[arithmetic_index+3][0])
+                            elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+                                if lexeme[arithmetic_index+3][0] == 'WIN':
+                                    if float(lexeme[arithmetic_index+1][0]) > float(1):
+                                        result = float(1)
+                                    else:
+                                        result = float(lexeme[arithmetic_index+1][0]) 
+                                else:
+                                    if float(lexeme[arithmetic_index+1][0]) > float(0):
+                                        result = float(0)
+                                    else:
+                                        result = float(lexeme[arithmetic_index+1][0])
                             else:
                                 if float(lexeme[arithmetic_index+1][0]) < float(lexeme[arithmetic_index+3][0]):
                                     result = float(lexeme[arithmetic_index+1][0]) 
@@ -160,32 +322,64 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                     if operation_list[-1] == 'SUM OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             result = result + float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                result = result + 1
+                            else:
+                                result = result + 0
                         else:
                             result = result + float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'DIFF OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             result = result - float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                result = result - 1
+                            else:
+                                result = result - 0                        
                         else:
                             result = result - float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'PRODUKT OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             result = result * float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                result = result * 1
+                            else:
+                                result = result * 0                        
                         else:
                             result = result * float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'QUOSHUNT OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             result = result / float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                result = result / 1
+                            else:
+                                result = result / 0
                         else:
                             result = result / float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'MOD OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             result = result % float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                result = result % 1
+                            else:
+                                result = result % 0
                         else:
                             result = result % float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'BIGGR OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             if result < float(varidents[lexeme[arithmetic_index+1][0]]):
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                if float(1) > result:
+                                    result = float(1)
+                            else:
+                                if float(0) > result:
+                                    result = float(0)
                         else:
                             if result < float(lexeme[arithmetic_index+1][0]):
                                 result = float(lexeme[arithmetic_index+1][0])
@@ -193,6 +387,13 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
                         if lexeme[arithmetic_index+1][1] == "Identifier":
                             if result > float(varidents[lexeme[arithmetic_index+1][0]]):  
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])
+                        elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
+                            if lexeme[arithmetic_index+1][0] == 'WIN':
+                                if float(1) < result:
+                                    result = float(1)
+                            else:
+                                if float(0) < result:
+                                    result = float(0)
                         else:
                             if result > float(lexeme[arithmetic_index+1][0]):  
                                 result = float(lexeme[arithmetic_index+1][0])
@@ -214,8 +415,6 @@ def ArithmeticAnalyzer(varidents, arithmetic,lexeme):
 
         print(f"updated an_counter: {an_counter}")
         for i in range (an_counter):
-            print(f"i: {i}")
-            print(f"result: {result}")
             if operation_list[-(1+i)] == 'SUM OF':
                 result = values_list[-(1+i)] + result   
             elif operation_list[-(1+i)] == 'DIFF OF':
@@ -430,6 +629,8 @@ def semantics(text):
     varidents = syntax.getVaridents(text)
     # print(varidents)
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
+    comparison = ['BOTH SAEM', 'DIFFRINT']
+    booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
     # print(varidents)
     
     for h in range(0, len(text.splitlines())):
@@ -884,7 +1085,7 @@ def semantics(text):
 
                 #THIS PART IS FOR THE COMPUTATIONS!!
                 elif lexeme[i][0] in arithmetic:
-                    semanticsResult += str(ArithmeticAnalyzer(varidents,arithmetic,lexeme))
+                    semanticsResult += str(arithmeticAnalyzer(varidents,arithmetic,lexeme))
                     break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
@@ -1045,10 +1246,41 @@ def semantics(text):
                                     temp.append(lexeme[temp_index])
                                     temp_index+=1
                             print(f"lexeme na ipapasa:{temp}")
-                            temp_result += str(ArithmeticAnalyzer(varidents,arithmetic,temp))
+                            temp_result += str(arithmeticAnalyzer(varidents,arithmetic,temp))
                             visible_index = temp_index
                             print(f"temp result NA SA LOOB: {temp_result}")
-                    print(f"temp result NA IPAPASA: {temp_result}")
+                        #COMPARISON
+                        elif lexeme[visible_index][0] in comparison:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            print(f"current lexeme: {lexeme}")
+                            print(f"temp_index: {temp_index}")
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    print(f"temp_index: {temp_index}")
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(comparison_expression(temp))
+                            visible_index = temp_index
+                        #BOOLEANS
+                        elif lexeme[visible_index][0] in booleans:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            print(f"current lexeme: {lexeme}")
+                            print(f"temp_index: {temp_index}")
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    print(f"temp_index: {temp_index}")
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(fin_boolean_expression(temp))
+                            visible_index = temp_index
                     semanticsResult += f"{temp_result}\n"
                     break
             lexeme.clear()
@@ -1444,9 +1676,6 @@ def comparison_expression(lexeme):
                             result = f'FAIL\n'
         # print(result)
     return result
-
-# def arithmetic():
-
 
 def convertFloat(num):
     try:
