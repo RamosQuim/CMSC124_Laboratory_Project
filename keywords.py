@@ -36,8 +36,17 @@ class LOLLexer:
             if match:
                 value = match.group(0)
                 self.current_position += len(value)
-                if token_type == 'YARN Literal':
-                    value = value.replace('"',"")
+                # print(value)
+                # if token_type == 'YARN Literal':
+                    #  print("value" + value)
+                    # print(value)S
+                    # if value[0] == '"' and value[len(value)-1] == '"':
+                    #       print(value)
+                    # value = value.replace('"', "")
+                        #   print(val)
+                    # return Token(token_type, value)
+
+                    # value = value.replace('"',"")
                 return Token(token_type, value)     #returns the Token
         return None
 
@@ -113,7 +122,7 @@ token_patterns = {
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
     r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
     # r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',    
-    r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',             
+    r'\s*\"[^\"]*\"\s*': 'YARN Literal',             
 }
 
 def lex(str):
@@ -125,21 +134,28 @@ def lex(str):
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
         tokens = lexer.tokenize()
+        # print(tokens)
         
         for i in range(0, len(tokens)):
-            
+            # print(tokens[i].value, tokens[i].type)
             temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
             val = temp.lstrip()
+            # print(val, val[0], val[len(val)-1], len(val))
 
             # print(tokens[i+1].value)
             
             # print(temp)
 
-            if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
-                new = Token('String Delimiter', '"')
-                tokens[i].value = val[1:-1]
-                tokens.insert(i, new)
-                tokens.insert(i+2, new)
+            # if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
+            if tokens[i].type == 'YARN Literal':
+                    
+                # print(tokens[i].value)
+                if val[0] == '"' and val[-1] == '"':
+                    # print(tokens[i].value)
+                    new = Token('String Delimiter', '"')
+                    tokens[i].value = val[1:-1]
+                    tokens.insert(i, new)
+                    tokens.insert(i+2, new)
             elif 'BTW' in val:
                 tokens[i].value = val[4:]
                 comment = Token('Comment Delimiter', 'BTW')

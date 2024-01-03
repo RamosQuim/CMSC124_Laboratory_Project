@@ -468,7 +468,7 @@ def syntax(text):
                                     break
                         
                         if lexeme[i-1][0] not in keyUsingExp:
-                            # print('pasok')
+                            # check format of comparison
                             if len(lexeme) == 4:
                                 if lexeme[i+2][0] != 'AN':
                                     syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
