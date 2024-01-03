@@ -148,6 +148,9 @@ def ArithmeticAnalyzer(h,lexeme):
         result.append(tempResult)
         return result
 
+# def comparisonSyntax(lexeme, h, i):
+    
+
 def booleanSyntax(lexeme, h, i):
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
@@ -1136,10 +1139,11 @@ def syntax(text):
                                     break
                             break
                         else:
-                            # if lexeme[i+1][0] == "BOTH OF" or lexeme[i+1][0] == "EITHER OF" or lexeme[i+1][0] == "WON OF" or lexeme[i+1][0] == "NOT":
+                            if lexeme[i+1][0] == "BOTH SAEM" or lexeme[i+1][0] == "DIFFRINT":
+                                booleanSyntax(lexeme, h, i)
                                 
                             
-                            # else:
+                            else:
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tincorrect number of parameters.')
                                 break

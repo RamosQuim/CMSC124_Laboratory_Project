@@ -450,24 +450,24 @@ def symbolTable(str1):
 
     #need ayusin syntax for expression
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
-    
-    sem_keys = semantics_varidents.keys()                
-    matchkeys = [key for key in sem_keys if any(key == sublist[0] for sublist in symbol_table)]
+    if semantics_varidents != 0:
+        sem_keys = semantics_varidents.keys()                
+        matchkeys = [key for key in sem_keys if any(key == sublist[0] for sublist in symbol_table)]
 
-    for k in symbol_table:
-        if k[0] in matchkeys:
-            if k[1] != semantics_varidents[k[0]]:
-                k[1] = semantics_varidents[k[0]]
-                semantics_varidents.pop(k[0])
+        for k in symbol_table:
+            if k[0] in matchkeys:
+                if k[1] != semantics_varidents[k[0]]:
+                    k[1] = semantics_varidents[k[0]]
+                    semantics_varidents.pop(k[0])
 
     # print(semantics_varidents)
 
-    if len(semantics_varidents) != 0:
-        for k in semantics_varidents:
-            arr = []
-            arr.append(k)
-            arr.append(semantics_varidents[k])
-            symbol_table.append(arr)
+        if len(semantics_varidents) != 0:
+            for k in semantics_varidents:
+                arr = []
+                arr.append(k)
+                arr.append(semantics_varidents[k])
+                symbol_table.append(arr)
             
     # return symbol_table
     return symbol_table

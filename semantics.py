@@ -412,6 +412,7 @@ def getVaridents(text):
         semantics(text)
 
         return modified_varidents
+    return 0
 
 def semantics(text):
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
@@ -1068,6 +1069,7 @@ def semantics(text):
                                     varidents[j] = lexeme[i+2][0]
                                     modified_varidents[lexeme[i-1][0]] = str(lexeme[i+2][0])
                     else:
+                        print(lexeme[i+1][0])
                         if lexeme[i+1][0] == 'BOTH SAEM' or lexeme[i+1][0] == 'DIFFRINT':
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
