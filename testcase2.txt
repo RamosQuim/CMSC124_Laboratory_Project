@@ -28,3 +28,9 @@ HAI
 	BUHBYE
 	ALL OF VAR AN VAR MKAY
 KTHXBYE
+
+HAI 
+    VISIBLE "hello" + "hi" + "hello world"
+KTHXBYE
+
+VISIBLE BOTH SAEM 5 AN 6 +

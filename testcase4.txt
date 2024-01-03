@@ -1,7 +1,7 @@
 HAI
 WAZZUP
 	I HAS A var3 ITZ WIN
-	I HAS A monde
+	I HAS A mond
 	I HAS A var4 ITZ FAIL
 	I HAS A var
 	I HAS A var2
