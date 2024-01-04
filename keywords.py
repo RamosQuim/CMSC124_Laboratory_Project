@@ -332,11 +332,29 @@ def yrn(tk):
                                     j[1] = new
                                     break
                         break
-                
+
+def modifiedVar(str1):
+                            mv = syntax.getModifVaridents(str1)
+                            if len(mv) != 0:
+                                    # print("yey", mv)
+                                    for i in mv:
+                                        c = 0
+                                        for j in symbol_table: #check if the variable using expression is already in the symbol table
+                                            if j[0] == i:
+                                                c =1
+                                                break
+                                        if c == 0:
+                                            ar = []
+                                            ar.append(i)
+                                            ar.append(mv[i])
+                                            symbol_table.append(ar)    
 
 def symbolTable(str1):
     symbol_table.clear()
     it = []
+    booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    comparison = ['BOTH SAEM', 'DIFFRINT']
+    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
 
     if len(it) == 0:
                 arr = []
@@ -349,6 +367,7 @@ def symbolTable(str1):
         
 
         if token[1].rstrip().lstrip() == 'Variable Identifier':
+            print(token[0])
             
             matches = re.finditer(r'I HAS A \b'+token[0]+r'\b', str1)
             last_occurrence_startIndex = -1
@@ -358,38 +377,57 @@ def symbolTable(str1):
                 end_index = match.end()
 
             if str1[end_index+1:end_index+4].rstrip().lstrip() == "ITZ":
-                mv = syntax.getModifVaridents(str1)
-                if len(mv) != 0:
-                    # print("yey", mv)
-                    for i in mv:
-                        c = 0
-                        for j in symbol_table: #check if the variable using expression is already in the symbol table
-                            if j[0] == i:
-                                c =1
-                                break
-                        if c == 0:
-                            ar = []
-                            ar.append(i)
-                            ar.append(mv[i])
-                            symbol_table.append(ar)
-                else:
-
                     whole = str1[end_index+5:]
                     value = re.match(r'.*[^\n]*',whole)[0]
                     new = value.replace('"', '')
-                # value = value.strip()
-                    if len(symbol_table) == 0:
-                        arr = []
-                        arr.append(token[0])
-                        arr.append(new)
-                        symbol_table.append(arr)
-                    else:
-                        checker = 0
-                        for i in symbol_table:
-                            if i[0] == token[0]: #check if the variable is already in the symbol table
+                    print(new)
+                    # result = ""
+
+                                        
+                    # result = semantics.booleanAnalyzer(new, 'no')
+                    # result = semantics.booleanAnalyzer(new, 'yes')
+                    # result = semantics.arithmeticAnalyzer(symbol_table, arithmetic,new)
+                    # result = semantics.comparison_expression(new)
+                    
+                  
+                    # mv = syntax.getModifVaridents(str1)
+                    # if len(mv) != 0:
+                    #     # print("yey", mv)
+                    #     for i in mv:
+                    #         c = 0
+                    #         for j in symbol_table: #check if the variable using expression is already in the symbol table
+                    #             if j[0] == i:
+                    #                 c =1
+                    #                 break
+                    #         if c == 0:
+                    #             ar = []
+                    #             ar.append(i)
+                    #             ar.append(mv[i])
+                    #             symbol_table.append(ar)
+                # else:
+
+                    
+                    # value = value.strip()
+                    # if len(symbol_table) == 0:
+                    #         arr = []
+                    #         arr.append(token[0])
+                    #         arr.append(new)
+                    #         symbol_table.append(arr)
+                    # else:
+                    # print(result)
+                    checker = 0
+                    for i in symbol_table:
+                        if i[0] == token[0]: #check if the variable is already in the symbol table
                                 checker = 1
                                 break
-                        if checker == 0:
+                    if checker == 0:
+                        if 'SUM OF' in new or 'DIFF OF' in new or 'PRODUKT OF' in new or 'QUOSHUNT OF' in new or 'MOD OF' in new:
+                            modifiedVar(str1)
+                        elif 'BOTH OF' in new or 'EITHER OF' in new or 'WON OF' in new or 'NOT' in new or 'ALL OF' in new or 'ANY OF' in new:
+                            modifiedVar(str1)
+                        elif 'BOTH SAEM' in new or 'DIFFRINT' in new:
+                            modifiedVar(str1)
+                        else:
                             arr = []
                             arr.append(token[0])
                             arr.append(new)
