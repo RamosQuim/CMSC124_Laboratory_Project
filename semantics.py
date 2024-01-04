@@ -1,6 +1,7 @@
 import keywords
 import syntax
 import for_input
+import math 
 # import ui 
 
 
@@ -53,6 +54,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
         values_list = []
         result = 0
         an_counter = 0
+        undefined_checker = 0 
 
         #if mag 1 ang valid_checker ay di na siya papasok sa while loop!! 
         if valid_checker == 1:
@@ -163,22 +165,32 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(lexeme[arithmetic_index+1][0]) * float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'QUOSHUNT OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
-                                result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(varidents[lexeme[arithmetic_index+3][0]])
+                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':
+                                if math.ceil(float(varidents[lexeme[arithmetic_index+3][0]])) == 0 or varidents[lexeme[arithmetic_index+3][0]] == '0':
+                                    undefined_checker = 1
+                                    break
+                                else:                                        
+                                    result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(varidents[lexeme[arithmetic_index+3][0]])
                             elif lexeme[arithmetic_index+1][1] == 'Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(lexeme[arithmetic_index+3][0])
                             elif lexeme[arithmetic_index+3][1] == 'Identifier':
-                                result = float(lexeme[arithmetic_index+1][0]) / float(varidents[lexeme[arithmetic_index+3][0]])
+                                if math.ceil(float(varidents[lexeme[arithmetic_index+3][0]])) == 0 or varidents[lexeme[arithmetic_index+3][0]] == '0':
+                                    undefined_checker = 1
+                                    break
+                                else:  
+                                    result = float(lexeme[arithmetic_index+1][0]) / float(varidents[lexeme[arithmetic_index+3][0]])
                             #THIS ONE IS FOR THE TROOFS
                             elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
                                 if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
                                     result = float(1)/float(1)
                                 elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
-                                    result = float(1)/float(0)
+                                    undefined_checker = 1
+                                    break
                                 elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
                                     result = float(0)/float(1)
                                 elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
-                                    result = float(0)/float(0)
+                                    undefined_checker = 1
+                                    break
                             elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
                                 if lexeme[arithmetic_index+1][0] == 'WIN':
                                     result = float(1)/float(lexeme[arithmetic_index+3][0])
@@ -188,9 +200,14 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 if lexeme[arithmetic_index+3][0] == 'WIN':
                                     result =float(lexeme[arithmetic_index+1][0])/float(1)
                                 else:
-                                    result = float(lexeme[arithmetic_index+1][0])/float(0)
+                                    undefined_checker = 1
+                                    break 
                             else:
-                                result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
+                                if math.ceil(float(lexeme[arithmetic_index+3][0])) == 0 or lexeme[arithmetic_index+3][0] == "0":
+                                    undefined_checker = 1
+                                    break 
+                                else:
+                                    result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'MOD OF':
                             #this is created to cater the variables!!!
                             if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
@@ -382,12 +399,18 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                             result = result * float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'QUOSHUNT OF':
                         if lexeme[arithmetic_index+1][1] == "Identifier":
-                            result = result / float(varidents[lexeme[arithmetic_index+1][0]])
+                            #check if 0 ba siya 
+                            if math.ceil(float(varidents[arithmetic_index+1][0])) == 0 or varidents[arithmetic_index+1][0] == "0":
+                                undefined_checker = 1
+                                break
+                            else:
+                                result = result / float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
                             if lexeme[arithmetic_index+1][0] == 'WIN':
                                 result = result / 1
                             else:
-                                result = result / 0
+                                undefined_checker = 1
+                                break 
                         else:
                             result = result / float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'MOD OF':
@@ -453,7 +476,11 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
             elif operation_list[-(1+i)] == 'PRODUKT OF':
                 result = values_list[-(1+i)] * result                           
             elif operation_list[-(1+i)] == 'QUOSHUNT OF':
-                result = values_list[-(1+i)] / result                  
+                if math.ceil(float(values_list[-(1+i)])) == 0:
+                    undefined_checker = 1
+                    break
+                else:
+                    result = values_list[-(1+i)] / result                  
             elif operation_list[-(1+i)] == 'MOD OF':
                 result = values_list[-(1+i)] % result                      
             elif operation_list[-(1+i)] == 'BIGGR OF':
@@ -462,16 +489,14 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
             elif operation_list[-(1+i)] == 'SMALLR OF':
                 if values_list[-(1+i)] < result:
                     result = values_list[-(1+i)]
-            # print(f"current i: {i}")
-            # print(f"current result:{result}")
             if is_onelement == 1:
                 break
 
-        # print(f"operation list: {operation_list}")
-        # print(f"values list: {values_list}")
-        # print(f"result: {result}")
-        # print(f"isfloat : {is_float}")
-
+        #check if may undefined result
+        if undefined_checker == 1:
+            result = "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
+            return result
+        #proceed to checking if float or int
         if is_float == False :
             semanticsResult = f"{int(result)}"
         else:
