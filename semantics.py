@@ -803,7 +803,8 @@ def semantics(text):
                 #         semanticsResult += f'WIN\n'
                 #     else:
                 #         semanticsResult += f'FAIL\n'
-
+                if lexeme[i][0] == 'I HAS A':
+                    break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
                 if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
                     one = convertFloat(lexeme[i+1][0])

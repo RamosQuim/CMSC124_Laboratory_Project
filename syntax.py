@@ -645,14 +645,18 @@ def syntax(text):
                         hasVarDec = 1
                         if len(lexeme) == 2:
                             varidents[lexeme[i+1][0]] = 'NOOB'
-                        elif len(lexeme) == 4:
+                        elif len(lexeme) == 4 or len(lexeme) == 6:
 
                             if isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) != 0:
                                 varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
                             elif isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) == 0:
                                 varidents[lexeme[i+1][0]] = int(float(lexeme[i+3][0]))         # if NUMBR
                             else:
-                                varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF or YARN
+                                if lexeme[i+3][0] != '"':
+                                    varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF or YARN
+                                else:
+                                    varidents[lexeme[i+1][0]] = lexeme[i+4][0] 
+                            
                         break
                     else:
                         if lexeme[i][0] != 'I HAS A' and lexeme[i][0] != 'BUHBYE' and lexeme[i][0] != 'KTHXBYE' and hasWazzup == 0 and hasBuhbye == -1: 
