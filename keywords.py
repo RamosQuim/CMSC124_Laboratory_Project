@@ -333,32 +333,6 @@ def yrn(tk):
                                     break
                         break
 
-def modifiedVar(str1):
-                            mv = syntax.getModifVaridents(str1)
-                            # print(str1)/
-                            if len(mv) != 0:
-                                    # print("yey", mv)
-                                    for i in mv:
-                                        c = 0
-                                        for j in symbol_table: #check if the variable using expression is already in the symbol table
-                                            if j[0] == i:
-                                                mv.pop(i)
-                                                
-                            if len(mv) != 0:
-                                ar = []
-                                ar.append(i)
-                                ar.append(mv[i])
-                                symbol_table.append(ar)  
-                                 
-                                        # if c == 0:
-                                        #     ar = []
-                                        #     ar.append(i)
-                                        #     ar.append(mv[i])
-                                        #     symbol_table.append(ar)    
-                                        #     break
-                                        # break
-                            return 
-
 def symbolTable(str1):
     symbol_table.clear()
     it = []
@@ -368,12 +342,12 @@ def symbolTable(str1):
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
 
     if len(it) == 0:
-                arr = []
-                arr.append('IT')   
-                arr.append('NOOB')
-                symbol_table.insert(0, arr) 
+        arr = []
+        arr.append('IT')   
+        arr.append('NOOB')
+        symbol_table.insert(0, arr) 
     lexeme = lex(str1)
-
+    counter_visible = 0
     for a in range(0, len(lexeme)):
         if len(lexeme) > 1: 
         #  print(lexeme[a][0])
@@ -447,12 +421,13 @@ def symbolTable(str1):
                                         vr[j[0]] =j[1]
 
                                 
-                                
+                                    # print(lexeme[a+2:a+q])
                                     res = semantics.arithmeticAnalyzer(vr,arithmetic, lexeme[a+2:a+q])
                                     arr = []
                                     arr.append(lexeme[a][0])
                                     arr.append(res)
                                     symbol_table.append(arr)
+
                 elif lexeme[a+1][0].rstrip().lstrip() == 'IS NOW A':   
                     if lexeme[a+2][0] =='NUMBAR':
                         nmbar(lexeme[a][0])
@@ -472,42 +447,118 @@ def symbolTable(str1):
                     elif lexeme[a+2][0] =='YARN':
                         yrn(lexeme[a][0])
             elif lexeme[a][0] == 'VISIBLE':
-                matches = re.finditer(r'\b'+lexeme[a][0]+r'\b', str1)
-                for match in matches:
-                    last_occurrence_startIndex = match.start()
-                    end_index = match.end()
-                    whole = str1[end_index+1:]
-                    value = (re.match(r'\"?.*\"?[^\n]*',whole)[0]).split(' + ')
-                    # value = re.match(r'\"?\w+\s*\w*[^ ]\"?[ ^\n]', whole)[0](.*)? r'\s*\"[^\"]*\"\+?\s*'
+                # print('pasok', len(lexeme), lexeme[a])
+                if counter_visible == 0:
+                    # print('yon')
+                    matches = re.finditer(r'\b'+lexeme[a][0]+r'\b', str1)
+                    value = []
+                    for match in matches:
+                        last_occurrence_startIndex = match.start()
+                        end_index = match.end()
+                        whole = str1[end_index+1:]
+                        value = re.match(r'\"?.*\"?[^\n]*',whole)[0]
+                        break
+                    # value = value.split(' + ')
+                    # print("value",value)
+                    new = value.split("+")
+                    # print("new",new)
 
-                    # print(value)
+                    # print("\n\n")
                     temp = []
-                    for v in value:
-                        # print(v)
-                        c = 0
-                        vl = v.replace('\r', '')
-                        if vl[0] == '"' and vl[len(vl)-1] == '"':
-                            # print(v)
-                            temp.append(vl.replace('"', ''))
-                        elif vl.replace(".", "").isnumeric() or vl == 'WIN' or vl == 'FAIL' or vl == '+':
-                            # print(v)
-                            temp.append(vl)
-                        elif vl == 'IT':
+                    for c in new:
+                        c = c.rstrip().lstrip()
+                        # print(c)
+                        c = c.replace('\r','')
+                        if c[0]== '"' and c[-1]=='"':
+                            c = c.replace('"','')
+                            temp.append(c)
+                        elif c == 'IT':
                             temp.append(symbol_table[0][1])
                         else:
                             for j in symbol_table:
-                                if j[0].split() == vl.split():
+                                if j[0] == c:
                                     c = 1
                                     temp.append(j[1])
                                     break
-                    # print(temp)
-                    it.append(temp) 
+                    
+                    it.append(temp)
+                    counter_visible = 1
+
+
+
+
+                    # r'\bVISIBLE\s+"([^"]+)"'
+                    # count = 1
+                    # current = lexeme[a+count][0]
+                    # lista = []
+                    # while current != '\n':
+                    #     lista.append(current)
+                    #     current = lexeme[a+count][0]
+                    
+                    # print(lista)
+
+                    # matches = re.finditer(r'\b'+lexeme[a][0]+r'\s(.+)$', str1)
+                    # content = ""
+                    # for match in matches:
+                    #     content = match.group(1)
+                    #     print(content)
+                    
+                    # content = content.split('+')
+                    # temp = []
+                    # for c in content:
+                    #     if c[0]== '"' and c[-1]=='"':
+                    #         c = c.replace('"','')
+                    #         temp.append(c)
+                    #     elif c == 'IT':
+                    #         temp.append(symbol_table[0][1])
+                    #     else:
+                    #         for j in symbol_table:
+                    #             if j[0] == c:
+                    #                 c = 1
+                    #                 temp.append(j[1])
+                    #                 break
+                    
+                    # it.append(temp)
+                # else:
+                #     continue
+                    
+                    
+
+                    #     last_occurrence_startIndex = match.start()
+                    #     end_index = match.end()
+                    #     whole = str1[end_index+1:]
+                    #     value = (re.match(r'\"?.*\"?[^\n]*',whole)[0]).split(' + ')
+                    # # value = re.match(r'\"?\w+\s*\w*[^ ]\"?[ ^\n]', whole)[0](.*)? r'\s*\"[^\"]*\"\+?\s*'
+
+                    #     print(value)
+                    #     temp = []
+                    #     for v in value:
+                    #     # print(v)
+                    #         c = 0
+                    #         vl = v.replace('\r', '')
+                    #         if vl[0] == '"' and vl[len(vl)-1] == '"':
+                    #         # print(v)
+                    #             temp.append(vl.replace('"', ''))
+                    #         elif vl.replace(".", "").isnumeric() or vl == 'WIN' or vl == 'FAIL' or vl == '+':
+                    #         # print(v)
+                    #             temp.append(vl)
+                    #         elif vl == 'IT':
+                    #             temp.append(symbol_table[0][1])
+                    #         else:
+                    #             for j in symbol_table:
+                    #                 if j[0].split() == vl.split():
+                    #                     c = 1
+                    #                     temp.append(j[1])
+                    #                     break
+                    #     # print("\t\t",temp)
+                    #     it.append(temp) 
             elif lexeme[a][0] == 'MAEK':
                 ex_typecast = semantics.getExplicitTypecast(str1)
                 if len(ex_typecast) != 0:
                     for i in ex_typecast:
                         it.append(str(i))
 
+    # print("\t\t",len(it))
     if len(it) != 0:
         
         j = ""  
@@ -520,7 +571,7 @@ def symbolTable(str1):
                     j += " "
         # symbol_table.insert(0, ['IT', j])
         symbol_table[0][1] = j
-        it.clear()
+        # it.clear()
     
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     if semantics_varidents != 0:

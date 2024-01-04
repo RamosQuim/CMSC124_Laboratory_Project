@@ -644,8 +644,10 @@ def syntax(text):
                                             success = result[0]
                                             break   
                                         else:
+                                           
                                             success = 1
                                             result = semantics.arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:])
+                                            # print(result[0])
                                             varidents[lexeme[i+1][0]] = result
                                             modif_var[lexeme[i+1][0]] = result
                                             break
@@ -658,7 +660,7 @@ def syntax(text):
                                             # print(lexeme[i+3:])
                                             result = semantics.comparison_expression(lexeme[i+3:])
                                             # success = 1
-                                            varidents[lexeme[i+1][0]] = semantics.comparison_expression(lexeme[i+3:])
+                                            varidents[lexeme[i+1][0]] = result
                                             modif_var[lexeme[i+1][0]] = result
                                             # break
                                     # elif lexeme[i+3][0]!= '"' and lexeme[i+5][0] != '"': #if string shoudl be enclosed by ""
@@ -672,7 +674,7 @@ def syntax(text):
                             varidents[lexeme[i+1][0]] = 'NOOB'
                         elif len(lexeme) == 4 or len(lexeme) == 6:
                             if isfloat(lexeme[i+3][0]) != False and '.' in lexeme[i+3][0]:
-                                print(lexeme[i+3][0])
+                                # print(lexeme[i+3][0])
                                 varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
                             elif isfloat(lexeme[i+3][0]) != False and '.' not in lexeme[i+3][0]:
                                 varidents[lexeme[i+1][0]] = int(lexeme[i+3][0])         # if NUMBR
@@ -1207,7 +1209,7 @@ def syntax(text):
                         break    
                     
                     if lexeme[i][0] in comparison:
-                        print(lexeme[i][0])
+                        # print(lexeme[i][0])
                         result = comparisonSyntax(lexeme, h, i)
                         if result is not None:
                             success = 0
