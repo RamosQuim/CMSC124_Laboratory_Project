@@ -839,9 +839,11 @@ def semantics(text):
                     three = convertFloat(lexeme[i+3][0])
                     if one == True and three == True:
                         if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
-                            semanticsResult += f'WIN\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'WIN\n', text]
                         else:
-                            semanticsResult += f'FAIL\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'FAIL\n', text]
                     elif one == False and three == True:
                         value = ""
                         for j in varidents:
@@ -849,9 +851,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(value) == float(lexeme[i+3][0]):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == True and three == False:
                         value = ""
                         for j in varidents:
@@ -859,9 +863,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(lexeme[i+1][0]) == float(value):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == False and three == False:
                         value = []
                         for j in varidents:
@@ -870,17 +876,21 @@ def semantics(text):
                         if len(value) == 2:
                             if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                 if float(value[0]) == float(value[1]):
-                                    semanticsResult += f'WIN\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
                                 else:
-                                    semanticsResult += f'FAIL\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
                 elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) == 4:
                     one = convertFloat(lexeme[i+1][0])
                     three = convertFloat(lexeme[i+3][0])
                     if one == True and three == True:
                         if float(lexeme[i+1][0]) != float(lexeme[i+3][0]):
-                            semanticsResult += f'WIN\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'WIN\n', text]
                         else:
-                            semanticsResult += f'FAIL\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'FAIL\n', text]
                     elif one == False and three == True:
                         value = ""
                         for j in varidents:
@@ -888,9 +898,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(value) != float(lexeme[i+3][0]):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == True and three == False:
                         value = ""
                         for j in varidents:
@@ -898,9 +910,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(lexeme[i+1][0]) != float(value):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == False and three == False:
                         value = []
                         for j in varidents:
@@ -909,9 +923,11 @@ def semantics(text):
                         if len(value) == 2:
                             if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                 if float(value[0]) != float(value[1]):
-                                    semanticsResult += f'WIN\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                 elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
             # if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
             #     result = f'WIN\n'
@@ -921,9 +937,11 @@ def semantics(text):
                     three = convertFloat(lexeme[i+6][0])
                     if one == True and three == True:
                         if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
-                            semanticsResult += f'WIN\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'WIN\n', text]
                         else:
-                            semanticsResult += f'FAIL\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'FAIL\n', text]
                     elif one == False and three == True:
                         value = ""
                         for j in varidents:
@@ -931,9 +949,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(value) >= float(lexeme[i+6][0]):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == True and three == False:
                         value = ""
                         for j in varidents:
@@ -941,7 +961,8 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(lexeme[i+1][0]) >= float(value):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
                                 result = f'FAIL\n'
                     elif one == False and three == False:
@@ -952,9 +973,11 @@ def semantics(text):
                         if len(value) == 2:
                             if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                 if float(value[0]) >= float(value[1]):
-                                    semanticsResult += f'WIN\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
                                 else:
-                                    semanticsResult += f'FAIL\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
                 elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) >= 4 and lexeme[3][0] == 'BIGGR OF':
             # if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
             #     result = f'WIN\n'
@@ -964,9 +987,11 @@ def semantics(text):
                     three = convertFloat(lexeme[i+6][0])
                     if one == True and three == True:
                         if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
-                            semanticsResult += f'WIN\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'WIN\n', text]
                         else:
-                            semanticsResult += f'FAIL\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'FAIL\n', text]
                     elif one == False and three == True:
                         value = ""
                         for j in varidents:
@@ -974,9 +999,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(value) <= float(lexeme[i+6][0]):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == True and three == False:
                         value = ""
                         for j in varidents:
@@ -984,9 +1011,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(lexeme[i+1][0]) <= float(value):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == False and three == False:
                         value = []
                         for j in varidents:
@@ -995,9 +1024,11 @@ def semantics(text):
                         if len(value) == 2:
                             if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                 if float(value[0]) <= float(value[1]):
-                                    semanticsResult += f'WIN\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
                                 else:
-                                    semanticsResult += f'FAIL\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
                 elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
             # if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
             #     result = f'WIN\n'
@@ -1007,9 +1038,11 @@ def semantics(text):
                     three = convertFloat(lexeme[i+6][0])
                     if one == True and three == True:
                         if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
-                            semanticsResult += f'WIN\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'WIN\n', text]
                         else:
-                            semanticsResult += f'FAIL\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'FAIL\n', text]
                     elif one == False and three == True:
                         value = ""
                         for j in varidents:
@@ -1017,9 +1050,10 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(value) > float(lexeme[i+6][0]):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                return [f'FAIL\n', text]
                     elif one == True and three == False:
                         value = ""
                         for j in varidents:
@@ -1027,9 +1061,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(lexeme[i+1][0]) > float(value):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == False and three == False:
                         value = []
                         for j in varidents:
@@ -1038,9 +1074,11 @@ def semantics(text):
                         if len(value) == 2:
                             if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                 if float(value[0]) > float(value[1]):
-                                    semanticsResult += f'WIN\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
                                 else:
-                                    semanticsResult += f'FAIL\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
                 elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'BIGGR OF':
             # if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
             #     result = f'WIN\n'
@@ -1050,9 +1088,11 @@ def semantics(text):
                     three = convertFloat(lexeme[i+6][0])
                     if one == True and three == True:
                         if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
-                            semanticsResult += f'WIN\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'WIN\n', text]
                         else:
-                            semanticsResult += f'FAIL\n'
+                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                            return [f'FAIL\n', text]
                     elif one == False and three == True:
                         value = ""
                         for j in varidents:
@@ -1060,9 +1100,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(value) < float(lexeme[i+6][0]):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == True and three == False:
                         value = ""
                         for j in varidents:
@@ -1070,9 +1112,11 @@ def semantics(text):
                                 value = varidents[j]
                         if convertFloat(value) == True:
                             if float(lexeme[i+1][0]) < float(value):
-                                semanticsResult += f'WIN\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'WIN\n', text]
                             else:
-                                semanticsResult += f'FAIL\n'
+                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                return [f'FAIL\n', text]
                     elif one == False and three == False:
                         value = []
                         for j in varidents:
@@ -1081,21 +1125,25 @@ def semantics(text):
                         if len(value) == 2:
                             if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                 if float(value[0]) < float(value[1]):
-                                    semanticsResult += f'WIN\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
                                 else:
-                                    semanticsResult += f'FAIL\n'
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
                 elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
-                    semanticsResult += f'{infiniteBooleanAnalyzer(lexeme, lexeme[i][0])}\n'
+                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                    return [f'{infiniteBooleanAnalyzer(lexeme, lexeme[i][0])}\n', text]
                     break
                     
                 elif lexeme[i][0] in booleans:
-                    semanticsResult += f'{booleanAnalyzer(lexeme, 0)}\n'
-                    break
+                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                    return [f'{booleanAnalyzer(lexeme, 0)}\n', text]
 
                 #THIS PART IS FOR THE COMPUTATIONS!!
                 elif lexeme[i][0] in arithmetic:
-                    semanticsResult += str(arithmeticAnalyzer(varidents,arithmetic,lexeme))
+                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                    return [str(arithmeticAnalyzer(varidents,arithmetic,lexeme)), text]
                     break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
@@ -1103,8 +1151,6 @@ def semantics(text):
                     # resolved na :>>
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
-                    
-                    semanticsResult += f"{lexeme[i+1][0]} is: {varidents[lexeme[i+1][0]]}\n"
                     modified_varidents[lexeme[i+1][0]] = str(input_value)
                     break
                     
@@ -1328,10 +1374,12 @@ def semantics(text):
                             temp_result += str(fin_boolean_expression(temp))
                             visible_index = temp_index
                             # print(f"temp in booleans:{temp}")
-                    semanticsResult += f"{temp_result}\n"
+                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                    return [f"{temp_result}\n", text]
                     break
             lexeme.clear()
-    return semanticsResult
+    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+    return [None, text]
 
 
 
@@ -1366,7 +1414,7 @@ def fin_boolean_expression(lexeme):
                         elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
                             result = f'FAIL\n'
                         elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            semanticsResult += f'FAIL\n'
+                            result += f'FAIL\n'
                     elif lexeme[i+1][0] in varidents and lexeme[i+3][0] in varidents:
                         if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
                             result = f'WIN\n'

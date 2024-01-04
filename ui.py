@@ -64,7 +64,14 @@ def analyzetext():
     if syntax.syntax(textEditor_Content) != '>> No syntax errors.':
         console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
     else:
-        console.insert("end", semantics.semantics(textEditor_Content), ("centered",))
+        while True:
+            print(textEditor_Content.lstrip().rstrip())
+            newtext = semantics.semantics(textEditor_Content)
+            if newtext[0] is None:
+                break
+            console.insert("end", newtext[0], ("centered",))
+            textEditor_Content = newtext[1]
+        
 
 
 root = tk.Tk()

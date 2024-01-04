@@ -646,14 +646,14 @@ def syntax(text):
                         if len(lexeme) == 2:
                             varidents[lexeme[i+1][0]] = 'NOOB'
                         elif len(lexeme) == 4 or len(lexeme) == 6:
-
-                            if isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) != 0:
+                            if isfloat(lexeme[i+3][0]) != False and '.' in lexeme[i+3][0]:
+                                print(lexeme[i+3][0])
                                 varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
-                            elif isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) == 0:
-                                varidents[lexeme[i+1][0]] = int(float(lexeme[i+3][0]))         # if NUMBR
+                            elif isfloat(lexeme[i+3][0]) != False and '.' not in lexeme[i+3][0]:
+                                varidents[lexeme[i+1][0]] = int(lexeme[i+3][0])         # if NUMBR
                             else:
                                 if lexeme[i+3][0] != '"':
-                                    varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF or YARN
+                                    varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF
                                 else:
                                     varidents[lexeme[i+1][0]] = lexeme[i+4][0] 
                             
