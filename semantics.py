@@ -747,7 +747,7 @@ def getExplicitTypecast(text):
 def getVaridents(text):
     if syntax.syntax(text) == '>> No syntax errors.':
         # print("pasok", modified_varidents)
-        semantics(text)
+        # semantics(text)
 
         return modified_varidents
     return 0
@@ -764,6 +764,7 @@ def semantics(text):
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     comparison = ['BOTH SAEM', 'DIFFRINT']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    outsideWazzup = 0
     # print(varidents)
     
     for h in range(0, len(text.splitlines())):
@@ -806,7 +807,12 @@ def semantics(text):
                 #         semanticsResult += f'WIN\n'
                 #     else:
                 #         semanticsResult += f'FAIL\n'
+                if lexeme[i][0] == 'BUHBYE':
+                    outsideWazzup = 1
+                    break
                 if lexeme[i][0] == 'I HAS A':
+                    if outsideWazzup == 1:
+                        varidents[lexeme[i+1][0]] = lexeme[i+3][0]
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
                 if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
@@ -1127,7 +1133,8 @@ def semantics(text):
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
                     modified_varidents[lexeme[i+1][0]] = str(input_value)
-                    break
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i+1][0]} ITZ {input_value}', 1)
+                    return [f'{input_value}\n', text]
                     
                 #R
                 elif lexeme[i][0] == 'R':
@@ -1346,7 +1353,7 @@ def semantics(text):
                                     # print(f"temp_index: {temp_index}")
                                     temp.append(lexeme[temp_index])
                                     temp_index+=1
-                            temp_result += str(fin_boolean_expression(temp))
+                            temp_result += str(booleanAnalyzer(temp, 0))
                             visible_index = temp_index
                             # print(f"temp in booleans:{temp}")
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
