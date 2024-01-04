@@ -10,8 +10,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
     if lexeme[0][0] in arithmetic:
         remover_index = 0
         is_float = False
-        print(f"semantics lexeme sa arithmetic: {lexeme}")
-
+        valid_checker = 0
         #this is created to remove the literal naming in lexeme and checking if it's a float or not
         while remover_index < len(lexeme):
             
@@ -20,30 +19,53 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                     remover_index = remover_index - 1
             elif lexeme[remover_index][1] == 'NUMBAR Literal' or lexeme[remover_index][1] == 'YARN Literal' or lexeme[remover_index][1] == 'Identifier':
                 if lexeme[remover_index][1] == 'Identifier':
-                    float_value = float(varidents[lexeme[remover_index][0]])
-                    int_value = int(float_value)
-                    if float_value != int_value:
-                        is_float = True
+                    if varidents[lexeme[remover_index][0]] == 'NOOB':
+                        valid_checker = 1
+                        break
+                    #THIS IS CREATED TO ENSURE THAT GIMME WILL NOT BE ACCEPTED HERE! 
+                    elif str(varidents[lexeme[remover_index][0]]).isnumeric() == False:
+                        try:
+                            float_val = float(varidents[lexeme[remover_index][0]])
+                            int_value = int(float_val)
+                            if float_val != int_value:
+                                is_float = True
+                        except ValueError:
+                            #end na!
+                            valid_checker = 1
+                            break
+                    else:
+                        float_value = float(varidents[lexeme[remover_index][0]])
+                        int_value = int(float_value)
+                        if float_value != int_value:
+                            is_float = True
                 else:
                     float_value = float(lexeme[remover_index][0])
                     int_value = int(float_value)
                     if float_value != int_value:
                         is_float = True
             remover_index = remover_index + 1
-        print(lexeme)
         arithmetic_index = 0
         operation_list = []
         values_list = []
         result = 0
         an_counter = 0
 
-        while arithmetic_index < len(lexeme):
+        #if mag 1 ang valid_checker ay di na siya papasok sa while loop!! 
+        if valid_checker == 1:
+            result = f"\n>> SyntaxError near <{lexeme[arithmetic_index][0]}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
+            return result 
+
+
+        while arithmetic_index < len(lexeme) and valid_checker == 0:
             #THIS IS FOR CHECKING IF MAY KATABI BA SIYA OR WALA NA OPERATION
             print(f"current lexeme sa arithemtic: {lexeme}")
             print(f"currently pointed to: {lexeme[arithmetic_index][0]}")
             print(f"varidents: {varidents}")
+            # OPERATOR OPERAND1 OPERAND2
             if lexeme[arithmetic_index][0] in arithmetic:
+                #check 1ST OPERAND POSITION
                 if lexeme[arithmetic_index+1][0] not in arithmetic:
+                    #check THE 2ND OPERAND POSITION
                     if lexeme[arithmetic_index+3][0] not in arithmetic:
                         if lexeme[arithmetic_index][0] == 'SUM OF':
                             #this is created to cater the variables!!!
@@ -306,7 +328,12 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         arithmetic_index = arithmetic_index + 4
                     else:
                         operation_list.append(lexeme[arithmetic_index][0])
-                        values_list.append(float(lexeme[arithmetic_index+1][0]))
+                        print(f"lexeme[arithmetic_index+1][0]]: {lexeme[arithmetic_index+1][0]}")
+                        print(f"varidents:{varidents}")
+                        if lexeme[arithmetic_index+1][0] in varidents:
+                            values_list.append(float(varidents[lexeme[arithmetic_index+1][0]]))
+                        else:
+                            values_list.append(float(lexeme[arithmetic_index+1][0])) 
                         arithmetic_index = arithmetic_index + 3
                         an_counter = an_counter + 1
                         print(f"next current index is : {lexeme[arithmetic_index][0]}")
@@ -1277,6 +1304,10 @@ def semantics(text):
                         #this is for IT
                         elif lexeme[visible_index][0] == 'IT':
                             temp_result += str(keywords.get_IT())
+                            visible_index+=1
+                        #THIS IS FOR THE TROOF LITERAL
+                        elif lexeme[visible_index][1] == 'TROOF Literal':
+                            temp_result += str(lexeme[visible_index][0])
                             visible_index+=1
                         elif lexeme[visible_index][0] in arithmetic:
                             #kunin ang lexeme until +

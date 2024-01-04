@@ -55,14 +55,16 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                         break
                                     else:
                                         #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
-                                        if str(varidents[lexeme[arithmetic_index-1][0]]).isnumeric() == False:
-                                            print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
-                                            try:
-                                                float_val = float(varidents[lexeme[arithmetic_index-1][0]])
-                                            except ValueError:
-                                                tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
-                                                success = 0
-                                                break                                                         
+                                        #GIVING CONSIDERATION TO NOOB
+                                        if varidents[lexeme[arithmetic_index-1][0]] != "NOOB":
+                                            if str(varidents[lexeme[arithmetic_index-1][0]]).isnumeric() == False:
+                                                print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
+                                                try:
+                                                    float_val = float(varidents[lexeme[arithmetic_index-1][0]])
+                                                except ValueError:
+                                                    tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
+                                                    success = 0
+                                                    break                                                         
                                 elif lexeme[arithmetic_index-1][1] != "String Delimiter":
                                     tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[0][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR,YARN, TROOF, and Variables only')
                                     success = 0
@@ -79,14 +81,16 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                         break
                                     else:
                                         #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
-                                        if str(varidents[lexeme[arithmetic_index+1][0]]).isnumeric() == False:
-                                            print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
-                                            try:
-                                                float_val = float(varidents[lexeme[arithmetic_index+1][0]])
-                                            except ValueError:
-                                                tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
-                                                success = 0
-                                                break  
+                                        #considering noob
+                                        if varidents[lexeme[arithmetic_index+1][0]] != "NOOB":
+                                            if str(varidents[lexeme[arithmetic_index+1][0]]).isnumeric() == False:
+                                                print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
+                                                try:
+                                                    float_val = float(varidents[lexeme[arithmetic_index+1][0]])
+                                                except ValueError:
+                                                    tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
+                                                    success = 0
+                                                    break  
                                 elif lexeme[arithmetic_index+1][1] != 'String Delimiter':
                                     if lexeme[arithmetic_index+1][1] != 'Arithmetic Operation':
                                         tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[0][0]} <x> AN <y> where <x> and <y> are either NUMBR, NUMBAR, YARN, and Variables only')
@@ -108,17 +112,21 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                         break
                                     else:
                                         #converted to string muna para macheck if ang laman ay numeric or not ba :> Since ang function na ito ay limited to strings only
-                                        if str(varidents[lexeme[arithmetic_index][0]]).isnumeric() == False:
-                                            print(f"varidents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
-                                            try:
-                                                float_val = float(varidents[lexeme[arithmetic_index][0]])
-                                                arithmetic_index +=1  #added this para di magkaroon ng inifnity loop
-                                            except ValueError:
-                                                tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
-                                                success = 0
-                                                break
+                                        #considering noob
+                                        if varidents[lexeme[arithmetic_index][0]] != "NOOB":
+                                            if str(varidents[lexeme[arithmetic_index][0]]).isnumeric() == False:
+                                                print(f"varidents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
+                                                try:
+                                                    float_val = float(varidents[lexeme[arithmetic_index][0]])
+                                                    arithmetic_index +=1  #added this para di magkaroon ng inifnity loop
+                                                except ValueError:
+                                                    tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t Variable value should be numeric only')
+                                                    success = 0
+                                                    break
+                                            else:
+                                                arithmetic_index +=1  
                                         else:
-                                            arithmetic_index +=1                                                  
+                                            arithmetic_index+=1                                                 
                                 elif lexeme[arithmetic_index][1] != "String Delimiter":
                                     tempResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[arithmetic_index][0]}>: \n\t{lexeme[0][0]} only accepts NUMBR, NUMBAR,TROOF, YARN and Variables!')
                                     success = 0
@@ -486,36 +494,55 @@ def syntax(text):
                                 else:
                                     #CHECK MUNA IF STRING SIYA 
                                     if lexeme[visible_indexcounter][1] != 'String Delimiter':
-                                        if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
-                                            if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
-                                                if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
-                                                    if lexeme[visible_indexcounter][0] != "IT":
-                                                        if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
-                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
-                                                            success = 0
-                                                            break
-                                                        else:
-                                                            #THIS IS THE BOOLEANS
-                                                            temp = []
-                                                            tempcounter = visible_indexcounter
-                                                            while tempcounter < len(lexeme):
-                                                                if lexeme[tempcounter][1] == "Output Delimiter":
-                                                                    break
-                                                                else:
-                                                                    temp.append(lexeme[tempcounter])
-                                                                    tempcounter+=1
-                                                            result = booleanSyntax(temp, h, i)
-                                                            #check kung ano yung irereturn
-                                                            if result is not None:
+                                        if lexeme[visible_indexcounter][1] != 'TROOF Literal':
+                                            if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
+                                                if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
+                                                    if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
+                                                        if lexeme[visible_indexcounter][0] != "IT":
+                                                            if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
                                                                 success = 0
-                                                                syntaxResult += result
                                                                 break
-                                                            #move forward!
-                                                            visible_indexcounter = tempcounter
+                                                            else:
+                                                                #THIS IS THE BOOLEANS
+                                                                temp = []
+                                                                tempcounter = visible_indexcounter
+                                                                while tempcounter < len(lexeme):
+                                                                    if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                        break
+                                                                    else:
+                                                                        temp.append(lexeme[tempcounter])
+                                                                        tempcounter+=1
+                                                                result = booleanSyntax(temp, h, i)
+                                                                #check kung ano yung irereturn
+                                                                if result is not None:
+                                                                    success = 0
+                                                                    syntaxResult += result
+                                                                    break
+                                                                #move forward!
+                                                                visible_indexcounter = tempcounter
+                                                        else:
+                                                            visible_indexcounter+=1
                                                     else:
-                                                        visible_indexcounter+=1
+                                                        #THIS IS THE COMPARISONS 
+                                                        temp = []
+                                                        tempcounter = visible_indexcounter
+                                                        while tempcounter < len(lexeme):
+                                                            if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                break
+                                                            else:
+                                                                temp.append(lexeme[tempcounter])
+                                                                tempcounter+=1
+                                                        result = comparisonSyntax(temp, h, i)
+                                                        #check kung ano yung irereturn
+                                                        if result is not None:
+                                                            success = 0
+                                                            syntaxResult += result
+                                                            break
+                                                        #move forward!
+                                                        visible_indexcounter = tempcounter
                                                 else:
-                                                    #THIS IS THE COMPARISONS 
+                                                    #get muna yung mga lexeme na pasok sa operation na ito 
                                                     temp = []
                                                     tempcounter = visible_indexcounter
                                                     while tempcounter < len(lexeme):
@@ -524,32 +551,16 @@ def syntax(text):
                                                         else:
                                                             temp.append(lexeme[tempcounter])
                                                             tempcounter+=1
-                                                    result = comparisonSyntax(temp, h, i)
-                                                    #check kung ano yung irereturn
-                                                    if result is not None:
-                                                        success = 0
-                                                        syntaxResult += result
-                                                        break
-                                                    #move forward!
+                                                    result = arithmeticSyntax(h,arithmetic,temp)
+                                                    #this is to add pag may error po
+                                                    if result[0] == 0:
+                                                        syntaxResult += result[1]
+                                                        success = result[0]
                                                     visible_indexcounter = tempcounter
                                             else:
-                                                #get muna yung mga lexeme na pasok sa operation na ito 
-                                                temp = []
-                                                tempcounter = visible_indexcounter
-                                                while tempcounter < len(lexeme):
-                                                    if lexeme[tempcounter][1] == "Output Delimiter":
-                                                        break
-                                                    else:
-                                                        temp.append(lexeme[tempcounter])
-                                                        tempcounter+=1
-                                                result = arithmeticSyntax(h,arithmetic,temp)
-                                                #this is to add pag may error po
-                                                if result[0] == 0:
-                                                    syntaxResult += result[1]
-                                                    success = result[0]
-                                                visible_indexcounter = tempcounter
+                                                visible_indexcounter += 1
                                         else:
-                                            visible_indexcounter += 1
+                                            visible_indexcounter +=1
                                     else:
                                         if lexeme[visible_indexcounter+2][1] != 'String Delimiter':
                                             syntaxResult += (f'>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter+2][1]}>: \n\tVariable Identifier ')
