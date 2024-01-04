@@ -1,6 +1,7 @@
 import re
 import sys
 import semantics
+import syntax
 
 compiled_lex = []
 symbol_table = []
@@ -126,6 +127,9 @@ token_patterns = {
 }
 
 def lex(str):
+    # print('\n\n')
+    # print(str)
+    # print('\n\n')
     compiled_lex.clear()
     # global compiled_lex
     # compiled_lex = []
@@ -160,7 +164,6 @@ def lex(str):
                 tokens[i].value = val[4:]
                 comment = Token('Comment Delimiter', 'BTW')
                 tokens.insert(i, comment)
-            
             if i != len(tokens):
                 if tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
@@ -182,7 +185,7 @@ def lex(str):
         # print(compiled_lex)
         # print(compiled_lex)
         return compiled_lex
-
+    
 def nmbar(tk):  
                 # print(tk)
                 check = 0
@@ -355,26 +358,42 @@ def symbolTable(str1):
                 end_index = match.end()
 
             if str1[end_index+1:end_index+4].rstrip().lstrip() == "ITZ":
-                whole = str1[end_index+5:]
-                value = re.match(r'.*[^\n]*',whole)[0]
-                new = value.replace('"', '')
-                # value = value.strip()
-                if len(symbol_table) == 0:
-                    arr = []
-                    arr.append(token[0])
-                    arr.append(new)
-                    symbol_table.append(arr)
+                mv = syntax.getModifVaridents(str1)
+                if len(mv) != 0:
+                    # print("yey", mv)
+                    for i in mv:
+                        c = 0
+                        for j in symbol_table: #check if the variable using expression is already in the symbol table
+                            if j[0] == i:
+                                c =1
+                                break
+                        if c == 0:
+                            ar = []
+                            ar.append(i)
+                            ar.append(mv[i])
+                            symbol_table.append(ar)
                 else:
-                    checker = 0
-                    for i in symbol_table:
-                        if i[0] == token[0]:
-                            checker = 1
-                            break
-                    if checker == 0:
+
+                    whole = str1[end_index+5:]
+                    value = re.match(r'.*[^\n]*',whole)[0]
+                    new = value.replace('"', '')
+                # value = value.strip()
+                    if len(symbol_table) == 0:
                         arr = []
                         arr.append(token[0])
                         arr.append(new)
                         symbol_table.append(arr)
+                    else:
+                        checker = 0
+                        for i in symbol_table:
+                            if i[0] == token[0]: #check if the variable is already in the symbol table
+                                checker = 1
+                                break
+                        if checker == 0:
+                            arr = []
+                            arr.append(token[0])
+                            arr.append(new)
+                            symbol_table.append(arr)
             
             #for recasting IS NOW A
             recasting = re.finditer(r'\b'+token[0]+r'\b IS NOW A', str1)
@@ -436,18 +455,20 @@ def symbolTable(str1):
                     # print(value)
                     temp = []
                     for v in value:
+                        # print(v)
                         c = 0
-                        if v[0] == '"' and v[len(v)-1] == '"':
+                        vl = v.replace('\r', '')
+                        if vl[0] == '"' and vl[len(vl)-1] == '"':
                             # print(v)
-                            temp.append(v.replace('"', ''))
-                        elif v.replace(".", "").isnumeric() or v == 'WIN' or v == 'FAIL' or v == '+':
+                            temp.append(vl.replace('"', ''))
+                        elif vl.replace(".", "").isnumeric() or vl == 'WIN' or vl == 'FAIL' or vl == '+':
                             # print(v)
-                            temp.append(v)
-                        elif v == 'IT':
+                            temp.append(vl)
+                        elif vl == 'IT':
                             temp.append(symbol_table[0][1])
                         else:
                             for j in symbol_table:
-                                if j[0].split() == v.split():
+                                if j[0].split() == vl.split():
                                     c = 1
                                     temp.append(j[1])
                                     break
@@ -515,7 +536,7 @@ def symbolTable(str1):
                 symbol_table.append(arr)
             
     # return symbol_table
-    print(f"symbol_table: {symbol_table}")
+    # print(f"symbol_table: {symbol_table}")
     return symbol_table
 
 
@@ -526,6 +547,8 @@ def connect_UI(str):
 #IT VALUE GETTER
 def get_IT():
      return symbol_table[0][1]
+
+
      
 
 # # for accepting many input lines from user

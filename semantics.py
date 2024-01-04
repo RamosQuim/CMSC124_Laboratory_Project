@@ -1198,6 +1198,17 @@ def semantics(text):
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         break
                                     break
+                        elif lexeme[i+1][0] == 'ANY OF' or lexeme[i+1][0] == 'ALL OF':
+                            for j in varidents:
+                                if lexeme[i-1][0] == j:
+                                    # result = fin_boolean_expression(lexeme[i+1:])
+                                    result = booleanAnalyzer(lexeme[i+1:], "yes")
+                                    # print(result)
+                                    if len(result) != 0:
+                                        varidents[j] = result
+                                        modified_varidents[lexeme[i-1][0]] = str(result)
+                                        break
+                                    break
                         elif lexeme[i+1][0] in arithmetic:
                             for j in varidents:
                                 if lexeme[i-1][0] == j:

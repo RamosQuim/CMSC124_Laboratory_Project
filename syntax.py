@@ -1,4 +1,5 @@
 import keywords
+import semantics
 
 #note: 
 #VARIABLE ASSIGNMENT USING R = wala pang syntax para sa expression
@@ -17,6 +18,7 @@ def getVaridents(text):
 
 #this part will be repsonsible for analyzing the operations 
 def arithmeticSyntax(h,arithmetic, lexeme):
+    # print(varidents)
     tempResult = ''
     success = 1
     result = []
@@ -221,7 +223,7 @@ def comparisonSyntax(lexeme, h, i):
             return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[comparison_index][0]}<value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
 
         if check == 0:
-            return
+            return None
         
 
 
@@ -358,8 +360,19 @@ def booleanSyntax(lexeme, h, i):
                 return (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>\n\tIncorrect format, see correct syntax. \n\t{lexeme[i][0]} [WIN|FAIL] AN [WIN|FAIL]')
             return None        
 
+modif_var = {}
+
+def getModifVaridents(text):
+    #  if syntax.syntax(text) == '>> No syntax errors.':
+    #     # print("pasok", modified_varidents)
+        syntax(text)
+        # print(modif_var, "anye")
+        return modif_var
+    # return 0
+
 def syntax(text):
     global varidents
+    global modif_var
     varidents.clear()
     syntaxResult = ''
     success = 1
@@ -420,16 +433,65 @@ def syntax(text):
                             success = 0
                             break
                         elif len(lexeme) > 2:
-                            if lexeme[i+2][0] != 'ITZ':
-                                syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'ITZ' keyword?")
-                                success = 0
-                                break
-                            elif len(lexeme) < 4:
+                           
+                            
+                            if len(lexeme) < 4:
                                 if (lexeme[i+3][1] not in varAssignment_literals and lexeme[i+3][1] != 'Variable Identifier'):
                                     if lexeme[i+3][1] not in literals and lexeme[i+3][1] != 'NOOB': 
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\tITZ must have a literal or variable identifier')
                                         success = 0
                                         break
+                            else:
+                                if lexeme[i+2][0] != 'ITZ':
+                                    syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+2][0]} is recognized incorrectly. Perhaps you need an 'ITZ' keyword?")
+                                    success = 0
+                                    break
+                                else:
+                                    if lexeme[i+3][0] in booleans:#
+                                        # print('pasok')
+                                        result = booleanSyntax(lexeme[i+3:], h, i)
+                                        if result is not None:
+                                            success = 0
+                                            syntaxResult += result
+                                            break
+                                        else:
+                                            result = semantics.booleanAnalyzer(lexeme[i+3:], 'no')
+                                            varidents[lexeme[i+1][0]] = result
+                                            modif_var[lexeme[i+1][0]] = result
+                                            # print(modif_var)
+                                        # break
+                                    elif lexeme[i+3][0] == 'ANY OF' or lexeme[i+3][0] == 'ALL OF':
+                                        result = booleanSyntax(lexeme[i+3:], h, i)
+                                        if result is not None:
+                                            success = 0
+                                            syntaxResult += result
+                                            break
+                                        else:
+                                            result = semantics.booleanAnalyzer(lexeme[i+3:], 'yes')
+                                            varidents[lexeme[i+1][0]] = result
+                                            modif_var[lexeme[i+1][0]] = result
+                                    elif lexeme[i+3][0] in arithmetic:
+                                        # print(varidents)
+                                        result = arithmeticSyntax(h,arithmetic,lexeme[i+3:])
+                                        if result[0] == 0:
+                                            syntaxResult += result[1]
+                                            success = result[0]
+                                            break   
+                                        else:
+                                            result = semantics.arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:])
+                                            varidents[lexeme[i+1][0]] = result
+                                            modif_var[lexeme[i+1][0]] = result
+                                    elif lexeme[i+3][0] in comparison:
+                                        if comparisonSyntax(lexeme[i+3:], h, i):
+                                            success = 0
+                                            syntaxResult += comparisonSyntax(lexeme[i+1:], h, i)
+                                            break 
+                                        else:
+                                            result = semantics.comparison_expression(lexeme[i+3:])
+                                            varidents[lexeme[i+1][0]] = result
+                                            modif_var[lexeme[i+1][0]] = result
+
+                            
                         hasVarDec = 1
                         if len(lexeme) == 2:
                             varidents[lexeme[i+1][0]] = 'NOOB'
@@ -566,6 +628,8 @@ def syntax(text):
                                                 if result[0] == 0:
                                                     syntaxResult += result[1]
                                                     success = result[0]
+
+                                                    break
                                                 visible_indexcounter = tempcounter
                                         else:
                                             visible_indexcounter += 1
@@ -1067,7 +1131,7 @@ def syntax(text):
                         if result is not None:
                             success = 0
                             syntaxResult += result
-                        
+                            break
                         break
 
                    
