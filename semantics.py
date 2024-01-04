@@ -628,6 +628,107 @@ def booleanAnalyzer(thisLexeme, isInfinite):
 
     return answer
 
+def infiniteBooleanAnalyzer(lexeme, keyword):
+    operands = []
+    parameters = []
+    result = []
+    standby_index = []
+    an_counter = 1
+    boolean_index = 1
+    while boolean_index <= len(lexeme)-2:
+        if lexeme[boolean_index][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
+            if lexeme[boolean_index+1][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
+                standby_index.append(boolean_index)
+                an_counter += 1
+                boolean_index += 1
+                continue
+            elif lexeme[boolean_index+1][0] == 'NOT':
+                standby_index.append(boolean_index)
+                boolean_index += 1
+                continue
+            if lexeme[boolean_index+3][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
+                an_counter += 1
+                boolean_index += 3
+                continue
+            elif lexeme[boolean_index+1][0] == 'NOT':
+                standby_index.append(boolean_index)
+                boolean_index += 1
+                continue
+            if lexeme[boolean_index+4][0] == 'AN' and len(standby_index) != 0:
+                standby_index.pop()
+                if len(standby_index) == 0:
+                    operands.append(an_counter)
+                    an_counter = 1
+            boolean_index += 5
+        elif lexeme[boolean_index][0] == 'NOT':
+            if lexeme[boolean_index+1][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
+                boolean_index += 1
+                continue
+            if lexeme[boolean_index+2][0] == 'AN' and len(standby_index) != 0:
+                standby_index.pop()
+                if len(standby_index) == 0:
+                    operands.append(an_counter)
+                    an_counter = 1
+            boolean_index += 3
+        elif lexeme[boolean_index][0] in varidents or lexeme[boolean_index][1] in literals:
+            operands.append(an_counter)
+            boolean_index += 2
+    lexeme = lexeme[1:]
+
+    isEnd = 0
+    for number_of_an in operands:
+        an = 0
+        boolean_index = 0
+        while an != number_of_an:
+            if lexeme[boolean_index][0] == 'AN':
+                an += 1
+            elif lexeme[boolean_index][0] == 'MKAY':
+                isEnd = 1
+                break
+            boolean_index += 1
+        if isEnd != 1:
+            if lexeme[0][0] in booleans:
+                if lexeme[0][0] in ["BOTH OF", "EITHER OF", "WON OF"]:
+                    parameters.append(lexeme[0:boolean_index+1])
+                    lexeme = lexeme[boolean_index+2:]
+                else:
+                    parameters.append(lexeme[0:boolean_index])
+                    lexeme = lexeme[boolean_index+1:]
+            else:
+                parameters.append(lexeme[0:boolean_index-1])
+                lexeme = lexeme[boolean_index:]
+        else:
+            parameters.append(lexeme[0:-1])
+    for operand in parameters:
+        if len(operand) != 1:
+            result.append(booleanAnalyzer(operand, 0))
+        else:
+            if operand[0][0] in varidents:
+                if varidents[operand[0][0]] in ['WIN', 'FAIL']:
+                    result.append(varidents[operand[0][0]])
+                elif f'{int(float(varidents[operand[0][0]]))}' != '0' or varidents[operand[0][0]] != 'NOOB':
+                    result.append('WIN')
+                else:
+                    result.append('FAIL')
+            else:
+                if operand in ['WIN', 'FAIL']:
+                    result.append(operand[0][0])
+                elif f'{int(float(operand[0][0]))}' != '0':
+                    result.append('WIN')
+                else:
+                    result.append('FAIL')
+
+    if keyword == 'ANY OF':
+        if 'WIN' in result:
+            return f'WIN'
+        else:
+            return f'FAIL'
+    else:
+        if 'FAIL' in result:
+            return f'FAIL'
+        else:
+            return f'WIN'
+
 modified_varidents = {}
 explicit_typecast = []
 booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
@@ -954,197 +1055,9 @@ def semantics(text):
                                     semanticsResult += f'WIN\n'
                                 else:
                                     semanticsResult += f'FAIL\n'
-                ##INFINITE ARITY BOOLEAN SYNTAX - ALL OF
-                elif lexeme[i][0] == 'ALL OF':
-                    operands = []
-                    parameters = []
-                    result = []
-                    standby_index = []
-                    an_counter = 1
-                    boolean_index = 1
-                    while boolean_index <= len(lexeme)-2:
-                        if lexeme[boolean_index][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                            if lexeme[boolean_index+1][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                                standby_index.append(boolean_index)
-                                an_counter += 1
-                                boolean_index += 1
-                                continue
-                            elif lexeme[boolean_index+1][0] == 'NOT':
-                                standby_index.append(boolean_index)
-                                boolean_index += 1
-                                continue
-                            if lexeme[boolean_index+3][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                                an_counter += 1
-                                boolean_index += 3
-                                continue
-                            elif lexeme[boolean_index+1][0] == 'NOT':
-                                standby_index.append(boolean_index)
-                                boolean_index += 1
-                                continue
-                            if lexeme[boolean_index+4][0] == 'AN' and len(standby_index) != 0:
-                                standby_index.pop()
-                                if len(standby_index) == 0:
-                                    operands.append(an_counter)
-                                    an_counter = 1
-                            boolean_index += 5
-                        elif lexeme[boolean_index][0] == 'NOT':
-                            if lexeme[boolean_index+1][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                                boolean_index += 1
-                                continue
-                            if lexeme[boolean_index+2][0] == 'AN' and len(standby_index) != 0:
-                                standby_index.pop()
-                                if len(standby_index) == 0:
-                                    operands.append(an_counter)
-                                    an_counter = 1
-                            boolean_index += 3
-                        elif lexeme[boolean_index][0] in varidents or lexeme[boolean_index][1] in literals:
-                            operands.append(an_counter)
-                            boolean_index += 2
-                    lexeme = lexeme[1:]
-
-                    isEnd = 0
-                    for number_of_an in operands:
-                        an = 0
-                        boolean_index = 0
-                        while an != number_of_an:
-                            if lexeme[boolean_index][0] == 'AN':
-                                an += 1
-                            elif lexeme[boolean_index][0] == 'MKAY':
-                                isEnd = 1
-                                break
-                            boolean_index += 1
-                        if isEnd != 1:
-                            if lexeme[0][0] in booleans:
-                                if lexeme[0][0] in ["BOTH OF", "EITHER OF", "WON OF"]:
-                                    parameters.append(lexeme[0:boolean_index+1])
-                                    lexeme = lexeme[boolean_index+2:]
-                                else:
-                                    parameters.append(lexeme[0:boolean_index])
-                                    lexeme = lexeme[boolean_index+1:]
-                            else:
-                                parameters.append(lexeme[0:boolean_index-1])
-                                lexeme = lexeme[boolean_index:]
-                        else:
-                            parameters.append(lexeme[0:-1])
-                    for operand in parameters:
-                        if len(operand) != 1:
-                            result.append(booleanAnalyzer(operand, 0))
-                        else:
-                            if operand[0][0] in varidents:
-                                if varidents[operand[0][0]] in ['WIN', 'FAIL']:
-                                    result.append(varidents[operand[0][0]])
-                                elif f'{int(float(varidents[operand[0][0]]))}' != '0' or varidents[operand[0][0]] != 'NOOB':
-                                    result.append('WIN')
-                                else:
-                                    result.append('FAIL')
-                            else:
-                                if operand in ['WIN', 'FAIL']:
-                                    result.append(operand[0][0])
-                                elif f'{int(float(operand[0][0]))}' != '0':
-                                    result.append('WIN')
-                                else:
-                                    result.append('FAIL')
-                    # print(result)
-                    if 'FAIL' in result:
-                        semanticsResult += f'FAIL\n'
-                    else:
-                        semanticsResult += f'WIN\n'
-                    break
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                elif lexeme[i][0] == 'ANY OF':
-                    operands = []
-                    parameters = []
-                    result = []
-                    standby_index = []
-                    an_counter = 1
-                    boolean_index = 1
-                    while boolean_index <= len(lexeme)-2:
-                        if lexeme[boolean_index][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                            if lexeme[boolean_index+1][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                                standby_index.append(boolean_index)
-                                an_counter += 1
-                                boolean_index += 1
-                                continue
-                            elif lexeme[boolean_index+1][0] == 'NOT':
-                                standby_index.append(boolean_index)
-                                boolean_index += 1
-                                continue
-                            if lexeme[boolean_index+3][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                                an_counter += 1
-                                boolean_index += 3
-                                continue
-                            elif lexeme[boolean_index+1][0] == 'NOT':
-                                standby_index.append(boolean_index)
-                                boolean_index += 1
-                                continue
-                            if lexeme[boolean_index+4][0] == 'AN' and len(standby_index) != 0:
-                                standby_index.pop()
-                                if len(standby_index) == 0:
-                                    operands.append(an_counter)
-                                    an_counter = 1
-                            boolean_index += 5
-                        elif lexeme[boolean_index][0] == 'NOT':
-                            if lexeme[boolean_index+1][0] in ['BOTH OF', 'EITHER OF', 'WON OF']:
-                                boolean_index += 1
-                                continue
-                            if lexeme[boolean_index+2][0] == 'AN' and len(standby_index) != 0:
-                                standby_index.pop()
-                                if len(standby_index) == 0:
-                                    operands.append(an_counter)
-                                    an_counter = 1
-                            boolean_index += 3
-                        elif lexeme[boolean_index][0] in varidents or lexeme[boolean_index][1] in literals:
-                            operands.append(an_counter)
-                            boolean_index += 2
-                    lexeme = lexeme[1:]
-
-                    isEnd = 0
-                    for number_of_an in operands:
-                        an = 0
-                        boolean_index = 0
-                        while an != number_of_an:
-                            if lexeme[boolean_index][0] == 'AN':
-                                an += 1
-                            elif lexeme[boolean_index][0] == 'MKAY':
-                                isEnd = 1
-                                break
-                            boolean_index += 1
-                        if isEnd != 1:
-                            if lexeme[0][0] in booleans:
-                                if lexeme[0][0] in ["BOTH OF", "EITHER OF", "WON OF"]:
-                                    parameters.append(lexeme[0:boolean_index+1])
-                                    lexeme = lexeme[boolean_index+2:]
-                                else:
-                                    parameters.append(lexeme[0:boolean_index])
-                                    lexeme = lexeme[boolean_index+1:]
-                            else:
-                                parameters.append(lexeme[0:boolean_index-1])
-                                lexeme = lexeme[boolean_index:]
-                        else:
-                            parameters.append(lexeme[0:-1])
-                    for operand in parameters:
-                        if len(operand) != 1:
-                            result.append(booleanAnalyzer(operand, 0))
-                        else:
-                            if operand[0][0] in varidents:
-                                if varidents[operand[0][0]] in ['WIN', 'FAIL']:
-                                    result.append(varidents[operand[0][0]])
-                                elif f'{int(float(varidents[operand[0][0]]))}' != '0' or varidents[operand[0][0]] != 'NOOB':
-                                    result.append('WIN')
-                                else:
-                                    result.append('FAIL')
-                            else:
-                                if operand in ['WIN', 'FAIL']:
-                                    result.append(operand[0][0])
-                                elif f'{int(float(operand[0][0]))}' != '0':
-                                    result.append('WIN')
-                                else:
-                                    result.append('FAIL')
-                    # print(result)
-                    if 'WIN' in result:
-                        semanticsResult += f'WIN\n'
-                    else:
-                        semanticsResult += f'FAIL\n'
+                elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                    semanticsResult += f'{infiniteBooleanAnalyzer(lexeme, lexeme[i][0])}\n'
                     break
                     
                 elif lexeme[i][0] in booleans:
