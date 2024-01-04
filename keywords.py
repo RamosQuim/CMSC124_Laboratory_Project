@@ -335,24 +335,35 @@ def yrn(tk):
 
 def modifiedVar(str1):
                             mv = syntax.getModifVaridents(str1)
+                            # print(str1)/
                             if len(mv) != 0:
                                     # print("yey", mv)
                                     for i in mv:
                                         c = 0
                                         for j in symbol_table: #check if the variable using expression is already in the symbol table
                                             if j[0] == i:
-                                                c =1
-                                                break
-                                        if c == 0:
-                                            ar = []
-                                            ar.append(i)
-                                            ar.append(mv[i])
-                                            symbol_table.append(ar)    
+                                                mv.pop(i)
+                                                
+                            if len(mv) != 0:
+                                ar = []
+                                ar.append(i)
+                                ar.append(mv[i])
+                                symbol_table.append(ar)  
+                                 
+                                        # if c == 0:
+                                        #     ar = []
+                                        #     ar.append(i)
+                                        #     ar.append(mv[i])
+                                        #     symbol_table.append(ar)    
+                                        #     break
+                                        # break
+                            return 
 
 def symbolTable(str1):
     symbol_table.clear()
     it = []
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    bool_inf = ['ALL OF', 'ANY OF']
     comparison = ['BOTH SAEM', 'DIFFRINT']
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
 
@@ -360,129 +371,108 @@ def symbolTable(str1):
                 arr = []
                 arr.append('IT')   
                 arr.append('NOOB')
-                symbol_table.insert(0, arr)  
+                symbol_table.insert(0, arr) 
+    lexeme = lex(str1)
 
-    for token in lex(str1):
-        # print(token[0], token[1])
-        
-
-        if token[1].rstrip().lstrip() == 'Variable Identifier':
-            print(token[0])
-            
-            matches = re.finditer(r'I HAS A \b'+token[0]+r'\b', str1)
-            last_occurrence_startIndex = -1
-            end_index = -1
-            for match in matches:
-                last_occurrence_startIndex = match.start()
-                end_index = match.end()
-
-            if str1[end_index+1:end_index+4].rstrip().lstrip() == "ITZ":
-                    whole = str1[end_index+5:]
-                    value = re.match(r'.*[^\n]*',whole)[0]
-                    new = value.replace('"', '')
-                    print(new)
-                    # result = ""
-
-                                        
-                    # result = semantics.booleanAnalyzer(new, 'no')
-                    # result = semantics.booleanAnalyzer(new, 'yes')
-                    # result = semantics.arithmeticAnalyzer(symbol_table, arithmetic,new)
-                    # result = semantics.comparison_expression(new)
-                    
-                  
-                    # mv = syntax.getModifVaridents(str1)
-                    # if len(mv) != 0:
-                    #     # print("yey", mv)
-                    #     for i in mv:
-                    #         c = 0
-                    #         for j in symbol_table: #check if the variable using expression is already in the symbol table
-                    #             if j[0] == i:
-                    #                 c =1
-                    #                 break
-                    #         if c == 0:
-                    #             ar = []
-                    #             ar.append(i)
-                    #             ar.append(mv[i])
-                    #             symbol_table.append(ar)
-                # else:
-
-                    
-                    # value = value.strip()
-                    # if len(symbol_table) == 0:
-                    #         arr = []
-                    #         arr.append(token[0])
-                    #         arr.append(new)
-                    #         symbol_table.append(arr)
-                    # else:
-                    # print(result)
-                    checker = 0
-                    for i in symbol_table:
-                        if i[0] == token[0]: #check if the variable is already in the symbol table
+    for a in range(0, len(lexeme)):
+        if len(lexeme) > 1: 
+        #  print(lexeme[a][0])
+            if lexeme[a][1].rstrip().lstrip() == 'Variable Identifier':
+            # print(lexeme[a-1][0], lexeme[a][0],lexeme[a+1][0], lexeme[a+2][0])
+                if lexeme[a-1][1] == 'Variable Declaration':
+              
+                    if lexeme[a+1][0].rstrip().lstrip() == 'ITZ':
+                    # print(lexeme[a-1][0], lexeme[a][0],lexeme[a+1][0], lexeme[a+2][0])
+                        checker = 0
+                        for i in symbol_table:
+                            if i[0] == lexeme[a][0]: #check if the variable is already in the symbol table
                                 checker = 1
                                 break
-                    if checker == 0:
-                        if 'SUM OF' in new or 'DIFF OF' in new or 'PRODUKT OF' in new or 'QUOSHUNT OF' in new or 'MOD OF' in new:
-                            modifiedVar(str1)
-                        elif 'BOTH OF' in new or 'EITHER OF' in new or 'WON OF' in new or 'NOT' in new or 'ALL OF' in new or 'ANY OF' in new:
-                            modifiedVar(str1)
-                        elif 'BOTH SAEM' in new or 'DIFFRINT' in new:
-                            modifiedVar(str1)
-                        else:
-                            arr = []
-                            arr.append(token[0])
-                            arr.append(new)
-                            symbol_table.append(arr)
-            
-            #for recasting IS NOW A
-            recasting = re.finditer(r'\b'+token[0]+r'\b IS NOW A', str1)
-            last_occurrence_startIndex = -1
-            end_index = -1
-            for match in recasting:
-                last_occurrence_startIndex = match.start()
-                end_index = match.end()
-            
-            # print(str1[end_index+1:end_index+5])
-            
-            if str1[end_index+1:end_index+7].rstrip().lstrip() == 'NUMBAR': #convert to float 
-                nmbar(token[0])
-                
-            elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'NUMBR': #convert to int 
-                nmbr(token[0])
-                
-            elif str1[end_index+1:end_index+6].rstrip().lstrip() == 'TROOF': #convert to bool 
-                trf(token[0])
-                
-            elif str1[end_index+1:end_index+5].rstrip().lstrip() == 'YARN': #convert to string 
-                yrn(token[0])
-                
+                        if checker == 0:
+                            if lexeme[a+2][0] not in arithmetic and lexeme[a+2][0] not in booleans and lexeme[a+2][0] not in comparison:
+                                    if lexeme[a+2][0] == '"' and lexeme[a+4][0] == '"':
+                                        arr = []
+                                        arr.append(lexeme[a][0])
+                                        arr.append(lexeme[a+3][0].replace('"',''))
+                                        symbol_table.append(arr)
+                                    else:
+                                        arr = []
+                                        arr.append(lexeme[a][0])
+                                        arr.append(lexeme[a+2][0].replace('"',''))
+                                        symbol_table.append(arr)
+                            # modifiedVar(str1)
+                            else:
+                                if lexeme[a+2][0] in comparison:
+                                    res = semantics.comparison_expression(lexeme[a+2:a+6])
+                                    arr = []
+                                    arr.append(lexeme[a][0])
+                                    arr.append(res)
+                                    symbol_table.append(arr)
+                                elif lexeme[a+2][0] in booleans:
+                                
+                                    q = 3
+                                    current = lexeme[a+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[a+q][0]
+                                
+                                    res = semantics.booleanAnalyzer(lexeme[a+2:a+q], 'no')
+                                    arr = []
+                                    arr.append(lexeme[a][0])
+                                    arr.append(res)
+                                    symbol_table.append(arr)
+                                elif lexeme[a+2][0] in bool_inf:
+                                
+                                    q = 3
+                                    current = lexeme[a+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[a+q][0]
+                                
+                                    res = semantics.infiniteBooleanAnalyzer(lexeme[a+2:a+q], lexeme[a+2][0])
+                                    arr = []
+                                    arr.append(lexeme[a][0])
+                                    arr.append(res)
+                                    symbol_table.append(arr)
+                                elif lexeme[a+2][0] in arithmetic:
+                                
+                                    q = 3
+                                    current = lexeme[a+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[a+q][0]
+                                
+                                    vr = {}
+                                    for j in symbol_table:
+                                        vr[j[0]] =j[1]
 
-            #for R MAEK RECASTING r'\b'+token[0]+r'\b IS NOW A'
-            m = re.finditer(r'\b'+token[0]+r'\b R MAEK', str1)
-            last_occurrence_startIndex = -1
-            e = -1
-            for match in m:
-                last_occurrence_startIndex = match.start()
-                e = match.end()
-            
-            length = len(token[0]) + 1
-
-            if str1[e+length:e+length+7].rstrip().lstrip() == 'NUMBAR':
-                       nmbar(token[0])
-                        
-            elif str1[e+length:e+length+6].rstrip().lstrip() == 'NUMBR':
-                       nmbr(token[0])
-            elif str1[e+length:e+length+5].rstrip().lstrip() == 'YARN':
-                       yrn(token[0])
-            elif str1[e+length:e+length+6].rstrip().lstrip() == 'TROOF':
-                       trf(token[0])
-            
-
-        elif token[0] == 'VISIBLE':
-
-            # if len(it) == 0:
-               
-
-                matches = re.finditer(r'\b'+token[0]+r'\b', str1)
+                                
+                                
+                                    res = semantics.arithmeticAnalyzer(vr,arithmetic, lexeme[a+2:a+q])
+                                    arr = []
+                                    arr.append(lexeme[a][0])
+                                    arr.append(res)
+                                    symbol_table.append(arr)
+                elif lexeme[a+1][0].rstrip().lstrip() == 'IS NOW A':   
+                    if lexeme[a+2][0] =='NUMBAR':
+                        nmbar(lexeme[a][0])
+                    elif lexeme[a+2][0] =='NUMBR':
+                        nmbr(lexeme[a][0])
+                    elif lexeme[a+2][0] =='TROOF':
+                        trf(lexeme[a][0])
+                    elif lexeme[a+2][0] =='YARN':
+                        yrn(lexeme[a][0])
+                elif lexeme[a+1][0].rstrip().lstrip() == 'R MAEK':   
+                    if lexeme[a+2][0] =='NUMBAR':
+                        nmbar(lexeme[a][0])
+                    elif lexeme[a+2][0] =='NUMBR':
+                        nmbr(lexeme[a][0])
+                    elif lexeme[a+2][0] =='TROOF':
+                        trf(lexeme[a][0])
+                    elif lexeme[a+2][0] =='YARN':
+                        yrn(lexeme[a][0])
+            elif lexeme[a][0] == 'VISIBLE':
+                matches = re.finditer(r'\b'+lexeme[a][0]+r'\b', str1)
                 for match in matches:
                     last_occurrence_startIndex = match.start()
                     end_index = match.end()
@@ -511,16 +501,13 @@ def symbolTable(str1):
                                     temp.append(j[1])
                                     break
                     # print(temp)
-                    it.append(temp)
-                    # temp.clear()
+                    it.append(temp) 
+            elif lexeme[a][0] == 'MAEK':
+                ex_typecast = semantics.getExplicitTypecast(str1)
+                if len(ex_typecast) != 0:
+                    for i in ex_typecast:
+                        it.append(str(i))
 
-        elif token[0] == 'MAEK':
-            ex_typecast = semantics.getExplicitTypecast(str1)
-            if len(ex_typecast) != 0:
-                for i in ex_typecast:
-                    it.append(str(i))
-    
-    # print("it", it)
     if len(it) != 0:
         
         j = ""  
@@ -535,24 +522,6 @@ def symbolTable(str1):
         symbol_table[0][1] = j
         it.clear()
     
-    # print("symbol table",symbol_table)
-
-    # if len(it) != 0:
-    #     # it[0] = [str(item) for item in str(it[0]) if item != '+'] # removing all '+'
-
-    #     j = ""  
-    #     for k in it[len(it)-1:len(it)]:
-    #         # print
-    #         for i in range(0, len(k)):
-    #             if k[i] != '+':
-                     
-    #                 j += k[i]
-    #                 j += " "
-    #     symbol_table.insert(0, ['IT', j])
-    #     it.clear()
-    
-
-    #need ayusin syntax for expression
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     if semantics_varidents != 0:
         sem_keys = semantics_varidents.keys()                
@@ -572,11 +541,9 @@ def symbolTable(str1):
                 arr.append(k)
                 arr.append(semantics_varidents[k])
                 symbol_table.append(arr)
-            
-    # return symbol_table
-    # print(f"symbol_table: {symbol_table}")
-    return symbol_table
 
+
+    return symbol_table
 
 def connect_UI(str):
     compiled_lex.clear()
