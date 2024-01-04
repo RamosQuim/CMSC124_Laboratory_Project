@@ -27,7 +27,10 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         try:
                             float_val = float(varidents[lexeme[remover_index][0]])
                             int_value = int(float_val)
+                            print(f"float_val:{float_val}")
+                            print(f"int_value: {int_value}")
                             if float_val != int_value:
+                                print('equal daw')
                                 is_float = True
                         except ValueError:
                             #end na!
