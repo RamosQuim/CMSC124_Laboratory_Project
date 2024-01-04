@@ -670,14 +670,18 @@ def syntax(text):
                         hasVarDec = 1
                         if len(lexeme) == 2:
                             varidents[lexeme[i+1][0]] = 'NOOB'
-                        elif len(lexeme) == 4:
-
-                            if isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) != 0:
+                        elif len(lexeme) == 4 or len(lexeme) == 6:
+                            if isfloat(lexeme[i+3][0]) != False and '.' in lexeme[i+3][0]:
+                                print(lexeme[i+3][0])
                                 varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
-                            elif isfloat(lexeme[i+3][0]) != False and int(float(lexeme[i+3][0])) - float(lexeme[i+3][0]) == 0:
-                                varidents[lexeme[i+1][0]] = int(float(lexeme[i+3][0]))         # if NUMBR
+                            elif isfloat(lexeme[i+3][0]) != False and '.' not in lexeme[i+3][0]:
+                                varidents[lexeme[i+1][0]] = int(lexeme[i+3][0])         # if NUMBR
                             else:
-                                varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF or YARN
+                                if lexeme[i+3][0] != '"':
+                                    varidents[lexeme[i+1][0]] = lexeme[i+3][0]              # if TROOF
+                                else:
+                                    varidents[lexeme[i+1][0]] = lexeme[i+4][0] 
+                            
                         break
                     else:
                         if lexeme[i][0] != 'I HAS A' and lexeme[i][0] != 'BUHBYE' and lexeme[i][0] != 'KTHXBYE' and hasWazzup == 0 and hasBuhbye == -1: 
@@ -747,7 +751,7 @@ def syntax(text):
                                                 if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
                                                     if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
                                                         if lexeme[visible_indexcounter][0] != "IT":
-                                                            if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                            if lexeme [visible_indexcounter][0] not in booleans_checker: #check if boolean
                                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
                                                                 success = 0
                                                                 break
