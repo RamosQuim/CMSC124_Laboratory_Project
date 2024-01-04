@@ -630,6 +630,7 @@ def booleanAnalyzer(thisLexeme, isInfinite):
 modified_varidents = {}
 explicit_typecast = []
 booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+booleans_checker = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT', 'ALL OF', 'ANY OF']
 literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
 varidents = {}
 
@@ -1344,7 +1345,7 @@ def semantics(text):
                             visible_index = temp_index
 
                         #BOOLEANS
-                        elif lexeme[visible_index][0] in booleans:
+                        elif lexeme[visible_index][0] in booleans_checker:
                             #kunin ang lexeme until +
                             temp = []
                             temp_index = visible_index

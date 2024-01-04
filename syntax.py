@@ -357,6 +357,7 @@ def syntax(text):
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     varAssignment_literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    booleans_checker = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT', 'ALL OF', 'ANY OF']
     keyUsingExp = ['YR', 'FOUND YR', 'ITZ', 'R', 'MEBBE', 'TIL', 'WILE', 'VISIBLE']
     hasHai = -1
     hasKthxbye = -1
@@ -484,7 +485,7 @@ def syntax(text):
                                     if lexeme[visible_indexcounter+1][0] not in varidents:
                                         if lexeme[visible_indexcounter+1][0] not in arithmetic:
                                             if lexeme[visible_indexcounter+1][0] not in comparison:
-                                                if lexeme[visible_indexcounter+1][0] not in booleans:
+                                                if lexeme[visible_indexcounter+1][0] not in booleans_checker:
                                                     if lexeme[visible_indexcounter+1][1] != 'String Delimiter':
                                                         if lexeme[visible_indexcounter+1][0] != "IT":
                                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only2')
@@ -499,7 +500,7 @@ def syntax(text):
                                                 if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
                                                     if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
                                                         if lexeme[visible_indexcounter][0] != "IT":
-                                                            if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                            if lexeme [visible_indexcounter][0] not in ~cker: #check if boolean
                                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
                                                                 success = 0
                                                                 break
