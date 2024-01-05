@@ -26,7 +26,7 @@ class LOLLexer:
             if token is not None:
                 self.tokens.append(token) #appends the token to the tokens list
             else:
-                raise SyntaxError(f"Invalid token at position {self.current_position}")
+                break
         return self.tokens
 
 
@@ -64,9 +64,9 @@ token_patterns = {
     r'\s*KTHXBYE\s+': 'Code Delimiter',
     r'\s*WAZZUP\s+': 'Variable Declaration Delimiter',
     r'\s*BUHBYE\s+': 'Variable Declaration Delimiter',
-    r'((\s*BTW .*)|( BTW .*))': 'Comment Line',
     r'\s*OBTW\s+': 'Comment Delimiter',
     r'\s*TLDR\s+': 'Comment Delimiter',
+    r'((\s*BTW .*)|( BTW .*))': 'Comment Line',
     r'\s*I HAS A\s+': 'Variable Declaration',
     r'\s*ITZ\s+': 'Variable Assignment',
     r'\s*R\s+': 'Variable Assignment',
@@ -100,7 +100,7 @@ token_patterns = {
     r'\s*OIC\s+': 'If-then Keyword',
     r'\s*WTF\?\s+': 'Switch-Case Keyword',
     r'\s*OMG\s+': 'Switch-Case Keyword',
-    r'\s*OMG WTF\s+': 'Switch-Case Keyword',
+    r'\s*OMGWTF\s+': 'Switch-Case Keyword',
     r'\s*IM IN YR\s+': 'Loop Keyword',
     r'\s*UPPIN\s+': 'Loop Operation',
     r'\s*NERFIN\s+': 'Loop Operation',
