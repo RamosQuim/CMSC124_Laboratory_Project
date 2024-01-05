@@ -34,3 +34,14 @@ HAI
     VISIBLE IT
 
 KTHXBYE
+
+HAI
+    HOW IZ I printName YR person
+        VISIBLE "Hello, "
+        GTFO
+    IF U SAY SO
+WAZZUP
+
+BUHBYE
+
+KTHXBYE
