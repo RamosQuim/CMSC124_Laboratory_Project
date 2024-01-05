@@ -541,6 +541,8 @@ def syntax(text):
     wtfchecker = -1
     omgchecker = -1
     omgwtfchecker = -1
+    functionchecker = -1
+    
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
@@ -549,7 +551,7 @@ def syntax(text):
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
                 
             for i in range(0, len(lexeme)):
-                print(f"starting lexeme:{lexeme}")
+                print(f"starting lexeme sa while:{lexeme}")
                 
                 ## PROGRAM BLOCK SYNTAX - HAI
                 if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
@@ -884,7 +886,7 @@ def syntax(text):
                                                     else:
                                                         visible_indexcounter+=1
                                             else:
-                                                if len(lexeme) != visible_indexcounter:
+                                                if len(lexeme) != (visible_indexcounter+1):
                                                     if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
                                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
                                                         success = 0
@@ -894,7 +896,7 @@ def syntax(text):
                                                 else:
                                                     visible_indexcounter+=1
                                         else:
-                                            if len(lexeme) != visible_indexcounter:
+                                            if len(lexeme) != (visible_indexcounter+1):
                                                 if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
                                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
                                                     success = 0
@@ -1305,61 +1307,95 @@ def syntax(text):
                         break
 
 
+
                     #SWITCH CASES STATEMENTS
-                    wtfchecker = -1
-                    if lexeme[i][0] == 'WTF?':
-                        #omgcounter=i
-                        wtfchecker = 1
-                        omgchecker = -1
-                        omgwtfchecker = -1
-                        #while lexeme[omgcounter][0] != "OMGWTF":
+                    #temporary tinanggal muna yung ? WTF
+                    if lexeme[i][0] == 'WTF':
+                        if wtfchecker == 1 or omgchecker !=-1 or omgwtfchecker !=-1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t WTF? is not properly used previously.')
+                            success = 0
+                            break
+                        elif len(lexeme) != 1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t WTF? should not be followed by any characters.')
+                            success = 0
+                            break
+                        else:
+                            wtfchecker = 1
+                        
+
                     #OMG STATEMENTS 
                     if lexeme[i][0] == "OMG":
                         if wtfchecker == 1: 
-                            if lexeme[i+1][1] != "String Delimeter": #check the sting
-                                if lexeme[i+1][1] != 'NUMBR Literal':
-                                    if lexeme[i+1][1] != 'NUMBER Literal':
-                                        if lexeme[i+1][1] != 'TROOF Literal':
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by Value Literal (NUMBRs, NUMBARs, YARNs, and TROOFs)')
-                                            success = 0
-                                            break
-                                        else:
-                                            print('uwu')
-                                    else:
-                                        print('uwu')
-                                else: 
-                                    print('uwu')
-                            else: #check the actual value
-                                if lexeme[i+2][1] != "YARN Literal":
+                            #to ensure na walang sobra na makukuha
+                            if len (lexeme) == 4:
+                                if lexeme[i+1][1] != 'String Delimeter':
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Invalid Value Literal')
                                     success = 0
                                     break
-                                else:
-                                    if lexeme[i+3][1] != "String Delimeter": #check the closing string
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by Value Literal')
+                            #to ensure na 2 lang ang pwedeng tanggapin niya 
+                            elif len(lexeme) == 2:
+                                if lexeme[i+1][1] != "String Delimeter": #check the sting
+                                    if lexeme[i+1][1] != 'NUMBR Literal':
+                                        if lexeme[i+1][1] != 'NUMBER Literal':
+                                            if lexeme[i+1][1] != 'TROOF Literal':
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by Value Literal (NUMBRs, NUMBARs, YARNs, and TROOFs)')
+                                                success = 0
+                                                break
+                                            else:
+                                                omgchecker = 1 
+                                        else:
+                                            omgchecker = 1
+                                    else: 
+                                        omgchecker = 1
+                                else: #check the actual value
+                                    if lexeme[i+2][1] != "YARN Literal":
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Invalid Value Literal')
                                         success = 0
                                         break
                                     else:
-                                        #check yung next!!    
-                                        omgchecker = 1
+                                        if lexeme[i+3][1] != "String Delimeter": #check the closing string
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by Value Literal')
+                                            success = 0
+                                            break
+                                        else:
+                                            #check yung next!!    
+                                            omgchecker = 1
+                            else:
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMG Should be followed by 1 Value Literal (NUMBRs, NUMBARs, YARNs, and TROOFs) only!')
+                                success = 0
+                                break
                         else:
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?1')
                             success = 0
                             break                                    
 
                     if lexeme[i][0] == "OMGWTF?":
-                        if omgchecker == 1:
+                        if len(lexeme) != 1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OMGWTF? should not be followed by anything.')
+                            success = 0
+                            break 
+                        elif omgchecker == 1:
                             omgwtfchecker = 1
                         else:
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?2')
                             success = 0
                             break   
 
                     if lexeme[i][0] == 'OIC':
-                        if omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
-                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                        if len(lexeme) != 1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OIC should not be followed by anything.')
                             success = 0
-                            break     
+                            break 
+                        elif omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?3')
+                            success = 0
+                            break   
+                        else:
+                            #we will now reset it 
+                            wtfchecker = -1
+                            omgchecker = -1
+                            omgwtfchecker = -1  
+
 
                     #THIS ONE IS CREATED FOR THE GIMMEH INPUT!!
                     if lexeme[i][0] == 'GIMMEH':
@@ -1378,6 +1414,7 @@ def syntax(text):
                             break                         
                     
                     #FUNCTION SYNTAX
+                    #note: hindi pa nacoconsider dito if valid ba yung parameters (???) not sure if need pa ba yon 
                     if lexeme[i][0] == 'HOW IZ I':
                         if len(lexeme)<2:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t HOW IZ I should have a function name!')
@@ -1397,48 +1434,145 @@ def syntax(text):
                             #checking the parameters
                             function_index = 2
                             print(f"lexeme before while loop: {lexeme}")
+
                             while function_index < len(lexeme):
-                                print(f"function index: {function_index}")
+                                #print(f"function index: {function_index}")
                                 if lexeme[function_index][1] != "Parameter Delimiter":
                                     if lexeme[function_index][1] != "Identifier":
-                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]')
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]1')
                                         success = 0
                                         break
                                     else:
-                                        #mag add lang if siya ay Identifer / parameter
-                                        function_index += 1
+                                        #mag add lang if siya ay Identifer OR AN PARAMETER DELIMITER (AN)
+                                        if lexeme[function_index][0] == 'AN':
+                                            #check muna yung before ni AN
+                                            print("pumasok sa AN")
+                                            if len(lexeme) == function_index+1:
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.1')
+                                                    success = 0
+                                                    break
+                                            if lexeme[function_index-1][1] != 'Identifier' and lexeme[function_index-1][0]!='AN':
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.2')
+                                                    success = 0
+                                                    break
+                                            #check yung after ni AN
+                                            if lexeme[function_index+1][0] != 'YR':
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]2')
+                                                    success = 0
+                                                    break
+                                            function_index+=1
+                                        else:
+                                            if len(lexeme) != (function_index+1):
+                                                if lexeme[function_index+1][1] == 'Identifier' and lexeme[function_index+1][0] != 'AN':
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]3')
+                                                    success = 0
+                                                    break
+                                                
+                                            if lexeme[function_index-1][0] != 'YR':
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]4')
+                                                success = 0
+                                                break
+                                            function_index += 1
                                 else:
-                                    #POSSIBLE PARAMETER DELIMITER IS YR AND AN ONLY
+                                    #POSSIBLE PARAMETER DELIMITER IS YR ONLY or AN 
                                     if lexeme[function_index][0] == 'YR':
                                         print("nasa YR ako")
+                                        if len(lexeme) == function_index+1:
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.3')
+                                            success = 0
+                                            break
                                         #check before YR 
                                         if lexeme[function_index-1][1] != 'Function Identifier':
                                             if lexeme[function_index-1][1] != 'Parameter Delimiter':
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax. {lexeme[function_index][0]} should only have a precedent of Function Name or AN.')
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.4')
                                                 success = 0
                                                 break
                                         #check after YR
                                         if lexeme[function_index+1][1] != 'Identifier':
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax. {lexeme[function_index][0]} should only have a precedent of Function Name or AN.')
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.5')
                                             success = 0
-                                            break    
-                                    
+                                            break                                        
+                                        function_index+=1
+                                        
+                                    #checking the AN
                                     elif lexeme[function_index][0] == 'AN':
                                         #check muna yung before ni AN
                                         print("pumasok sa AN")
-                                        if lexeme[function_index-1][1] != 'Identifier':
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax. {lexeme[function_index][0]} should only have a precedent of Function Name or AN.')
+                                        if len(lexeme) == function_index+1:
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.6')
+                                                success = 0
+                                                break
+                                        if lexeme[function_index-1][1] != 'Identifier' and lexeme[function_index-1][0]!='AN':
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.')
                                                 success = 0
                                                 break
                                         #check yung after ni AN
                                         if lexeme[function_index+1][0] != 'YR':
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]')
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: \n\t{lexeme[i][0]} [YR <param1> [AN YR <param2> ...]]5')
                                                 success = 0
                                                 break
-                                        print("umabot dito eh")
-                                    
-                                    function_index+=1
-                        break 
+                                        function_index+=1
+                        functionchecker = 1
+                        break
+                    
+                    #RETURN WITH SOMETHING
+                    if lexeme[i][0]=='FOUND YR':
+                        if lexeme[i+1][0] not in arithmetic:
+                            if lexeme[i+1][0] not in comparison:
+                                if lexeme[i+1][0] not in booleans:
+                                    if lexeme[i+1][0] not in inifinitebooleans:
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tFOUND YR only accepts expressions!')
+                                        success = 0
+                                        break
+                                    else:
+                                        result = booleanSyntax(lexeme[i+1:], h, i)
+                                        if result is not None:
+                                            success = 0
+                                            syntaxResult += result
+                                            break
+                                else:
+                                    result = infiniteBooleanSyntax(lexeme[i+1:], h, i)
+                                    if result is not None:
+                                        success = 0
+                                        syntaxResult += result
+                                        break
+                            else:
+                                result = comparisonSyntax(lexeme[i+1:], h, i)
+                                if result is not None:
+                                    success = 0
+                                    syntaxResult += result
+                                    break
+                        else:
+                            result = arithmeticSyntax(h,arithmetic, lexeme[i+1:])
+                            if result[0] == 0:
+                                success = result[0]
+                                syntaxResult += result[1]
+                                break                        
+                        break
+                    #THIS IS THE RETURN OF EMPTY (USED IN FUNCTIONS AND SWITCH CASE)
+                    if lexeme[i][0] == 'GTFO':
+                        if functionchecker == -1 and omgchecker == -1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: GTFO should only be used in a Function or Switch-Case!')
+                            success = 0
+                            break
+                        elif len(lexeme)<1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tIncorrect syntax, see correct syntax: \n\t GTFO')
+                            success = 0
+                            break
+                        break
+
+                    #THIS IS THE END OF THE FUNCTION 
+                    if lexeme[i][0] == 'IF U SAY SO':
+                        if functionchecker == -1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: IF U SAY SO should only be used in a Function!')
+                            success = 0
+                            break
+                        elif len(lexeme)!=1:
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect syntax, see correct syntax: \n\t IF U SAY SO')
+                            success = 0
+                            break
+                        #reset the checker
+                        functionchecker = -1
                 else:
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')
                     success = 0

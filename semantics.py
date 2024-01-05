@@ -811,8 +811,7 @@ def semantics(text):
             
             # print(f"len(lexeme): {len(lexeme)}")
             for i in range(0, len(lexeme)):
-                print(f"undefined_error: {undefined_error}")
-                
+                                
                 # if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
                 #     if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
                 #         semanticsResult += f'WIN\n'
