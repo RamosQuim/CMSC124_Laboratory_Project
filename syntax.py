@@ -60,7 +60,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                         #GIVING CONSIDERATION TO NOOB
                                         if varidents[lexeme[arithmetic_index-1][0]] != "NOOB":
                                             if str(varidents[lexeme[arithmetic_index-1][0]]).isnumeric() == False:
-                                                print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
+                                                # print(f"varidents[lexeme[arithmetic_index-1][0]]: {varidents[lexeme[arithmetic_index-1][0]]}")
                                                 try:
                                                     float_val = float(varidents[lexeme[arithmetic_index-1][0]])
                                                 except ValueError:
@@ -86,7 +86,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                         #considering noob
                                         if varidents[lexeme[arithmetic_index+1][0]] != "NOOB":
                                             if str(varidents[lexeme[arithmetic_index+1][0]]).isnumeric() == False:
-                                                print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
+                                                # print(f"varidents[lexeme[arithmetic_index+1][0]]: {varidents[lexeme[arithmetic_index+1][0]]}")
                                                 try:
                                                     float_val = float(varidents[lexeme[arithmetic_index+1][0]])
                                                 except ValueError:
@@ -117,7 +117,7 @@ def arithmeticSyntax(h,arithmetic, lexeme):
                                         #considering noob
                                         if varidents[lexeme[arithmetic_index][0]] != "NOOB":
                                             if str(varidents[lexeme[arithmetic_index][0]]).isnumeric() == False:
-                                                print(f"varidents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
+                                                # print(f"varid/ents[lexeme[arithmetic_index][0]]: {varidents[lexeme[arithmetic_index][0]]}")
                                                 try:
                                                     float_val = float(varidents[lexeme[arithmetic_index][0]])
                                                     arithmetic_index +=1  #added this para di magkaroon ng inifnity loop
@@ -522,6 +522,7 @@ def getModifVaridents(text):
 def syntax(text):
     global varidents
     global modif_var
+    modif_var.clear()
     varidents.clear()
     syntaxResult = ''
     success = 1
@@ -605,21 +606,36 @@ def syntax(text):
                                             syntaxResult += result
                                             break
                                         else:
+                                            success = 1
                                             result = semantics.booleanAnalyzer(lexeme[i+3:], 'no')
                                             varidents[lexeme[i+1][0]] = result
                                             modif_var[lexeme[i+1][0]] = result
                                             # print(modif_var)
                                         # break
-                                    elif lexeme[i+3][0] == 'ANY OF' or lexeme[i+3][0] == 'ALL OF':
-                                        result = booleanSyntax(lexeme[i+3:], h, i)
+                                    elif lexeme[i+3][0] == 'ANY OF': 
+                                        result = infiniteBooleanSyntax(lexeme[i+3:], h, i)
                                         if result is not None:
                                             success = 0
                                             syntaxResult += result
                                             break
                                         else:
-                                            result = semantics.booleanAnalyzer(lexeme[i+3:], 'yes')
+                                            success = 1
+                                            result = semantics.infiniteBooleanAnalyzer(lexeme[i+3:], 'ANY OF')
                                             varidents[lexeme[i+1][0]] = result
                                             modif_var[lexeme[i+1][0]] = result
+                                            break
+                                    elif lexeme[i+3][0] == 'ALL OF':
+                                        result = infiniteBooleanSyntax(lexeme[i+3:], h, i)
+                                        if result is not None:
+                                            success = 0
+                                            syntaxResult += result
+                                            break
+                                        else:
+                                            success = 1
+                                            result = semantics.infiniteBooleanAnalyzer(lexeme[i+3:], 'ALL OF')
+                                            varidents[lexeme[i+1][0]] = result
+                                            modif_var[lexeme[i+1][0]] = result
+                                            break
                                     elif lexeme[i+3][0] in arithmetic:
                                         # print(varidents)
                                         result = arithmeticSyntax(h,arithmetic,lexeme[i+3:])
@@ -628,18 +644,29 @@ def syntax(text):
                                             success = result[0]
                                             break   
                                         else:
+                                           
+                                            success = 1
                                             result = semantics.arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:])
+                                            # print(result[0])
                                             varidents[lexeme[i+1][0]] = result
                                             modif_var[lexeme[i+1][0]] = result
+                                            break
                                     elif lexeme[i+3][0] in comparison:
                                         if comparisonSyntax(lexeme[i+3:], h, i):
                                             success = 0
                                             syntaxResult += comparisonSyntax(lexeme[i+1:], h, i)
                                             break 
                                         else:
+                                            # print(lexeme[i+3:])
                                             result = semantics.comparison_expression(lexeme[i+3:])
+                                            # success = 1
                                             varidents[lexeme[i+1][0]] = result
                                             modif_var[lexeme[i+1][0]] = result
+                                            # break
+                                    # elif lexeme[i+3][0]!= '"' and lexeme[i+5][0] != '"': #if string shoudl be enclosed by ""
+                                    #     syntaxResult += (f"\n>> SyntaxError in line {h+1} near <{lexeme[i+1][0]}>: \n\t{lexeme[i+4][0]} should be enclosed by quotation marks if it is a yarn or string")
+                                    #     success = 0
+                                    #     break
 
                             
                         hasVarDec = 1
@@ -647,7 +674,7 @@ def syntax(text):
                             varidents[lexeme[i+1][0]] = 'NOOB'
                         elif len(lexeme) == 4 or len(lexeme) == 6:
                             if isfloat(lexeme[i+3][0]) != False and '.' in lexeme[i+3][0]:
-                                print(lexeme[i+3][0])
+                                # print(lexeme[i+3][0])
                                 varidents[lexeme[i+1][0]] = float(lexeme[i+3][0])       # if NUMBAR
                             elif isfloat(lexeme[i+3][0]) != False and '.' not in lexeme[i+3][0]:
                                 varidents[lexeme[i+1][0]] = int(lexeme[i+3][0])         # if NUMBR
@@ -1182,7 +1209,7 @@ def syntax(text):
                         break    
                     
                     if lexeme[i][0] in comparison:
-                        print(lexeme[i][0])
+                        # print(lexeme[i][0])
                         result = comparisonSyntax(lexeme, h, i)
                         if result is not None:
                             success = 0

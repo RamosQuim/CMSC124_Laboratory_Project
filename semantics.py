@@ -61,9 +61,9 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
 
         while arithmetic_index < len(lexeme) and valid_checker == 0:
             #THIS IS FOR CHECKING IF MAY KATABI BA SIYA OR WALA NA OPERATION
-            print(f"current lexeme sa arithemtic: {lexeme}")
-            print(f"currently pointed to: {lexeme[arithmetic_index][0]}")
-            print(f"varidents: {varidents}")
+            # print(f"current lexeme sa arithemtic: {lexeme}")
+            # print(f"currently pointed to: {lexeme[arithmetic_index][0]}")
+            # print(f"varidents: {varidents}")
             # OPERATOR OPERAND1 OPERAND2
             if lexeme[arithmetic_index][0] in arithmetic:
                 #check 1ST OPERAND POSITION
@@ -71,12 +71,13 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                     #check THE 2ND OPERAND POSITION
                     if lexeme[arithmetic_index+3][0] not in arithmetic:
                         if lexeme[arithmetic_index][0] == 'SUM OF':
+                            # print(lexeme[arithmetic_index+1][1], lexeme[arithmetic_index+1][0], float(varidents[lexeme[arithmetic_index+1][0]]),float(lexeme[arithmetic_index+3][0]) )
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])+float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])+float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 result = float(lexeme[arithmetic_index+1][0])+float(varidents[lexeme[arithmetic_index+3][0]])
                             #THIS ONE IS FOR THE TROOFS
                             elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
@@ -102,11 +103,11 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(lexeme[arithmetic_index+1][0])+float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'DIFF OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])-float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])-float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 result = float(lexeme[arithmetic_index+1][0])-float(varidents[lexeme[arithmetic_index+3][0]])
                             #THIS ONE IS FOR THE TROOFS
                             elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
@@ -132,11 +133,11 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(lexeme[arithmetic_index+1][0]) - float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'PRODUKT OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])*float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])*float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 result = float(lexeme[arithmetic_index+1][0])*float(varidents[lexeme[arithmetic_index+3][0]])
                             #THIS ONE IS FOR THE TROOFS
                             elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
@@ -162,15 +163,15 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(lexeme[arithmetic_index+1][0]) * float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'QUOSHUNT OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):
                                 if math.ceil(float(varidents[lexeme[arithmetic_index+3][0]])) == 0 or varidents[lexeme[arithmetic_index+3][0]] == '0':
                                     undefined_checker = 1
                                     break
                                 else:                                        
                                     result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 if math.ceil(float(varidents[lexeme[arithmetic_index+3][0]])) == 0 or varidents[lexeme[arithmetic_index+3][0]] == '0':
                                     undefined_checker = 1
                                     break
@@ -207,11 +208,11 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                     result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'MOD OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':                                        
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
                                 result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 result = float(lexeme[arithmetic_index+1][0]) % float(varidents[lexeme[arithmetic_index+3][0]])
                             #THIS ONE IS FOR THE TROOFS
                             elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
@@ -237,17 +238,17 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                 result = float(lexeme[arithmetic_index+1][0]) % float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'BIGGR OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):
                                 if float(varidents[lexeme[arithmetic_index+1][0]]) > float(varidents[lexeme[arithmetic_index+3][0]]):
                                     result = float(varidents[lexeme[arithmetic_index+1][0]])
                                 else:
                                     result = float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 if float(varidents[lexeme[arithmetic_index+1][0]]) > float(lexeme[arithmetic_index+3][0]):
                                     result = float(varidents[lexeme[arithmetic_index+1][0]])
                                 else:
                                     result = float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 if float(lexeme[arithmetic_index+1][0]) > float(varidents[lexeme[arithmetic_index+3][0]]):
                                     result = float(lexeme[arithmetic_index+1][0]) 
                                 else:
@@ -291,17 +292,17 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                                     result = float(lexeme[arithmetic_index+3][0])
                         elif lexeme[arithmetic_index][0] == 'SMALLR OF':
                             #this is created to cater the variables!!!
-                            if lexeme[arithmetic_index+1][1] == 'Identifier' and lexeme[arithmetic_index+3][1] == 'Identifier':
+                            if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):
                                 if float(varidents[lexeme[arithmetic_index+1][0]]) < float(varidents[lexeme[arithmetic_index+3][0]]):
                                     result = float(varidents[lexeme[arithmetic_index+1][0]])
                                 else:
                                     result = float(varidents[lexeme[arithmetic_index+3][0]])
-                            elif lexeme[arithmetic_index+1][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
                                 if float(varidents[lexeme[arithmetic_index+1][0]]) < float(lexeme[arithmetic_index+3][0]):
                                     result = float(varidents[lexeme[arithmetic_index+1][0]])
                                 else:
                                     result = float(lexeme[arithmetic_index+3][0])
-                            elif lexeme[arithmetic_index+3][1] == 'Identifier':
+                            elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
                                 if float(lexeme[arithmetic_index+1][0]) < float(varidents[lexeme[arithmetic_index+3][0]]):
                                     result = float(lexeme[arithmetic_index+1][0]) 
                                 else:
@@ -346,8 +347,8 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         arithmetic_index = arithmetic_index + 4
                     else:
                         operation_list.append(lexeme[arithmetic_index][0])
-                        print(f"lexeme[arithmetic_index+1][0]]: {lexeme[arithmetic_index+1][0]}")
-                        print(f"varidents:{varidents}")
+                        # print(f"lexeme[arithmetic_index+1][0]]: {lexeme[arithmetic_index+1][0]}")
+                        # print(f"varidents:{varidents}")
                         if lexeme[arithmetic_index+1][0] in varidents:
                             values_list.append(float(varidents[lexeme[arithmetic_index+1][0]]))
                         else:
@@ -365,7 +366,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
             elif lexeme[arithmetic_index][0] == 'AN':
                 if lexeme[arithmetic_index+1][0] not in arithmetic:
                     if operation_list[-1] == 'SUM OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             result = result + float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
                             if lexeme[arithmetic_index+1][0] == 'WIN':
@@ -375,7 +376,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         else:
                             result = result + float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'DIFF OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             result = result - float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
                             if lexeme[arithmetic_index+1][0] == 'WIN':
@@ -385,7 +386,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         else:
                             result = result - float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'PRODUKT OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             result = result * float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
                             if lexeme[arithmetic_index+1][0] == 'WIN':
@@ -395,7 +396,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         else:
                             result = result * float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'QUOSHUNT OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             #check if 0 ba siya 
                             if math.ceil(float(varidents[arithmetic_index+1][0])) == 0 or varidents[arithmetic_index+1][0] == "0":
                                 undefined_checker = 1
@@ -411,7 +412,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         else:
                             result = result / float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'MOD OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             result = result % float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
                             if lexeme[arithmetic_index+1][0] == 'WIN':
@@ -421,7 +422,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         else:
                             result = result % float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'BIGGR OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             if result < float(varidents[lexeme[arithmetic_index+1][0]]):
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
@@ -435,7 +436,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                             if result < float(lexeme[arithmetic_index+1][0]):
                                 result = float(lexeme[arithmetic_index+1][0])
                     elif operation_list[-1] == 'SMALLR OF':
-                        if lexeme[arithmetic_index+1][1] == "Identifier":
+                        if lexeme[arithmetic_index+1][1] == "Identifier" or lexeme[arithmetic_index+1][1] == "Variable Identifier":
                             if result > float(varidents[lexeme[arithmetic_index+1][0]]):  
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])
                         elif lexeme[arithmetic_index+1][1] == "TROOF Literal":
@@ -769,7 +770,7 @@ def getExplicitTypecast(text):
 def getVaridents(text):
     if syntax.syntax(text) == '>> No syntax errors.':
         # print("pasok", modified_varidents)
-        semantics(text)
+        # semantics(text)
 
         return modified_varidents
     return 0
@@ -788,6 +789,7 @@ def semantics(text):
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     comparison = ['BOTH SAEM', 'DIFFRINT']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    outsideWazzup = 0
     # print(varidents)
     undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
     noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
@@ -841,10 +843,12 @@ def semantics(text):
                 #         semanticsResult += f'WIN\n'
                 #     else:
                 #         semanticsResult += f'FAIL\n'
-                
-
-                
+                if lexeme[i][0] == 'BUHBYE':
+                    outsideWazzup = 1
+                    break
                 if lexeme[i][0] == 'I HAS A':
+                    if outsideWazzup == 1:
+                        varidents[lexeme[i+1][0]] = lexeme[i+3][0]
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
                 if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
@@ -1177,7 +1181,8 @@ def semantics(text):
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
                     modified_varidents[lexeme[i+1][0]] = str(input_value)
-                    break
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i+1][0]} ITZ {input_value}', 1)
+                    return [f'{input_value}\n', text]
                     
                 #R
                 elif lexeme[i][0] == 'R':
@@ -1414,7 +1419,7 @@ def semantics(text):
                                     # print(f"temp_index: {temp_index}")
                                     temp.append(lexeme[temp_index])
                                     temp_index+=1
-                            temp_result += str(fin_boolean_expression(temp))
+                            temp_result += str(booleanAnalyzer(temp, 0))
                             visible_index = temp_index
                             # print(f"temp in booleans:{temp}")
                     print(f"undefined_error sa labas:{undefined_error}")
