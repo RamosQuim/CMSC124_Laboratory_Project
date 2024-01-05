@@ -4,7 +4,8 @@ import for_input
 import math 
 # import ui 
 
-
+undefined_error = 0
+noob_error = 0
 #this part is for the semantics of the arithmetic operations (SUM OF, DIFF OF, ETC.)
 def arithmeticAnalyzer(varidents, arithmetic,lexeme): 
     # print(f'ARITHMETIC ANALYZER LEXEME: {lexeme}')           
@@ -28,10 +29,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         try:
                             float_val = float(varidents[lexeme[remover_index][0]])
                             int_value = int(float_val)
-                            print(f"float_val:{float_val}")
-                            print(f"int_value: {int_value}")
                             if float_val != int_value:
-                                print('equal daw')
                                 is_float = True
                         except ValueError:
                             #end na!
@@ -48,7 +46,6 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                     if float_value != int_value:
                         is_float = True
             remover_index = remover_index + 1
-        # print(lexeme)
         arithmetic_index = 0
         operation_list = []
         values_list = []
@@ -58,7 +55,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
 
         #if mag 1 ang valid_checker ay di na siya papasok sa while loop!! 
         if valid_checker == 1:
-            result = f"\n>> SyntaxError near <{lexeme[arithmetic_index][0]}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
+            result = "NOOBERROR"
             return result 
 
 
@@ -494,7 +491,7 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
 
         #check if may undefined result
         if undefined_checker == 1:
-            result = "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
+            result = "UNDEFINEDERROR"
             return result
         #proceed to checking if float or int
         if is_float == False :
@@ -782,6 +779,8 @@ def semantics(text):
     semanticsResult = ''
     global varidents
     global explicit_typecast
+    global undefined_error
+    global noob_error
     explicit_typecast.clear()
     modified_varidents.clear()
     varidents = syntax.getVaridents(text)
@@ -790,9 +789,18 @@ def semantics(text):
     comparison = ['BOTH SAEM', 'DIFFRINT']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
     # print(varidents)
-    
+    undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
+    noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
+    #undefined_error = 0
+
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
+        
+        if undefined_error == 1 or noob_error:
+            undefined_error = 0
+            noob_error = 0
+            return [None,'']
+        
         if lexeme is not None:
             # print(f"lexeme: {lexeme}")
             if ['BTW', 'Comment Delimiter'] in lexeme:
@@ -801,6 +809,8 @@ def semantics(text):
             
             # print(f"len(lexeme): {len(lexeme)}")
             for i in range(0, len(lexeme)):
+                print(f"undefined_error: {undefined_error}")
+                
                 # if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
                 #     if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
                 #         semanticsResult += f'WIN\n'
@@ -831,6 +841,9 @@ def semantics(text):
                 #         semanticsResult += f'WIN\n'
                 #     else:
                 #         semanticsResult += f'FAIL\n'
+                
+
+                
                 if lexeme[i][0] == 'I HAS A':
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
@@ -1143,8 +1156,20 @@ def semantics(text):
                 #THIS PART IS FOR THE COMPUTATIONS!!
                 elif lexeme[i][0] in arithmetic:
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    return [str(arithmeticAnalyzer(varidents,arithmetic,lexeme)), text]
-                    break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
+                    arithmeticresult = str(arithmeticAnalyzer(varidents,arithmetic,lexeme))
+                    print(f"arithmetic result:{arithmeticresult}")
+                    if arithmeticresult == "NOOBERROR":
+                        temp_result += noob_error_prompt
+                        noob_error = 1
+                        break 
+                    if arithmeticresult == "UNDEFINEDERROR":
+                        temp_result += undefined_error_prompt
+                        undefined_error = 1
+                        print("UNDEFINEDERROR1")
+                        break
+                    else:
+                        return [arithmeticresult, text]
+                        break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
                 elif lexeme[i][0] == 'GIMMEH':
@@ -1231,12 +1256,22 @@ def semantics(text):
                                 if lexeme[i-1][0] == j:
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     result = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:])
-                                    print(result)
-                                    if len(result) != 0:
-                                        varidents[j] = result
-                                        modified_varidents[lexeme[i-1][0]] = str(result)
+                                    print(f"result in arithmetic:{result}")
+                                    if result == "NOOBERROR":
+                                        temp_result += noob_error_prompt
+                                        noob_error = 1
                                         break
-                                    break
+                                    elif result == 'UNDEFINEDERROR':
+                                        temp_result += undefined_error_prompt
+                                        undefined_error = 1
+                                        print("UNDEFINEDERROR2")
+                                        break
+                                    else:
+                                        if len(result) != 0:
+                                            varidents[j] = result
+                                            modified_varidents[lexeme[i-1][0]] = str(result)
+                                            break
+                                        break
                 #MAEK    
                 elif lexeme[i][0] == 'MAEK':
                     if len(lexeme) == 3 or len(lexeme) == 4 :
@@ -1296,6 +1331,7 @@ def semantics(text):
                                             explicit_typecast.append("NOOB")
                 
                 elif lexeme[i][0] == 'VISIBLE':
+                    print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
                     #result = "uwu"
@@ -1333,13 +1369,20 @@ def semantics(text):
                                 if lexeme[temp_index][1] == "Output Delimiter":
                                     break
                                 else:
-                                    # print(f"temp_index: {temp_index}")
                                     temp.append(lexeme[temp_index])
                                     temp_index+=1
-                            # print(f"lexeme na ipapasa:{temp}")
-                            temp_result += str(arithmeticAnalyzer(varidents,arithmetic,temp))
-                            visible_index = temp_index
-                            # print(f"temp result NA SA LOOB: {temp_result}")
+                            arithmeticresult = str(arithmeticAnalyzer(varidents,arithmetic,temp)) 
+                            if arithmeticresult == "NOOBERROR":
+                                temp_result += noob_error_prompt
+                                break 
+                            elif arithmeticresult == "UNDEFINEDERROR":
+                                temp_result += undefined_error_prompt
+                                undefined_error = 1
+                                print("UNDEFINEDERROR3")
+                                break
+                            else:
+                                temp_result += arithmeticresult
+                                visible_index = temp_index
                         #COMPARISON
                         elif lexeme[visible_index][0] in comparison:
                             #kunin ang lexeme until +
@@ -1374,6 +1417,7 @@ def semantics(text):
                             temp_result += str(fin_boolean_expression(temp))
                             visible_index = temp_index
                             # print(f"temp in booleans:{temp}")
+                    print(f"undefined_error sa labas:{undefined_error}")
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                     return [f"{temp_result}\n", text]
                     break
