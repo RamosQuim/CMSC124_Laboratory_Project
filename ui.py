@@ -18,7 +18,7 @@ input_user = ""
 # this will readd the file and store the content in textEditor
 def filename():
     filetypes = (
-        ('text files', '*.txt'),
+        ('lol files', '*.lol'),
     )
 
 
