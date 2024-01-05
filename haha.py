@@ -442,3 +442,263 @@ def main():
 #                             symbol_table.append(arr)
 #                         else:
 #                             break
+
+'''
+def arithmeticOperands(lexeme):
+    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
+    result = 0
+    arithmetic_index = 0
+    if lexeme[arithmetic_index][0] == 'SUM OF':
+        # print(lexeme[arithmetic_index+1][1], lexeme[arithmetic_index+1][0], float(varidents[lexeme[arithmetic_index+1][0]]),float(lexeme[arithmetic_index+3][0]) )
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
+            result = float(varidents[lexeme[arithmetic_index+1][0]])+float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            result = float(varidents[lexeme[arithmetic_index+1][0]])+float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            result = float(lexeme[arithmetic_index+1][0])+float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)+float(1)
+            elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(1)+float(0)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(0)+float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)+float(0)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                result = float(1)+float(lexeme[arithmetic_index+3][0])
+            else:
+                result = float(0)+float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                result =float(lexeme[arithmetic_index+1][0])+ float(1)
+            else:
+                result = float(lexeme[arithmetic_index+1][0])+float(0)
+        else:
+            result = float(lexeme[arithmetic_index+1][0])+float(lexeme[arithmetic_index+3][0])
+    elif lexeme[arithmetic_index][0] == 'DIFF OF':
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
+            result = float(varidents[lexeme[arithmetic_index+1][0]])-float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            result = float(varidents[lexeme[arithmetic_index+1][0]])-float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            result = float(lexeme[arithmetic_index+1][0])-float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)-float(1)
+            elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(1)-float(0)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(0)-float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)-float(0)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                result = float(1)-float(lexeme[arithmetic_index+3][0])
+            else:
+                result = float(0)-float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                result =float(lexeme[arithmetic_index+1][0])-float(1)
+            else:
+                result = float(lexeme[arithmetic_index+1][0])-float(0)
+        else:
+            result = float(lexeme[arithmetic_index+1][0]) - float(lexeme[arithmetic_index+3][0])
+    elif lexeme[arithmetic_index][0] == 'PRODUKT OF':
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
+            result = float(varidents[lexeme[arithmetic_index+1][0]])*float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            result = float(varidents[lexeme[arithmetic_index+1][0]])*float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            result = float(lexeme[arithmetic_index+1][0])*float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)*float(1)
+            elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(1)*float(0)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(0)*float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)*float(0)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                result = float(1)*float(lexeme[arithmetic_index+3][0])
+            else:
+                result = float(0)*float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                result =float(lexeme[arithmetic_index+1][0])*float(1)
+            else:
+                result = float(lexeme[arithmetic_index+1][0])*float(0)
+        else:
+            result = float(lexeme[arithmetic_index+1][0]) * float(lexeme[arithmetic_index+3][0])
+    elif lexeme[arithmetic_index][0] == 'QUOSHUNT OF':
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):
+            result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            result = float(varidents[lexeme[arithmetic_index+1][0]]) / float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            result = float(lexeme[arithmetic_index+1][0]) / float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)/float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(0)/float(1)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                result = float(1)/float(lexeme[arithmetic_index+3][0])
+            else:
+                result = float(0)/float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                result =float(lexeme[arithmetic_index+1][0])/float(1)
+        else:
+            result = float(lexeme[arithmetic_index+1][0]) / float(lexeme[arithmetic_index+3][0])
+    elif lexeme[arithmetic_index][0] == 'MOD OF':
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
+            result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            result = float(varidents[lexeme[arithmetic_index+1][0]]) % float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            result = float(lexeme[arithmetic_index+1][0]) % float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)%float(1)
+            elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(1)%float(0)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(0)%float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)%float(0)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                result = float(1)%float(lexeme[arithmetic_index+3][0])
+            else:
+                result = float(0)%float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                result =float(lexeme[arithmetic_index+1][0])%float(1)
+            else:
+                result = float(lexeme[arithmetic_index+1][0])%float(0)
+        else:
+            result = float(lexeme[arithmetic_index+1][0]) % float(lexeme[arithmetic_index+3][0])
+    elif lexeme[arithmetic_index][0] == 'BIGGR OF':
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):
+            if float(varidents[lexeme[arithmetic_index+1][0]]) > float(varidents[lexeme[arithmetic_index+3][0]]):
+                result = float(varidents[lexeme[arithmetic_index+1][0]])
+            else:
+                result = float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            if float(varidents[lexeme[arithmetic_index+1][0]]) > float(lexeme[arithmetic_index+3][0]):
+                result = float(varidents[lexeme[arithmetic_index+1][0]])
+            else:
+                result = float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            if float(lexeme[arithmetic_index+1][0]) > float(varidents[lexeme[arithmetic_index+3][0]]):
+                result = float(lexeme[arithmetic_index+1][0]) 
+            else:
+                result = float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)
+            elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                if  float(1) > float(lexeme[arithmetic_index+3][0]):
+                    result = float(1)
+                else: 
+                    result = float(lexeme[arithmetic_index+3][0])
+            else:
+                if  float(0) > float(lexeme[arithmetic_index+3][0]):
+                    result = float(0)
+                else: 
+                    result = float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                if float(lexeme[arithmetic_index+1][0]) < float(1):
+                    result = float(1)
+                else:
+                    result = float(lexeme[arithmetic_index+1][0]) 
+            else:
+                if float(lexeme[arithmetic_index+1][0]) < float(0):
+                    result = float(0)
+                else:
+                    result = float(lexeme[arithmetic_index+1][0])
+        else:
+            if float(lexeme[arithmetic_index+1][0]) > float(lexeme[arithmetic_index+3][0]):
+                result = float(lexeme[arithmetic_index+1][0])
+            else:
+                result = float(lexeme[arithmetic_index+3][0])
+    elif lexeme[arithmetic_index][0] == 'SMALLR OF':
+        #this is created to cater the variables!!!
+        if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):
+            if float(varidents[lexeme[arithmetic_index+1][0]]) < float(varidents[lexeme[arithmetic_index+3][0]]):
+                result = float(varidents[lexeme[arithmetic_index+1][0]])
+            else:
+                result = float(varidents[lexeme[arithmetic_index+3][0]])
+        elif lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier':
+            if float(varidents[lexeme[arithmetic_index+1][0]]) < float(lexeme[arithmetic_index+3][0]):
+                result = float(varidents[lexeme[arithmetic_index+1][0]])
+            else:
+                result = float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier':
+            if float(lexeme[arithmetic_index+1][0]) < float(varidents[lexeme[arithmetic_index+3][0]]):
+                result = float(lexeme[arithmetic_index+1][0]) 
+            else:
+                result = float(varidents[lexeme[arithmetic_index+3][0]])
+        #THIS ONE IS FOR THE TROOFS
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal' and lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(1)
+            elif lexeme[arithmetic_index+1][0] == 'WIN' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'WIN':
+                result = float(0)
+            elif lexeme[arithmetic_index+1][0] == 'FAIL' and lexeme[arithmetic_index+3][0] == 'FAIL':
+                result = float(0)
+        elif lexeme[arithmetic_index+1][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+1][0] == 'WIN':
+                if  float(1) < float(lexeme[arithmetic_index+3][0]):
+                    result = float(1)
+                else: 
+                    result = float(lexeme[arithmetic_index+3][0])
+            else:
+                if  float(0) < float(lexeme[arithmetic_index+3][0]):
+                    result = float(0)
+                else: 
+                    result = float(lexeme[arithmetic_index+3][0])
+        elif lexeme[arithmetic_index+3][1] == 'TROOF Literal':
+            if lexeme[arithmetic_index+3][0] == 'WIN':
+                if float(lexeme[arithmetic_index+1][0]) > float(1):
+                    result = float(1)
+                else:
+                    result = float(lexeme[arithmetic_index+1][0]) 
+            else:
+                if float(lexeme[arithmetic_index+1][0]) > float(0):
+                    result = float(0)
+                else:
+                    result = float(lexeme[arithmetic_index+1][0])
+        else:
+            if float(lexeme[arithmetic_index+1][0]) < float(lexeme[arithmetic_index+3][0]):
+                result = float(lexeme[arithmetic_index+1][0]) 
+            else:
+                result = float(lexeme[arithmetic_index+3][0])
+'''
