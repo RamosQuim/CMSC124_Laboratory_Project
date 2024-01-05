@@ -1058,7 +1058,7 @@ def getVaridents(text):
     if syntax.syntax(text) == '>> No syntax errors.':
         # print("pasok", modified_varidents)
         semantics(text)
-
+        print(modified_varidents)
         return modified_varidents
     return 0
 
@@ -1073,7 +1073,7 @@ def getVisibleValue(text):
 def semantics(text):
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     semanticsResult = ''
-    global modified_varidents
+    # global modified_varidents
     global varidents
     global explicit_typecast
     global undefined_error
@@ -1113,36 +1113,7 @@ def semantics(text):
             # print(f"len(lexeme): {len(lexeme)}")
             for i in range(0, len(lexeme)):
                                 
-                # if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
-                #     if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
-                #         semanticsResult += f'WIN\n'
-                #     else:
-                #         semanticsResult += f'FAIL\n'
-                # elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) == 4:
-                #     if float(lexeme[i+1][0]) != float(lexeme[i+3][0]):
-                #         semanticsResult += f'WIN\n'
-                #     else:
-                #         semanticsResult += f'FAIL\n'
-                # elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
-                #     if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
-                #         semanticsResult += f'WIN\n'
-                #     else:
-                #         semanticsResult += f'FAIL\n'
-                # elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) >= 4 and lexeme[3][0] == 'BIGGR OF':
-                #     if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
-                #         semanticsResult += f'WIN\n'
-                #     else:
-                #         semanticsResult += f'FAIL\n'
-                # elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
-                #     if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
-                #         semanticsResult += f'WIN\n'
-                #     else:
-                #         semanticsResult += f'FAIL\n'
-                # elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'BIGGR OF':
-                #     if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
-                #         semanticsResult += f'WIN\n'
-                #     else:
-                #         semanticsResult += f'FAIL\n'
+                
                 if lexeme[i][0] == 'BUHBYE':
                     outsideWazzup = 1
                     break
@@ -1217,7 +1188,7 @@ def semantics(text):
                                                 # print(k, varidents[k][0])
                                                 varidents[lexeme[i-1][0]] = varidents[k]
                                                 modified_varidents[lexeme[i-1][0]] = varidents[k]
-                                                break
+                                                
                                     else:
                                         varidents[j] = lexeme[i+1][0]
                                         # print(varidents)
@@ -1240,8 +1211,7 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
-                                        break
-                                    break
+                                        
                         elif lexeme[i+1][0] in booleans:
                             # fin_boolean_expression(lexeme) booleanAnalyzer(thisLexeme, isInfinite)
                             for j in varidents:
@@ -1252,8 +1222,7 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
-                                        break
-                                    break
+                                        
                         elif lexeme[i+1][0] == 'ANY OF':
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
@@ -1263,8 +1232,7 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
-                                        break
-                                    break
+                                        
                         elif lexeme[i+1][0] == 'SMOOSH':
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
@@ -1276,8 +1244,7 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
-                                        break
-                                    break
+                                        
 
                         elif lexeme[i+1][0] == 'ALL OF':
                             for j in varidents:
@@ -1288,8 +1255,7 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
-                                        break
-                                    break
+                                        
                         elif lexeme[i+1][0] in arithmetic:
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
@@ -1299,18 +1265,17 @@ def semantics(text):
                                     if result == "NOOBERROR":
                                         temp_result += noob_error_prompt
                                         noob_error = 1
-                                        break
                                     elif result == 'UNDEFINEDERROR':
                                         temp_result += undefined_error_prompt
                                         undefined_error = 1
                                         # print("UNDEFINEDERROR2")
-                                        break
+                                        
                                     else:
                                         if len(result) != 0:
                                             varidents[j] = result
                                             modified_varidents[lexeme[i-1][0]] = str(result)
-                                            break
-                                        break
+                                            
+                    print(modified_varidents)
                 #MAEK    
                 elif lexeme[i][0] == 'MAEK':
                     if len(lexeme) == 3 or len(lexeme) == 4 :

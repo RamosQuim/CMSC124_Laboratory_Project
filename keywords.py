@@ -452,9 +452,9 @@ def symbolTable(str1):
                 
                 vis_val = semantics.getVisibleValue(str1)
                 print(vis_val)
-                if len(vis_val) != 0:
-                    for i in vis_val:
-                        it.append(str(i))
+                # if len(vis_val) != 0:
+                #     for i in vis_val:
+                #         it.append(str(i))
                 # dis = semantics.getVisibleValue(str1)
                 # print('\n\n',dis)
                 

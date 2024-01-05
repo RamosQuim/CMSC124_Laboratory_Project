@@ -158,10 +158,12 @@ def arithmeticSyntax(h,arithmetic, lexeme):
         result.append(success)
         result.append(tempResult)
         return result
-
-#parameters: lexeme - ang ipapasa here is from the lexeme with index kung saan nagstart 'yung both saem of diffrint up 
-    #hanggang sa end ng format lang ng both saem or diffrint so either lexeme[i:i+4] or lexeme[i:i+7] kapag may biggr of | smallr of
+    
 def comparisonSyntax(lexeme, h, i):
+        inf_bool = ['ANY OF', 'ALL OF']
+        booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+        arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
+        # print(varidents)
         # comparison = ["BOTH SAEM", "DIFFRINT"]
         comparison_index = 0
         check = 0
@@ -169,19 +171,20 @@ def comparisonSyntax(lexeme, h, i):
         # print(len(lexeme))
     # while comparison_index < len(lexeme):
     #     print(varidents)
-        if isfloat(lexeme[comparison_index+1][0]) == False:
-            if lexeme[comparison_index+1][0] not in varidents:
-                success =0
-                check = 1
-                return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
-            else:
-                # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
-                if isfloat(varidents[lexeme[comparison_index+1][0]]) == False:
-                    success =0
-                    check = 1
-                    return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
+        
 
         if len(lexeme) == 4:
+            if isfloat(lexeme[comparison_index+1][0]) == False:
+                if lexeme[comparison_index+1][0] not in varidents:
+                    success =0
+                    check = 1
+                    return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
+                else:
+                # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
+                    if isfloat(varidents[lexeme[comparison_index+1][0]]) == False and varidents[lexeme[comparison_index+1][0]] != 'NOOB':
+                        success =0
+                        check = 1
+                        return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
             if lexeme[comparison_index+2][0] != 'AN':
                 success =0
                 check = 1
@@ -193,42 +196,101 @@ def comparisonSyntax(lexeme, h, i):
                     return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
                 else:
                 # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
-                    if isfloat(varidents[lexeme[comparison_index+3][0]]) == False:
+                    if isfloat(varidents[lexeme[comparison_index+3][0]]) == False and varidents[lexeme[comparison_index+3][0]] != 'NOOB':
                         success =0
                         check = 1
                         return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
-        elif len(lexeme) == 7:
-            if lexeme[comparison_index+2][0] != 'AN':
-                success =0
-                check = 1
-                return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-            elif lexeme[comparison_index+3][0] != 'SMALLR OF' and lexeme[comparison_index+3][0] != 'BIGGR OF':
-                success =0
-                check = 1
-                return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+2][0]}>: \n\t{lexeme[comparison_index+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
-            elif isfloat(lexeme[comparison_index+4][0]) == False and lexeme[comparison_index+4][0] != lexeme[comparison_index+1][0]:
-                success =0
-                check = 1
-                return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} SMALLR OF and BIGGR OF only accepts NUMBR or NUMBAR type')
-            elif lexeme[comparison_index+5][0] != 'AN':
-                success =0
-                check = 1
-                return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
-            elif isfloat(lexeme[comparison_index+6][0]) == False:
-                if lexeme[comparison_index+6][0] not in varidents:
+        else:
+            if lexeme[comparison_index+1][0] in arithmetic:
+                index = comparison_index+1
+                num_operations = 1
+                for i in range(2, len(lexeme)):
+                    if lexeme[i][0] in arithmetic:
+                        num_operations += 1
+                        index = i
+                num_AN = num_operations * 2 + 3
+                result = arithmeticSyntax(h,arithmetic, lexeme[comparison_index+1:num_AN])
+                if result[0] == 0:
+                    
+                    success = result[0]
+                    return result[1]
+                
+                
+            elif isfloat(lexeme[comparison_index+1][0]) == False:
+                if lexeme[comparison_index+1][0] not in varidents:
                     success =0
                     check = 1
                     return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
                 else:
                 # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
-                    if isfloat(varidents[lexeme[comparison_index+6][0]]) == False:
+                    if isfloat(varidents[lexeme[comparison_index+1][0]]) == False and varidents[lexeme[comparison_index+1][0]] != 'NOOB':
                         success =0
                         check = 1
                         return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
-        else:
-            success =   0
-            check = 1
-            return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[comparison_index][0]}<value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
+            elif lexeme[comparison_index+2][0] != 'AN':
+                success =0
+                check = 1
+                return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+            elif lexeme[comparison_index+3][0] in arithmetic and lexeme[comparison_index+3][0] !='BIGGR OF' and lexeme[comparison_index+3][0] != 'SMALLR OF':
+
+                            # print(lexeme[comparison_index+3][0])
+                           
+                            index = comparison_index+1
+                            num_operations = 1
+                            for i in range(2, len(lexeme)):
+                                if lexeme[i][0] in arithmetic:
+                                    num_operations += 1
+                                    index = i
+                            num_AN = num_operations * 2 + 3
+                            # print(lexeme[comparison_index+3:index+4])
+                            result = arithmeticSyntax(h,arithmetic, lexeme[comparison_index+3:num_AN])
+                            if result[0] ==0:
+                    
+                                success = result[0]
+                                return result[1]
+                    
+            elif lexeme[comparison_index+3][0] != 'SMALLR OF' and lexeme[comparison_index+3][0] != 'BIGGR OF':
+                success =0
+                check = 1
+                return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+2][0]}>: \n\t{lexeme[comparison_index+3][0]} is recognized incorrectly. Perhaps you need a 'SMALLR OF' or 'BIGGR OF' keyword?")
+            elif lexeme[comparison_index+3][0] == 'SMALLR OF' and lexeme[comparison_index+3][0] == 'BIGGR OF':
+                if isfloat(lexeme[comparison_index+4][0]) == False: 
+                        if lexeme[comparison_index+4][0] != lexeme[comparison_index+1][0]:
+                            success =0
+                            check = 1
+                            return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+4][0]}>: \n\t{lexeme[comparison_index+4][0]} and {lexeme[comparison_index+4][0]} should be same")
+                elif lexeme[comparison_index+5][0] != 'AN':
+                        success =0
+                        check = 1
+                        return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index+4][0]}>: \n\t{lexeme[i+5][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
+                elif isfloat(lexeme[comparison_index+6][0]) == False:
+                        if lexeme[comparison_index+6][0] not in varidents:
+                            success =0
+                            check = 1
+                            return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type')
+                        else:
+                # print(isfloat(varidents[lexeme[comparison_index+1][0]]))
+                            if isfloat(varidents[lexeme[comparison_index+6][0]]) == False and varidents[lexeme[comparison_index+6][0]] != 'NOOB':
+                                success =0
+                                check = 1
+                                return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index][0]} only accepts NUMBR or NUMBAR type variable')
+            # elif lexeme[comparison_index+3][0] in arithmetic:
+            #     index = comparison_index+1
+            #     num_operations = 1
+            #     for i in range(2, len(lexeme)):
+            #         if lexeme[i][0] in arithmetic:
+            #             num_operations += 1
+            #             index = i
+            #     num_AN = num_operations + 4
+            #     result = arithmeticSyntax(h,arithmetic, lexeme[comparison_index+1:index+4])
+            #     if result:
+                    
+            #         success = result[0]
+            #         return result[1]
+            else:
+                success =   0
+                check = 1
+                return(f'\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\t{lexeme[comparison_index][0]}<value> [[AN BIGGR OF|SMALLR OF] <value>] AN <value>')
 
         if check == 0:
             return None
