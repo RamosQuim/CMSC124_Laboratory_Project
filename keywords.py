@@ -346,10 +346,11 @@ def symbolTable(str1):
         arr.append('IT')   
         arr.append('NOOB')
         symbol_table.insert(0, arr) 
+
     lexeme = lex(str1)
     counter_visible = 0
     for a in range(0, len(lexeme)):
-        if len(lexeme) > 1: 
+        if len(lexeme) > 1 and a<len(lexeme): 
         #  print(lexeme[a][0])
             if lexeme[a][1].rstrip().lstrip() == 'Variable Identifier':
             # print(lexeme[a-1][0], lexeme[a][0],lexeme[a+1][0], lexeme[a+2][0])
@@ -447,42 +448,53 @@ def symbolTable(str1):
                     elif lexeme[a+2][0] =='YARN':
                         yrn(lexeme[a][0])
             elif lexeme[a][0] == 'VISIBLE':
+                # print(lexeme)
+                
+                vis_val = semantics.getVisibleValue(str1)
+                print(vis_val)
+                if len(vis_val) != 0:
+                    for i in vis_val:
+                        it.append(str(i))
+                # dis = semantics.getVisibleValue(str1)
+                # print('\n\n',dis)
+                
                 # print('pasok', len(lexeme), lexeme[a])
-                if counter_visible == 0:
+                # if counter_visible == 0:
                     # print('yon')
-                    matches = re.finditer(r'\b'+lexeme[a][0]+r'\b', str1)
-                    value = []
-                    for match in matches:
-                        last_occurrence_startIndex = match.start()
-                        end_index = match.end()
-                        whole = str1[end_index+1:]
-                        value = re.match(r'\"?.*\"?[^\n]*',whole)[0]
-                        break
-                    # value = value.split(' + ')
-                    # print("value",value)
-                    new = value.split("+")
+                    # matches = re.finditer(r'\b'+lexeme[a][0]+r'\b', str1)
+                    # value = []
+                    # for match in matches:
+                    #     last_occurrence_startIndex = match.start()
+                    #     end_index = match.end()
+                    #     whole = str1[end_index+1:]
+                        
+                    #     # break
+                    # value = re.match(r'\"?.*\"?[^\n]*',whole)[0]
+                    # # value = value.split(' + ')
+                    # # print("value",value)
+                    # new = value.split("+")
                     # print("new",new)
 
-                    # print("\n\n")
-                    temp = []
-                    for c in new:
-                        c = c.rstrip().lstrip()
-                        # print(c)
-                        c = c.replace('\r','')
-                        if c[0]== '"' and c[-1]=='"':
-                            c = c.replace('"','')
-                            temp.append(c)
-                        elif c == 'IT':
-                            temp.append(symbol_table[0][1])
-                        else:
-                            for j in symbol_table:
-                                if j[0] == c:
-                                    c = 1
-                                    temp.append(j[1])
-                                    break
+                    # # print("\n\n")
+                    # temp = []
+                    # for c in new:
+                    #     c = c.rstrip().lstrip()
+                    #     # print(c)
+                    #     c = c.replace('\r','')
+                    #     if c[0]== '"' and c[-1]=='"':
+                    #         c = c.replace('"','')
+                    #         temp.append(c)
+                    #     elif c == 'IT':
+                    #         temp.append(symbol_table[0][1])
+                    #     else:
+                    #         for j in symbol_table:
+                    #             if j[0] == c:
+                    #                 c = 1
+                    #                 temp.append(j[1])
+                    #                 break
                     
-                    it.append(temp)
-                    counter_visible = 1
+                    # it.append(temp)
+                    # counter_visible = 1
 
 
 
@@ -571,7 +583,7 @@ def symbolTable(str1):
                     j += " "
         # symbol_table.insert(0, ['IT', j])
         symbol_table[0][1] = j
-        # it.clear()
+        it.clear()
     
     semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
     if semantics_varidents != 0:
