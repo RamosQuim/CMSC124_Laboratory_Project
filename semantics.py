@@ -758,7 +758,6 @@ def infiniteBooleanAnalyzer(lexeme, keyword):
 modified_varidents = {}
 explicit_typecast = []
 booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
-booleans_checker = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT', 'ALL OF', 'ANY OF']
 literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
 varidents = {}
 
@@ -789,6 +788,7 @@ def semantics(text):
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     comparison = ['BOTH SAEM', 'DIFFRINT']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    infinitebooleans = ['ANY OF', "ALL OF"]
     outsideWazzup = 0
     # print(varidents)
     undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
@@ -1364,12 +1364,18 @@ def semantics(text):
                         elif lexeme[visible_index][1] == 'TROOF Literal':
                             temp_result += str(lexeme[visible_index][0])
                             visible_index+=1
+                        #THIS IS FOR GETTING THE NUMBR
+                        elif lexeme[visible_index][1] == 'NUMBAR Literal':
+                            temp_result += str(lexeme[visible_index][0])
+                            visible_index+=1
+                        #FOR GETTING THE NUMBAR
+                        elif lexeme[visible_index][1] == 'NUMBR Literal':
+                            temp_result += str(lexeme[visible_index][0])
+                            visible_index+=1
                         elif lexeme[visible_index][0] in arithmetic:
                             #kunin ang lexeme until +
                             temp = []
                             temp_index = visible_index
-                            # print(f"current lexeme: {lexeme}")
-                            # print(f"temp_index: {temp_index}")
                             while temp_index < len(lexeme):
                                 if lexeme[temp_index][1] == "Output Delimiter":
                                     break
@@ -1388,7 +1394,7 @@ def semantics(text):
                             else:
                                 temp_result += arithmeticresult
                                 visible_index = temp_index
-                        #COMPARISON
+                        #COMPARISON 
                         elif lexeme[visible_index][0] in comparison:
                             #kunin ang lexeme until +
                             temp = []
@@ -1406,23 +1412,31 @@ def semantics(text):
                             visible_index = temp_index
 
                         #BOOLEANS
-                        elif lexeme[visible_index][0] in booleans_checker:
+                        elif lexeme[visible_index][0] in booleans:
                             #kunin ang lexeme until +
                             temp = []
                             temp_index = visible_index
-                            # print(f"current lexeme sa booleans: {lexeme}")
-                            # print(f"temp_index: {temp_index}")
                             while temp_index < len(lexeme):
                                 if lexeme[temp_index][1] == "Output Delimiter":
                                     break
                                 else:
-                                    # print(f"temp_index: {temp_index}")
                                     temp.append(lexeme[temp_index])
                                     temp_index+=1
                             temp_result += str(booleanAnalyzer(temp, 0))
                             visible_index = temp_index
-                            # print(f"temp in booleans:{temp}")
-                    print(f"undefined_error sa labas:{undefined_error}")
+                        #INFINITE BOOLEANS
+                        elif lexeme[visible_index][0] in infinitebooleans:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(infiniteBooleanAnalyzer(temp, lexeme[visible_index][0]))
+                            visible_index = temp_index
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                     return [f"{temp_result}\n", text]
                     break
