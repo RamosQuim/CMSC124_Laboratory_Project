@@ -841,302 +841,293 @@ def semantics(text):
                         varidents[lexeme[i+1][0]] = lexeme[i+3][0]
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
-                if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
-                    one = convertFloat(lexeme[i+1][0])
-                    three = convertFloat(lexeme[i+3][0])
-                    if one == True and three == True:
-                        if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'WIN\n', text]
-                        else:
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'FAIL\n', text]
-                    elif one == False and three == True:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+1][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(value) == float(lexeme[i+3][0]):
+                if lexeme[i][0] == 'BOTH SAEM':
+                    if len(lexeme) == 4:
+                        one = convertFloat(lexeme[i+1][0])
+                        three = convertFloat(lexeme[i+3][0])
+                        if one == True and three == True:
+                            if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
                                 text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                 return [f'WIN\n', text]
                             else:
                                 text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                 return [f'FAIL\n', text]
-                    elif one == True and three == False:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+3][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(lexeme[i+1][0]) == float(value):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == False and three == False:
-                        value = []
-                        for j in varidents:
-                            if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                                value.append(varidents[j])
-                        if len(value) == 2:
-                            if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                if float(value[0]) == float(value[1]):
+                        elif one == False and three == True:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+1][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(value) == float(lexeme[i+3][0]):
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'WIN\n', text]
                                 else:
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'FAIL\n', text]
-                elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) == 4:
-                    one = convertFloat(lexeme[i+1][0])
-                    three = convertFloat(lexeme[i+3][0])
-                    if one == True and three == True:
-                        if float(lexeme[i+1][0]) != float(lexeme[i+3][0]):
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'WIN\n', text]
-                        else:
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'FAIL\n', text]
-                    elif one == False and three == True:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+1][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(value) != float(lexeme[i+3][0]):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == True and three == False:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+3][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(lexeme[i+1][0]) != float(value):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == False and three == False:
-                        value = []
-                        for j in varidents:
-                            if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                                value.append(varidents[j])
-                        if len(value) == 2:
-                            if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                if float(value[0]) != float(value[1]):
-                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                    return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
-            # if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-                    one = convertFloat(lexeme[i+1][0])
-                    three = convertFloat(lexeme[i+6][0])
-                    if one == True and three == True:
-                        if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'WIN\n', text]
-                        else:
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'FAIL\n', text]
-                    elif one == False and three == True:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+1][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(value) >= float(lexeme[i+6][0]):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == True and three == False:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+6][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(lexeme[i+1][0]) >= float(value):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                result = f'FAIL\n'
-                    elif one == False and three == False:
-                        value = []
-                        for j in varidents:
-                            if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                value.append(varidents[j])
-                        if len(value) == 2:
-                            if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                if float(value[0]) >= float(value[1]):
+                        elif one == True and three == False:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+3][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(lexeme[i+1][0]) == float(value):
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'WIN\n', text]
                                 else:
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'FAIL\n', text]
-                elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) >= 4 and lexeme[3][0] == 'BIGGR OF':
-            # if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-                    one = convertFloat(lexeme[i+1][0])
-                    three = convertFloat(lexeme[i+6][0])
-                    if one == True and three == True:
-                        if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'WIN\n', text]
-                        else:
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'FAIL\n', text]
-                    elif one == False and three == True:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+1][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(value) <= float(lexeme[i+6][0]):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == True and three == False:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+6][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(lexeme[i+1][0]) <= float(value):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == False and three == False:
-                        value = []
-                        for j in varidents:
-                            if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                value.append(varidents[j])
-                        if len(value) == 2:
-                            if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                if float(value[0]) <= float(value[1]):
+                        elif one == False and three == False:
+                            value = []
+                            for j in varidents:
+                                if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
+                                    value.append(varidents[j])
+                            if len(value) == 2:
+                                if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                    if float(value[0]) == float(value[1]):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                    elif len(lexeme) == 7: #for SMALLR OF and BIGGR OF
+                        if lexeme[i+3][0] == 'SMALLR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'WIN\n', text]
                                 else:
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'FAIL\n', text]
-                elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
-            # if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-                    one = convertFloat(lexeme[i+1][0])
-                    three = convertFloat(lexeme[i+6][0])
-                    if one == True and three == True:
-                        if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'WIN\n', text]
-                        else:
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'FAIL\n', text]
-                    elif one == False and three == True:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+1][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(value) > float(lexeme[i+6][0]):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                return [f'FAIL\n', text]
-                    elif one == True and three == False:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+6][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(lexeme[i+1][0]) > float(value):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == False and three == False:
-                        value = []
-                        for j in varidents:
-                            if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                value.append(varidents[j])
-                        if len(value) == 2:
-                            if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                if float(value[0]) > float(value[1]):
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) <= float(lexeme[i+6][0]):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) <= float(value):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) <= float(value[1]):
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'WIN\n', text]
+                                        else:
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'FAIL\n', text]
+                        elif lexeme[i+3][0] == 'BIGGR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'WIN\n', text]
                                 else:
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'FAIL\n', text]
-                elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'BIGGR OF':
-            # if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-                    one = convertFloat(lexeme[i+1][0])
-                    three = convertFloat(lexeme[i+6][0])
-                    if one == True and three == True:
-                        if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'WIN\n', text]
-                        else:
-                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                            return [f'FAIL\n', text]
-                    elif one == False and three == True:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+1][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(value) < float(lexeme[i+6][0]):
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) <= float(lexeme[i+6][0]):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) <= float(value):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) <= float(value[1]):
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'WIN\n', text]
+                                        else:
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'FAIL\n', text]
+                #for diffrint
+                elif lexeme[i][0] == 'DIFFRINT':
+                    if len(lexeme) == 4:
+                        one = convertFloat(lexeme[i+1][0])
+                        three = convertFloat(lexeme[i+3][0])
+                        if one == True and three == True:
+                            if float(lexeme[i+1][0]) != float(lexeme[i+3][0]):
                                 text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                 return [f'WIN\n', text]
                             else:
                                 text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                 return [f'FAIL\n', text]
-                    elif one == True and three == False:
-                        value = ""
-                        for j in varidents:
-                            if j == lexeme[i+6][0]:
-                                value = varidents[j]
-                        if convertFloat(value) == True:
-                            if float(lexeme[i+1][0]) < float(value):
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'WIN\n', text]
-                            else:
-                                text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                                return [f'FAIL\n', text]
-                    elif one == False and three == False:
-                        value = []
-                        for j in varidents:
-                            if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                value.append(varidents[j])
-                        if len(value) == 2:
-                            if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                if float(value[0]) < float(value[1]):
+                        elif one == False and three == True:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+1][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(value) != float(lexeme[i+3][0]):
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'WIN\n', text]
                                 else:
                                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                                     return [f'FAIL\n', text]
+                        elif one == True and three == False:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+3][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(lexeme[i+1][0]) != float(value):
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
+                                else:
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
+                        elif one == False and three == False:
+                            value = []
+                            for j in varidents:
+                                if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
+                                    value.append(varidents[j])
+                            if len(value) == 2:
+                                if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                    if float(value[0]) != float(value[1]):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                    elif len(lexeme) == 7: #for SMALLR OF and BIGGR OF
+                        if lexeme[i+3][0] == 'SMALLR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
+                                else:
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) > float(lexeme[i+6][0]):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) > float(value):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) > float(value[1]):
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'WIN\n', text]
+                                        else:
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'FAIL\n', text]
+                        elif lexeme[i+3][0] == 'BIGGR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'WIN\n', text]
+                                else:
+                                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                    return [f'FAIL\n', text]
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) < float(lexeme[i+6][0]):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) < float(value):
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'WIN\n', text]
+                                    else:
+                                        text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                        return [f'FAIL\n', text]
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) < float(value[1]):
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'WIN\n', text]
+                                        else:
+                                            text = text.replace(f'{text.splitlines()[h]}', '', 1)
+                                            return [f'FAIL\n', text]
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
                 elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
@@ -1223,11 +1214,23 @@ def semantics(text):
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         break
                                     break
-                        elif lexeme[i+1][0] == 'ANY OF' or lexeme[i+1][0] == 'ALL OF':
+                        elif lexeme[i+1][0] == 'ANY OF':
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
                                     # result = fin_boolean_expression(lexeme[i+1:])
-                                    result = booleanAnalyzer(lexeme[i+1:], "yes")
+                                    result = infiniteBooleanAnalyzer(lexeme[i+1:], lexeme[i+1][0])
+                                    # print(result)
+                                    if len(result) != 0:
+                                        varidents[j] = result
+                                        modified_varidents[lexeme[i-1][0]] = str(result)
+                                        break
+                                    break
+
+                        elif lexeme[i+1][0] == 'ALL OF':
+                            for j in varidents:
+                                if lexeme[i-1][0] == j:
+                                    # result = fin_boolean_expression(lexeme[i+1:])
+                                    result = infiniteBooleanAnalyzer(lexeme[i+1:], lexeme[i+1][0])
                                     # print(result)
                                     if len(result) != 0:
                                         varidents[j] = result
@@ -1525,258 +1528,451 @@ def fin_boolean_expression(lexeme):
 def comparison_expression(lexeme):
     # print(lexeme, "comparison exp", len(lexeme))
     # len(lexeme)
+    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     result = []
     for i in range(0, len(lexeme)):
-        if lexeme[i][0] == 'BOTH SAEM' and len(lexeme) == 4:
-            one = convertFloat(lexeme[i+1][0])
-            three = convertFloat(lexeme[i+3][0])
-            if one == True and three == True:
-                if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
-                    result = f'WIN\n'
-                else:
-                    result = f'FAIL\n'
-            elif one == False and three == True:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+1][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(value) == float(lexeme[i+3][0]):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == True and three == False:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+3][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(lexeme[i+1][0]) == float(value):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == False and three == False:
-                value = []
-                for j in varidents:
-                    if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                        value.append(varidents[j])
-                if len(value) == 2:
-                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                        if float(value[0]) == float(value[1]):
-                            result = f'WIN\n'
-                        else:
-                            result = f'FAIL\n'
-        elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) == 4:
-            one = convertFloat(lexeme[i+1][0])
-            three = convertFloat(lexeme[i+3][0])
-            if one == True and three == True:
-                if float(lexeme[i+1][0]) != float(lexeme[i+3][0]):
-                    result = f'WIN\n'
-                else:
-                    result = f'FAIL\n'
-            elif one == False and three == True:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+1][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(value) != float(lexeme[i+3][0]):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == True and three == False:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+3][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(lexeme[i+1][0]) != float(value):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == False and three == False:
-                value = []
-                for j in varidents:
-                    if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                        value.append(varidents[j])
-                if len(value) == 2:
-                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                        if float(value[0]) != float(value[1]):
-                            result = f'WIN\n'
-                        else:
-                            result = f'FAIL\n'
-        elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
-            # if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-            one = convertFloat(lexeme[i+1][0])
-            three = convertFloat(lexeme[i+6][0])
-            if one == True and three == True:
-                if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
-                    result = f'WIN\n'
-                else:
-                    result = f'FAIL\n'
-            elif one == False and three == True:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+1][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(value) >= float(lexeme[i+6][0]):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == True and three == False:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+6][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(lexeme[i+1][0]) >= float(value):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == False and three == False:
-                value = []
-                for j in varidents:
-                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                        value.append(varidents[j])
-                if len(value) == 2:
-                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                        if float(value[0]) >= float(value[1]):
-                            result = f'WIN\n'
-                        else:
-                            result = f'FAIL\n'
-        elif lexeme[i][0] == 'BOTH SAEM' and len(lexeme) >= 4 and lexeme[3][0] == 'BIGGR OF':
-            # if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-            one = convertFloat(lexeme[i+1][0])
-            three = convertFloat(lexeme[i+6][0])
-            if one == True and three == True:
-                if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
-                    result = f'WIN\n'
-                else:
-                    result = f'FAIL\n'
-            elif one == False and three == True:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+1][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(value) <= float(lexeme[i+6][0]):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == True and three == False:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+6][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(lexeme[i+1][0]) <= float(value):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == False and three == False:
-                value = []
-                for j in varidents:
-                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                        value.append(varidents[j])
-                if len(value) == 2:
-                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                        if float(value[0]) <= float(value[1]):
-                            result = f'WIN\n'
-                        else:
-                            result = f'FAIL\n'
-        elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'SMALLR OF':
-            # if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-            one = convertFloat(lexeme[i+1][0])
-            three = convertFloat(lexeme[i+6][0])
-            if one == True and three == True:
-                if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
-                    result = f'WIN\n'
-                else:
-                    result = f'FAIL\n'
-            elif one == False and three == True:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+1][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(value) > float(lexeme[i+6][0]):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == True and three == False:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+6][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(lexeme[i+1][0]) > float(value):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == False and three == False:
-                value = []
-                for j in varidents:
-                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                        value.append(varidents[j])
-                if len(value) == 2:
-                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                        if float(value[0]) > float(value[1]):
-                            result = f'WIN\n'
-                        else:
-                            result = f'FAIL\n'
-        elif lexeme[i][0] == 'DIFFRINT' and len(lexeme) > 4 and lexeme[3][0] == 'BIGGR OF':
-            # if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
-            #     result = f'WIN\n'
-            # else:
-            #     result = f'FAIL\n'
-            one = convertFloat(lexeme[i+1][0])
-            three = convertFloat(lexeme[i+6][0])
-            if one == True and three == True:
-                if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
-                    result = f'WIN\n'
-                else:
-                    result = f'FAIL\n'
-            elif one == False and three == True:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+1][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(value) < float(lexeme[i+6][0]):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == True and three == False:
-                value = ""
-                for j in varidents:
-                    if j == lexeme[i+6][0]:
-                        value = varidents[j]
-                if convertFloat(value) == True:
-                    if float(lexeme[i+1][0]) < float(value):
-                        result = f'WIN\n'
-                    else:
-                        result = f'FAIL\n'
-            elif one == False and three == False:
-                value = []
-                for j in varidents:
-                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                        value.append(varidents[j])
-                if len(value) == 2:
-                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                        if float(value[0]) < float(value[1]):
-                            result = f'WIN\n'
-                        else:
-                            result = f'FAIL\n'
+                if lexeme[i][0] == 'BOTH SAEM':
+                    if len(lexeme) == 4:
+                        one = convertFloat(lexeme[i+1][0])
+                        three = convertFloat(lexeme[i+3][0])
+                        if one == True and three == True:
+                            if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
+                                result = 'WIN'
+                                
+                            else:
+                                result = 'FAIL'
+                        elif one == False and three == True:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+1][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(value) == float(lexeme[i+3][0]):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                        elif one == True and three == False:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+3][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(lexeme[i+1][0]) == float(value):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                        elif one == False and three == False:
+                            value = []
+                            for j in varidents:
+                                if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
+                                    value.append(varidents[j])
+                            if len(value) == 2:
+                                if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                    if float(value[0]) == float(value[1]):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                    else: #for SMALLR OF and BIGGR OF
+                        #BOTH SAEM/DIFFRINT x AN y
+
+                        #assuming x is in arithmetic
+                        print(lexeme[i+1][0] )
+                        if lexeme[i+1][0] in arithmetic:
+                            num_operations = 1
+            
+                            index =i+1
+                            # num_operations += 1
+                            for j in range(2, len(lexeme)):
+                                if lexeme[j][0] in arithmetic:
+                                    num_operations += 1
+                                    index = j
+                            num_AN = num_operations * 2 + 3
+
+                            temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:num_AN])
+                            # print(lexeme[index+4+1])
+                            print(temp)
+                            one = convertFloat(temp)
+                            three = convertFloat(lexeme[index+4+1][0])
+                            last_operand = lexeme[index+4+1][0]
+                            if one == True and three == True:
+                                if float(temp) == float(last_operand):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                           
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == last_operand:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(temp) == float(value):
+                                       result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                            break
+                        #assuming y is in arithmetic
+                        # elif lexeme[i+3][0] in arithmetic:
+                        #     num_operations = 1
+            
+                        #     index =i+3
+                        #     for j in range(index, len(lexeme)):
+                        #         if lexeme[j][0] in arithmetic:
+                        #             num_operations += 1
+                        #             index = j
+                        #             num_AN = num_operations + 4
+
+                        #     temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:index+4])
+                        #     # print(lexeme[index+4+1])
+                        #     one = convertFloat(temp)
+                        #     three = convertFloat(lexeme[index+3][0])
+                        #     # last_operand = lexeme[index+4+1][0]
+                        #     if one == True and three == True:
+                        #         if float(lexeme[i+1][0]) == float(temp):
+                        #             result = 'WIN'
+                        #         else:
+                        #             result = 'FAIL'
+                           
+                        #     elif one == False and three == True:
+                        #         value = ""
+                        #         for j in varidents:
+                        #             if j == lexeme[i+1][0]:
+                        #                 value = varidents[j]
+                        #         if convertFloat(value) == True:
+                        #             if float(value) == float(temp):
+                        #                result = 'WIN'
+                        #             else:
+                        #                 result = 'FAIL'
+                        #     print(result)
+                
+                        elif lexeme[i+3][0] == 'SMALLR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) <= float(lexeme[i+6][0]):
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) <= float(value):
+                                       result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) <= float(value[1]):
+                                            result = 'WIN'
+                                        else:
+                                           result = 'FAIL'
+                        elif lexeme[i+3][0] == 'BIGGR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
+                                   result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) <= float(lexeme[i+6][0]):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) <= float(value):
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) <= float(value[1]):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                        #assuming y is in arithmetic
+                        elif lexeme[i+3][0] in arithmetic:
+                            num_operations = 1
+            
+                            index =i+3
+                            for j in range(index, len(lexeme)):
+                                if lexeme[j][0] in arithmetic:
+                                    num_operations += 1
+                                    index = j
+                            num_AN = num_operations * 2 + 3
+
+                            temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:num_AN])
+                            # print(lexeme[index+4+1])
+                            one = convertFloat(temp)
+                            three = convertFloat(lexeme[index+3][0])
+                            # last_operand = lexeme[index+4+1][0]
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) == float(temp):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                           
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) == float(temp):
+                                       result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                            # print(result)
+                #for diffrint
+                elif lexeme[i][0] == 'DIFFRINT':
+                    if len(lexeme) == 4:
+                        one = convertFloat(lexeme[i+1][0])
+                        three = convertFloat(lexeme[i+3][0])
+                        if one == True and three == True:
+                            if float(lexeme[i+1][0]) != float(lexeme[i+3][0]):
+                               result = 'WIN'
+                            else:
+                                result = 'FAIL'
+                        elif one == False and three == True:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+1][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(value) != float(lexeme[i+3][0]):
+                                   result = 'WIN'
+                                else:
+                                   result = 'FAIL'
+                        elif one == True and three == False:
+                            value = ""
+                            for j in varidents:
+                                if j == lexeme[i+3][0]:
+                                    value = varidents[j]
+                            if convertFloat(value) == True:
+                                if float(lexeme[i+1][0]) != float(value):
+                                   result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                        elif one == False and three == False:
+                            value = []
+                            for j in varidents:
+                                if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
+                                    value.append(varidents[j])
+                            if len(value) == 2:
+                                if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                    if float(value[0]) != float(value[1]):
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
+                    else: #for SMALLR OF and BIGGR OF
+                        print(lexeme[i+1][0])
+                        if lexeme[i+1][0] in arithmetic:
+                            num_operations = 1
+            
+                            index =i+1
+                            # num_operations += 1
+                            for j in range(index, len(lexeme)):
+                                if lexeme[j][0] in arithmetic:
+                                    num_operations += 1
+                                    index = j
+                            num_AN =num_operations * 2 + 3
+
+                            temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:index+4])
+                            print(temp)
+                            # print(lexeme[index+4+1])
+                            one = convertFloat(temp)
+                            three = convertFloat(lexeme[index+4+1][0])
+                            last_operand = lexeme[index+4+1][0]
+                            if one == True and three == True:
+                                if float(temp) != float(last_operand):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                           
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == last_operand:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(temp) != float(value):
+                                       result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                        # elif lexeme[i+3][0] in arithmetic:
+                        #     num_operations = 1
+            
+                        #     index =i+3
+                        #     for j in range(index, len(lexeme)):
+                        #         if lexeme[j][0] in arithmetic:
+                        #             num_operations += 1
+                        #             index = j
+                        #             num_AN = num_operations + 4
+
+                        #     temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:index+4])
+                        #     # print(lexeme[index+4+1])
+                        #     one = convertFloat(temp)
+                        #     three = convertFloat(lexeme[index+3][0])
+                        #     # last_operand = lexeme[index+4+1][0]
+                        #     if one == True and three == True:
+                        #         if float(lexeme[i+1][0]) != float(temp):
+                        #             result = 'WIN'
+                        #         else:
+                        #             result = 'FAIL'
+                           
+                        #     elif one == False and three == True:
+                        #         value = ""
+                        #         for j in varidents:
+                        #             if j == lexeme[i+1][0]:
+                        #                 value = varidents[j]
+                        #         if convertFloat(value) == True:
+                        #             if float(value) != float(temp):
+                        #                result = 'WIN'
+                        #             else:
+                        #                 result = 'FAIL'
+                        if lexeme[i+3][0] == 'SMALLR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) > float(lexeme[i+6][0]):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) > float(lexeme[i+6][0]):
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) > float(value):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) > float(value[1]):
+                                           result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                        elif lexeme[i+3][0] == 'BIGGR OF':
+                            one = convertFloat(lexeme[i+1][0])
+                            three = convertFloat(lexeme[i+6][0])
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) < float(lexeme[i+6][0]):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) < float(lexeme[i+6][0]):
+                                       result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
+                            elif one == True and three == False:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+6][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(lexeme[i+1][0]) < float(value):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                            elif one == False and three == False:
+                                value = []
+                                for j in varidents:
+                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                        value.append(varidents[j])
+                                if len(value) == 2:
+                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                        if float(value[0]) < float(value[1]):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                        #assuming y is in arithmetic
+                        elif lexeme[i+3][0] in arithmetic:
+                            num_operations = 1
+            
+                            index =i+3
+                            for j in range(index, len(lexeme)):
+                                if lexeme[j][0] in arithmetic:
+                                    num_operations += 1
+                                    index = j
+                            num_AN = num_operations * 2 + 3
+
+                            temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:num_AN])
+                            # print(lexeme[index+4+1])
+                            one = convertFloat(temp)
+                            three = convertFloat(lexeme[index+3][0])
+                            # last_operand = lexeme[index+4+1][0]
+                            if one == True and three == True:
+                                if float(lexeme[i+1][0]) != float(temp):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                           
+                            elif one == False and three == True:
+                                value = ""
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        value = varidents[j]
+                                if convertFloat(value) == True:
+                                    if float(value) != float(temp):
+                                       result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
         # print(result)
     return result
 
