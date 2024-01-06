@@ -765,6 +765,7 @@ def syntax(text):
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
+            print(f"starting prev_lexeme:{prev_lexeme}")
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
@@ -1038,6 +1039,7 @@ def syntax(text):
                     if lexeme[i][0] == 'VISIBLE':
                         print(f"lexeme sa visible: {lexeme}")
                         print(f"func_parameters: {func_parameters}")
+                        print(f"previous lexeme3:{prev_lexeme}")
                     #     # if less than
                         # print(f"lexeme in visible start: {lexeme}")
                         if len(lexeme) < 2:
@@ -1375,9 +1377,10 @@ def syntax(text):
                                     if lexeme[i+3][0] not in comparison:
                                         if lexeme[i+3][0] not in booleans:
                                             if lexeme[i+3][0] not in inifinitebooleans:
-                                                success = 0
-                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tInvalid expression.')
-                                                break
+                                                if lexeme[i+3][0] not in varidents:         #DELETE THIS IF HINDI MAG ACCEPT NG VARIDENTS
+                                                    success = 0
+                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tInvalid expression.')
+                                                    break
                                 else:
                                     #while loop na para sa infinite
                                     calling_index = i+3
@@ -1428,9 +1431,12 @@ def syntax(text):
                                                     if lexeme[calling_index][0] not in comparison:
                                                         if lexeme[calling_index][0] not in booleans:
                                                             if lexeme[calling_index][0] not in inifinitebooleans:
-                                                                success = 0
-                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tInvalid expression.')
-                                                                break
+                                                                if lexeme[calling_index][0] not in varidents:   #DELETE THIS IF HINDI TATANGGAPIN SI VARIDENTS
+                                                                    success = 0
+                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tInvalid expression.')
+                                                                    break
+                                                                else:
+                                                                    calling_index += 1
                                                             else:
                                                                 temp = []
                                                                 temp_index = calling_index
@@ -1951,15 +1957,29 @@ def syntax(text):
                         ###### NOTEEEEE: Pa-adjust na lang ng condition ditooo thanksss, nilagyan 
                         ###### ko muna yung pangalawang condition para di magprompt yung syntaxError sa console natin
                         # elif omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
-                            elif (omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1) and (orlychecker != -1 and yarlychecker != -1 and nowaichecker != -1):
-                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?3')
+                            elif wtfchecker != 1 and orlychecker != 1:
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OIC can only be used in If-Then and Switch Statements.')
                                 success = 0
-                                break   
-                            else:
-                            #we will now reset it 
-                                wtfchecker = -1
-                                omgchecker = -1
-                                omgwtfchecker = -1  
+                                break  
+                            elif wtfchecker == 1:
+                                if omgchecker !=1 and wtfchecker !=1:
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                                    success = 0
+                                    break
+                                else:
+                                    wtfchecker = -1
+                                    omgchecker = -1
+                                    omgwtfchecker = -1  
+                            elif orlychecker == 1:
+                                if yarlychecker != 1 and nowaichecker !=1:
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t If-Then Statements required O RLY?, YA RLY, and NO WAI')
+                                    success = 0
+                                    break
+                                else:
+                                #we will now reset it 
+                                    orlychecker = -1
+                                    yarlychecker = -1
+                                    nowaichecker = -1  
 
 
                     #THIS ONE IS CREATED FOR THE GIMMEH INPUT!!
@@ -1989,11 +2009,12 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t GIMMEH should only have a Variable')
                                 success = 0
                                 break   
+                        print(f"previous lexeme2: {prev_lexeme}")
 
                     #IF THEN SYNTAX
                     #O RLY
                     if lexeme[i][0] == 'O':
-                        print(f"previouse lexeme: {prev_lexeme}")
+                        print(f"previous lexeme1: {prev_lexeme}")
                         if len(lexeme) != 2:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t O RLY? should not have other characters in the same line.')
                             success = 0
@@ -2003,14 +2024,15 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t Incorrect Syntax.')
                                 success = 0
                                 break 
+                            #COMMENT OUT KO MUNA KASI AYAW GUMANA NETO HUHU
                             #check yung previous line expression
-                            if prev_lexeme[0][0] not in arithmetic:
-                                if prev_lexeme[0][0] not in comparison:
-                                    if prev_lexeme[0][0] not in booleans:
-                                        if prev_lexeme[0][0] not in inifinitebooleans:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t Previous Expression is not valid.')
-                                            success = 0
-                                            break 
+                            #if prev_lexeme[0][0] not in arithmetic:
+                            #    if prev_lexeme[0][0] not in comparison:
+                            #        if prev_lexeme[0][0] not in booleans:
+                            #            if prev_lexeme[0][0] not in inifinitebooleans:
+                            #                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t Previous Expression is not valid.')
+                            #                success = 0
+                            #                break 
                         orlychecker = 1
                     #YA RLY
                     if lexeme[i][0] == 'YA':
@@ -2234,6 +2256,7 @@ def syntax(text):
             #ADD SA PREVIOUS!!
             prev_lexeme.clear()
             prev_lexeme.append(lexeme)
+            print(f"update prev_lexeme:{prev_lexeme}")
             lexeme.clear()
 
     if hasHai == 0 and hasKthxbye == -1:
