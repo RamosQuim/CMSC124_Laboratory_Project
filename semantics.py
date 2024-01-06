@@ -1048,27 +1048,27 @@ booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
 literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
 varidents = {}
 
-def getExplicitTypecast(text):
-    if syntax.syntax(text) == '>> No syntax errors.':
-        semantics(text)
-        print('>>>>', modified_varidents, explicit_typecast)
-        return explicit_typecast
+# def getExplicitTypecast(text):
+#     if syntax.syntax(text) == '>> No syntax errors.':
+#         semantics(text)
+#         print('>>>>', modified_varidents, explicit_typecast)
+#         return explicit_typecast
 
-def getVaridents(text):
-    if syntax.syntax(text) == '>> No syntax errors.':
-        # print("pasok", modified_varidents)
-        semantics(text)
-        print(modified_varidents)
-        return modified_varidents
-    return 0
+# def getVaridents(text):
+#     if syntax.syntax(text) == '>> No syntax errors.':
+#         # print("pasok", modified_varidents)
+#         semantics(text)
+#         print(modified_varidents)
+#         return modified_varidents
+#     return 0
 
-def getVisibleValue(text):
-    if syntax.syntax(text) == '>> No syntax errors.':
-        # print("pasok", modified_varidents)
-        semantics(text)
-        print('>>>:', temp_res)
-        return temp_res
-    return 0
+# def getVisibleValue(text):
+#     if syntax.syntax(text) == '>> No syntax errors.':
+#         # print("pasok", modified_varidents)
+#         semantics(text)
+#         print('>>>:', temp_res)
+#         return temp_res
+#     return 0
 
 def semantics(text):
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
@@ -1079,12 +1079,14 @@ def semantics(text):
     global undefined_error
     global noob_error
     global temp_res
-    explicit_typecast.clear()
-    modified_varidents.clear()
+    varidents = {'IT': 'NOOB'}
     # temp_res.clear()
     # temp_res = ""
     temp_list = []
-    varidents = syntax.getVaridents(text)
+
+    temp_varident = syntax.getVaridents(text)
+    for key in temp_varident:
+        varidents[key] = temp_varident[key]
     # print(varidents)
     literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     comparison = ['BOTH SAEM', 'DIFFRINT']
@@ -1098,11 +1100,10 @@ def semantics(text):
 
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
-        
         if undefined_error == 1 or noob_error:
             undefined_error = 0
             noob_error = 0
-            return [None,'']
+            return [None,'', varidents]
         
         if lexeme is not None:
             # print(f"lexeme: {lexeme}")
@@ -1112,7 +1113,7 @@ def semantics(text):
             
             # print(f"len(lexeme): {len(lexeme)}")
             for i in range(0, len(lexeme)):
-                                
+                print('current keyword', lexeme[i][0])
                 
                 if lexeme[i][0] == 'BUHBYE':
                     outsideWazzup = 1
@@ -1125,16 +1126,16 @@ def semantics(text):
                 if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                     result = comparison_expression(lexeme)
-                    return [result, text]
+                    return [result, text, varidents]
                 
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
                 elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    return [f'{infiniteBooleanAnalyzer(lexeme, lexeme[i][0])}\n', text]
+                    return [f'{infiniteBooleanAnalyzer(lexeme, lexeme[i][0])}\n', text, varidents]
                     
                 elif lexeme[i][0] in booleans:
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    return [f'{booleanAnalyzer(lexeme, 0)}\n', text]
+                    return [f'{booleanAnalyzer(lexeme, 0)}\n', text, varidents]
 
                 #THIS PART IS FOR THE COMPUTATIONS!!
                 elif lexeme[i][0] in arithmetic:
@@ -1151,7 +1152,7 @@ def semantics(text):
                         # print("UNDEFINEDERROR1")
                         break
                     else:
-                        return [arithmeticresult, text]
+                        return [arithmeticresult, text, varidents]
                         break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
@@ -1161,11 +1162,10 @@ def semantics(text):
                     varidents[lexeme[i+1][0]] = str(input_value)
                     modified_varidents[lexeme[i+1][0]] = str(input_value)
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i+1][0]} ITZ {input_value}', 1)
-                    return [f'{input_value}\n', text]
+                    return [f'{input_value}\n', text, varidents]
                     
                 #R
                 elif lexeme[i][0] == 'R':
-                    print('pasok dito')
                     if len(lexeme) == 3:
                         # print(varidents, lexeme[i-1][0], lexeme[i+1][0])
                         for j in varidents:
@@ -1187,23 +1187,26 @@ def semantics(text):
                                                 # print(k, varidents[k], lexeme[i-1][0])
                                                 # print(k, varidents[k][0])
                                                 varidents[lexeme[i-1][0]] = varidents[k]
-                                                modified_varidents[lexeme[i-1][0]] = varidents[k]
-                                                
+                                                modified_varidents[lexeme[i-1][0]] = varidents[k]  
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {varidents[k]}', 1)
+                                                return [f'', text, varidents]     
                                     else:
                                         varidents[j] = lexeme[i+1][0]
                                         # print(varidents)
-                                        modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
-                                        
+                                        modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]  
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {varidents[j]}', 1)
+                                        return [f'', text, varidents]              
                                 
-                    elif len(lexeme) == 5:
+                    elif len(lexeme) == 5 and lexeme[i+1][0] != 'MAEK':
                         # print(varidents)
                         for j in varidents:
                             if lexeme[i-1][0] == j:
                                 if lexeme[i+1][0] == '"' and lexeme[i+3][0] == '"':
                                     varidents[j] = lexeme[i+2][0]
                                     modified_varidents[lexeme[i-1][0]] = str(lexeme[i+2][0])
+                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {lexeme[i+2][0]}', 1)
+                                    return [f'', text, varidents]  
                     else:
-                        # print(lexeme[i+1][0])
                         if lexeme[i+1][0] == 'BOTH SAEM' or lexeme[i+1][0] == 'DIFFRINT':
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
@@ -1211,6 +1214,8 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {result}', 1)
+                                        return [f'', text, varidents] 
                                         
                         elif lexeme[i+1][0] in booleans:
                             # fin_boolean_expression(lexeme) booleanAnalyzer(thisLexeme, isInfinite)
@@ -1222,6 +1227,8 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {result}', 1)
+                                        return [f'', text, varidents] 
                                         
                         elif lexeme[i+1][0] == 'ANY OF':
                             for j in varidents:
@@ -1232,6 +1239,8 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {result}', 1)
+                                        return [f'', text, varidents] 
                                         
                         elif lexeme[i+1][0] == 'SMOOSH':
                             for j in varidents:
@@ -1239,11 +1248,12 @@ def semantics(text):
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     # print(lexeme[i+1:])
                                     result = concatenationAnalyzer(lexeme[i+1:])
-                                    result = infiniteBooleanAnalyzer(lexeme[i+1:], lexeme[i+1][0])
                                     # print(result)
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {result}', 1)
+                                        return [f'', text, varidents] 
                                         
 
                         elif lexeme[i+1][0] == 'ALL OF':
@@ -1255,6 +1265,8 @@ def semantics(text):
                                     if len(result) != 0:
                                         varidents[j] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {result}', 1)
+                                        return [f'', text, varidents] 
                                         
                         elif lexeme[i+1][0] in arithmetic:
                             for j in varidents:
@@ -1274,8 +1286,167 @@ def semantics(text):
                                         if len(result) != 0:
                                             varidents[j] = result
                                             modified_varidents[lexeme[i-1][0]] = str(result)
-                                            
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {j} ITZ {result}', 1)
+                                            return [f'', text, varidents] 
+                        elif lexeme[i+1][0] == 'MAEK':
+                            i += 1
+                            if len(lexeme[i:]) == 3 or len(lexeme[i:]) == 4 :
+                                for j in varidents:
+                                    if j == lexeme[i+1][0]:
+                                        if varidents[j] == 'NOOB':
+                                            if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {""}', 1)
+                                                return [f'', text, varidents] 
+                                            elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"0.0"}', 1)
+                                                return [f'', text, varidents] 
+                                            elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"0"}', 1)
+                                                return [f'', text, varidents]
+                                            elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"FAIL"}', 1)
+                                                return [f'', text, varidents]
+                                            elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"NOOB"}', 1)
+                                                return [f'', text, varidents]
+                                        else:
+                                            if convertFloat(varidents[j]):
+                                                if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                                    print('pasok diosidnkfkjsbdf')
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {str(varidents[j])}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                                    if '.' in str(varidents[j]):
+                                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {varidents[j]}', 1)
+                                                        return [f'', text, varidents]
+                                                    else:
+                                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {varidents[j]}.0', 1)
+                                                        print(text)
+                                                        return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {int(float(varidents[j]))}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"NOOB"}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                                    if varidents[j] == 0.0:
+                                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"FAIL"}', 1)
+                                                        return [f'', text, varidents]
+                                                    else:
+                                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"WIN"}', 1)
+                                                        return [f'', text, varidents]
+                                            elif varidents[j] == 'WIN':
+                                                if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {str(varidents[j])}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"1.0"}', 1)
+                                                    return [f'', text, varidents] 
+                                                elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"1"}', 1)
+                                                    return [f'', text, varidents] 
+                                                elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {varidents[j]}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"NOOB"}', 1)
+                                                    return [f'', text, varidents]
+                                            elif varidents[j] == 'FAIL':
+                                                if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {str(varidents[j])}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"0.0"}', 1)
+                                                    return [f'', text, varidents] 
+                                                elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"0"}', 1)
+                                                    return [f'', text, varidents] 
+                                                elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {varidents[j]}', 1)
+                                                    return [f'', text, varidents]
+                                                elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
+                                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-2][0]} ITZ {"NOOB"}', 1)
+                                                    return [f'', text, varidents]                    
                     print(modified_varidents)
+
+                elif lexeme[i][0] == 'IS NOW A':
+                    for j in varidents:
+                        if j == lexeme[i-1][0]:
+                            if varidents[j] == 'NOOB':
+                                if lexeme[i+1][0] == 'YARN':
+                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {""}', 1)
+                                    return [f'', text, varidents] 
+                                elif lexeme[i+1][0] == 'NUMBAR':
+                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"0.0"}', 1)
+                                    return [f'', text, varidents] 
+                                elif lexeme[i+1][0] == 'NUMBR':
+                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"0"}', 1)
+                                    return [f'', text, varidents]
+                                elif lexeme[i+1][0] == 'TROOF':
+                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"FAIL"}', 1)
+                                    return [f'', text, varidents]
+                                elif lexeme[i+1][0] == 'NOOB':
+                                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"NOOB"}', 1)
+                                    return [f'', text, varidents]
+                            else:
+                                if convertFloat(varidents[j]):
+                                    if lexeme[i+1][0] == 'YARN':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {str(varidents[j])}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NUMBAR':
+                                        if '.' in str(varidents[j]):
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {varidents[j]}', 1)
+                                            return [f'', text, varidents]
+                                        else:
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {varidents[j]}.0', 1)
+                                            print(text)
+                                            return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NUMBR':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {int(float(varidents[j]))}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NOOB':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"NOOB"}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'TROOF':
+                                        if varidents[j] == 0.0:
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"FAIL"}', 1)
+                                            return [f'', text, varidents]
+                                        else:
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"WIN"}', 1)
+                                            return [f'', text, varidents]
+                                elif varidents[j] == 'WIN':
+                                    if lexeme[i+1][0] == 'YARN':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {str(varidents[j])}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NUMBAR':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"1.0"}', 1)
+                                        return [f'', text, varidents] 
+                                    elif lexeme[i+1][0] == 'NUMBR':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"1"}', 1)
+                                        return [f'', text, varidents] 
+                                    elif lexeme[i+1][0] == 'TROOF':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {varidents[j]}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NOOB':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"NOOB"}', 1)
+                                        return [f'', text, varidents]
+                                elif varidents[j] == 'FAIL':
+                                    if lexeme[i+1][0] == 'YARN':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {str(varidents[j])}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NUMBAR':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"0.0"}', 1)
+                                        return [f'', text, varidents] 
+                                    elif lexeme[i+1][0] == 'NUMBR':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"0"}', 1)
+                                        return [f'', text, varidents] 
+                                    elif lexeme[i+1][0] == 'TROOF':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {varidents[j]}', 1)
+                                        return [f'', text, varidents]
+                                    elif lexeme[i+1][0] == 'NOOB':
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"NOOB"}', 1)
+                                        return [f'', text, varidents]
                 #MAEK    
                 elif lexeme[i][0] == 'MAEK':
                     if len(lexeme) == 3 or len(lexeme) == 4 :
@@ -1283,56 +1454,80 @@ def semantics(text):
                             if j == lexeme[i+1][0]:
                                 if varidents[j] == 'NOOB':
                                     if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                        explicit_typecast.append("")
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {""}', 1)
+                                        return [f'', text, varidents] 
                                     elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                        explicit_typecast.append("0.0")
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"0.0"}', 1)
+                                        return [f'', text, varidents] 
                                     elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                        explicit_typecast.append("0")
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"0"}', 1)
+                                        return [f'', text, varidents]
                                     elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
-                                        explicit_typecast.append("FAIL")
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"FAIL"}', 1)
+                                        return [f'', text, varidents]
                                     elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
-                                        explicit_typecast.append("NOOB")
+                                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"NOOB"}', 1)
+                                        return [f'', text, varidents]
                                 else:
-                                    if str(varidents[j]).isnumeric():
+                                    if convertFloat(varidents[j]):
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast.append(str(varidents[j]))
+                                            print('pasok diosidnkfkjsbdf')
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {str(varidents[j])}', 1)
+                                            return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast.append(float(varidents[j]))
+                                            if '.' in str(varidents[j]):
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[j]}', 1)
+                                                return [f'', text, varidents]
+                                            else:
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[j]}.0', 1)
+                                                print(text)
+                                                return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast.append(int(float(varidents[j])))
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {int(float(varidents[j]))}', 1)
+                                            return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
-                                            explicit_typecast.append("NOOB")
-                                    elif convertFloat(varidents[j]):
-                                        if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast.append(str(varidents[j]))
-                                        elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast.append(float(varidents[j]))
-                                        elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast.append(int(float(varidents[j])))
-                                        elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
-                                            explicit_typecast.append("NOOB")
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"NOOB"}', 1)
+                                            return [f'', text, varidents]
+                                        elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
+                                            if varidents[j] == 0.0:
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"FAIL"}', 1)
+                                                return [f'', text, varidents]
+                                            else:
+                                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"WIN"}', 1)
+                                                return [f'', text, varidents]
                                     elif varidents[j] == 'WIN':
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast.append(str(varidents[j]))
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {str(varidents[j])}', 1)
+                                            return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast.append('1.0')
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"1.0"}', 1)
+                                            return [f'', text, varidents] 
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast.append('1')
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"1"}', 1)
+                                            return [f'', text, varidents] 
                                         elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
-                                            explicit_typecast.append(varidents[j])
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[j]}', 1)
+                                            return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
-                                            explicit_typecast.append("NOOB")
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"NOOB"}', 1)
+                                            return [f'', text, varidents]
                                     elif varidents[j] == 'FAIL':
                                         if lexeme[i+2][0] == 'YARN' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'YARN'):
-                                            explicit_typecast.append(str(varidents[j]))
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {str(varidents[j])}', 1)
+                                            return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NUMBAR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBAR'):
-                                            explicit_typecast.append('0.0')
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"0.0"}', 1)
+                                            return [f'', text, varidents] 
                                         elif lexeme[i+2][0] == 'NUMBR' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NUMBR'):
-                                            explicit_typecast.append('0')
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"0"}', 1)
+                                            return [f'', text, varidents] 
                                         elif lexeme[i+2][0] == 'TROOF' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'TROOF'):
-                                            explicit_typecast = varidents[j]
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[j]}', 1)
+                                            return [f'', text, varidents]
                                         elif lexeme[i+2][0] == 'NOOB' or (lexeme[i+2][0] == 'A' and lexeme[i+3][0] == 'NOOB'):
-                                            explicit_typecast.append("NOOB")
+                                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"NOOB"}', 1)
+                                            return [f'', text, varidents]
+                    
                 
                 elif lexeme[i][0] == 'VISIBLE':
                     # print(f"lexeme:{lexeme}")
@@ -1448,20 +1643,20 @@ def semantics(text):
                                     temp_index+=1
                             temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
                             visible_index = temp_index
-                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    print('\n\n temp_result:', temp_result)
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {temp_result}', 1)
                     # temp_res.append(temp_result)
                     # print("temp_res:", temp_res)
-                    temp_list.append(temp_result)
-                    print(temp_list)
-                    return [f"{temp_result}\n", text]
+                    print('ito ang current result', temp_result)
+                    print('ito ang current result',varidents)
+                    varidents['IT'] = temp_result
+                    print('ito ang current ipapasa',varidents)
+                    return [f"{temp_result}\n", text, varidents]
                     # break
             lexeme.clear()
     text = text.replace(f'{text.splitlines()[h]}', '', 1)
     temp_res = temp_list
-    print('hey:', temp_res)
-    # temp_res.clear()
-    return [None, text]
+    print('hey:', varidents)
+    return [None, text, varidents]
 
 
 

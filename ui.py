@@ -34,20 +34,14 @@ def analyzetext():
     for row in lexemes.get_children():
         lexemes.delete(row)
     
-    for row in symbolTable.get_children():
-        symbolTable.delete(row)
-    
     console.delete("1.0", "end")
 
     results = []
-    symbolsResults = []
 
     #this part will get all the input in the text editor
     textEditor_Content = textEditor.get("1.0", "end")
-    symbols = keywords.symbolTable(textEditor_Content)
     # print(f"returned_value: {returned_value}")
     results.append(keywords.lex(textEditor_Content))
-    symbolsResults.append(symbols)
 
     #this part will show the newly added things!!
     for item in results:
@@ -56,17 +50,17 @@ def analyzetext():
             lexemes.insert("", "end", values=j)
     
     #this part will show the newly added things!!
-    for item in symbolsResults:
-        # print(f"item:{item}")
-        for j in item:
-            # print(f"j:{j}")
-            symbolTable.insert("", "end", values=j)
+    
     if syntax.syntax(textEditor_Content) != '>> No syntax errors.':
         console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
     else:
         while True:
-            print(textEditor_Content.lstrip().rstrip())
             newtext = semantics.semantics(textEditor_Content)
+            for row in symbolTable.get_children():
+                symbolTable.delete(row)
+            print('ito ang nareceive', newtext[2])
+            for item in newtext[2]:
+                symbolTable.insert("", "end", values=[item, newtext[2][item]])
             if newtext[0] is None:
                 break
             console.insert("end", newtext[0], ("centered",))

@@ -570,7 +570,149 @@ def infiniteBooleanSyntax(lexeme, h, i):
             return (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tMKAY must be the end, see correct syntax. \n\t{lexeme[boolean_index][0]} <finite_bool_expr> AN <finite_bool_expr> [[AN <finite_bool_expr>...] MKAY')
             
     
-
+def concatenationSyntax(lexeme, h, i):
+    comparison = ['BOTH SAEM', 'DIFFRINT']
+    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
+    literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
+    varAssignment_literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
+    booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    inifinitebooleans = ['ALL OF', 'ANY OF']
+    print(f"lexeme sa smoosh: {lexeme}")
+#     # if less than
+    # print(f"lexeme in visible start: {lexeme}")
+    if len(lexeme) < 2:
+        return (f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMOOSH must have a Variable Identifier, Literal, or an Expression')
+    else:
+        visible_indexcounter = 1
+        while visible_indexcounter < len(lexeme):
+            # check muna yung "+"
+            if lexeme[visible_indexcounter][0] == "AN":
+                #check yung before "+"
+                if lexeme[visible_indexcounter-1][0] not in varidents:
+                    if lexeme[visible_indexcounter-1][1] != 'NUMBR Literal':
+                        if lexeme[visible_indexcounter-1][1] != 'NUMBAR Literal':
+                            if lexeme[visible_indexcounter-1][1] != 'TROOF Literal':
+                                if lexeme[visible_indexcounter-1][1] != 'String Delimiter':
+                                    if lexeme[visible_indexcounter-1][1] != 'Concatenation Delimiter':
+                                        if lexeme[visible_indexcounter-1][0] != "IT":
+                                            return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only1')
+                                            
+                #check yung after naman "+"
+                if lexeme[visible_indexcounter+1][0] not in varidents:
+                    if lexeme[visible_indexcounter+1][0] not in arithmetic:
+                        if lexeme[visible_indexcounter+1][0] not in comparison:
+                            if lexeme[visible_indexcounter+1][0] not in booleans:
+                                if lexeme[visible_indexcounter+1][1] != 'NUMBR Literal':
+                                    if lexeme[visible_indexcounter+1][1] != 'NUMBAR Literal':
+                                        if lexeme[visible_indexcounter+1][1] != 'TROOF Literal':
+                                            if lexeme[visible_indexcounter+1][0] not in inifinitebooleans:
+                                                if lexeme[visible_indexcounter+1][1] != 'String Delimiter':
+                                                    if lexeme[visible_indexcounter+1][0] != "IT":
+                                                        return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} SMOOSH <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only2')
+                                                        
+                visible_indexcounter+=1
+            else:
+                #CHECK MUNA IF STRING SIYA 
+                if lexeme[visible_indexcounter][1] != 'String Delimiter':
+                    if lexeme[visible_indexcounter][1] != 'TROOF Literal':
+                        if lexeme[visible_indexcounter][1] != 'NUMBR Literal':
+                            if lexeme[visible_indexcounter][1] != 'NUMBAR Literal':
+                                if lexeme[visible_indexcounter][1] != 'TROOF Literal':
+                                    if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
+                                        if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
+                                            if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
+                                                if lexeme[visible_indexcounter][0] != "IT":
+                                                    if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                        if lexeme [visible_indexcounter][0] not in inifinitebooleans:
+                                                            return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} SMOOSH <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
+                                                            
+                                                        else:
+                                                            #THIS IF THE INIFNITE BOOLEANS (ANY OF AND ALL OF)
+                                                            temp = []
+                                                            tempcounter = visible_indexcounter
+                                                            while tempcounter < len(lexeme):
+                                                                if lexeme[tempcounter][0] == "SMOOSH":
+                                                                    break
+                                                                else:
+                                                                    temp.append(lexeme[tempcounter])
+                                                                    tempcounter+=1
+                                                            result = infiniteBooleanSyntax(temp,h,i)
+                                                            #check kung ano yung irereturn
+                                                            if result is not None:                                                            
+                                                                return result
+                                                                
+                                                            #means walang error
+                                                            visible_indexcounter = tempcounter 
+                                                    else:
+                                                        #THIS IS THE BOOLEANS
+                                                        temp = []
+                                                        tempcounter = visible_indexcounter
+                                                        while tempcounter < len(lexeme):
+                                                            if lexeme[tempcounter][0] == "SMOOSH":
+                                                                break
+                                                            else:
+                                                                temp.append(lexeme[tempcounter])
+                                                                tempcounter+=1
+                                                        result = booleanSyntax(temp, h, i)
+                                                        #check kung ano yung irereturn
+                                                        if result is not None:  
+                                                            return result
+                                                            
+                                                        #move forward!
+                                                        visible_indexcounter = tempcounter
+                                                else:
+                                                    visible_indexcounter+=1
+                                            else:
+                                                #THIS IS THE COMPARISONS 
+                                                temp = []
+                                                tempcounter = visible_indexcounter
+                                                while tempcounter < len(lexeme):
+                                                    if lexeme[tempcounter][1] == "Output Delimiter":
+                                                        break
+                                                    else:
+                                                        temp.append(lexeme[tempcounter])
+                                                        tempcounter+=1
+                                                result = comparisonSyntax(temp, h, i)
+                                                #check kung ano yung irereturn
+                                                if result is not None:
+                                                    
+                                                    return result
+                                                    
+                                                #move forward!
+                                                visible_indexcounter = tempcounter
+                                        else:
+                                            #get muna yung mga lexeme na pasok sa operation na ito 
+                                            temp = []
+                                            tempcounter = visible_indexcounter
+                                            while tempcounter < len(lexeme):
+                                                if lexeme[tempcounter][1] == "Output Delimiter":
+                                                    break
+                                                else:
+                                                    temp.append(lexeme[tempcounter])
+                                                    tempcounter+=1
+                                            result = arithmeticSyntax(h,arithmetic,temp)
+                                            #this is to add pag may error po
+                                            if result[0] == 0:
+                                                return result[1]
+                                                
+                                            visible_indexcounter = tempcounter
+                                    else:
+                                        visible_indexcounter += 1
+                                else:
+                                        visible_indexcounter +=1
+                            else:
+                                    visible_indexcounter +=1
+                        else:
+                                visible_indexcounter +=1
+                    else:
+                        visible_indexcounter +=1
+                else:
+                    if lexeme[visible_indexcounter+2][1] != 'String Delimiter':
+                        return (f'>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter+2][1]}>: \n\tVariable Identifier ')
+                    else:
+                        #move forward 
+                        visible_indexcounter +=3
+        # print("UMABOT SA END NG SYNTAX HUHU")
 modif_var = {}
 
 def getModifVaridents(text):
@@ -830,9 +972,28 @@ def syntax(text):
                                                                         
                                                                         if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
                                                                             if lexeme [visible_indexcounter][0] not in inifinitebooleans:
-                                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
-                                                                                success = 0
-                                                                                break
+                                                                                if lexeme[visible_indexcounter][0] != 'SMOOSH':
+                                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
+                                                                                    success = 0
+                                                                                    break
+                                                                                else:
+                                                                                    #THIS IF THE SMOOSH
+                                                                                    temp = []
+                                                                                    tempcounter = visible_indexcounter
+                                                                                    while tempcounter < len(lexeme):
+                                                                                        if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                                            break
+                                                                                        else:
+                                                                                            temp.append(lexeme[tempcounter])
+                                                                                            tempcounter+=1
+                                                                                    result = concatenationSyntax(temp,h,i)
+                                                                                    #check kung ano yung irereturn
+                                                                                    if result is not None:
+                                                                                        success = 0
+                                                                                        syntaxResult += result
+                                                                                        break
+                                                                                    #means walang error
+                                                                                    visible_indexcounter = tempcounter
                                                                             else:
                                                                                 #THIS IF THE INIFNITE BOOLEANS (ANY OF AND ALL OF)
                                                                                 temp = []
@@ -1235,6 +1396,13 @@ def syntax(text):
                                 
                             break
                             # continue //
+                        elif lexeme[i+1][0] == "SMOOSH":
+                            # print(lexeme[i+1:])
+                            if concatenationSyntax(lexeme[i+1:], h, i):
+                                success = 0
+                                syntaxResult += concatenationSyntax(lexeme[i+1:], h, i)
+                                break
+                            break
                         elif lexeme[i+1][0] in arithmetic:
                             result = arithmeticSyntax(h,arithmetic,lexeme[i+1:])
                             if result[0] == 0:
@@ -1259,7 +1427,7 @@ def syntax(text):
                         elif len(lexeme) == 5:
                             if lexeme[i+1][0] != '"' and lexeme[i+3][0] != '"':
 
-                                if lexeme[i-1][0] not in varidents or varidents[lexeme[i-1][0]] == 'NOOB':
+                                if lexeme[i-1][0] not in varidents:
                                     success = 0
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} is not a variable identifier or is an uninitialized variable.')
                                     break
@@ -1268,7 +1436,7 @@ def syntax(text):
                                         success = 0
                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near  <{lexeme[i][0]}>: \n\t{lexeme[i+1][0]} is not a [MAEK | Variable identifier | NUMBAR Literal | NUMBR Literal | TROOF Literal | YARN Literal].')
                                         break 
-                                if lexeme[i+2][0] != lexeme[i-1][0] or varidents[lexeme[i+2][0]] == 'NOOB':
+                                if lexeme[i+2][0] != lexeme[i-1][0]:
                                     success = 0
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i+2][0]} and {lexeme[i-1][0]} should be same variable when recasting and must be initialized.')
                                     break
@@ -1331,7 +1499,7 @@ def syntax(text):
                         # print(lexeme)
                         if len(lexeme) == 3:
                             # print(lexeme[i-1][0])
-                            if lexeme[i-1][0] not in varidents or varidents[lexeme[i-1][0]] == 'NOOB':
+                            if lexeme[i-1][0] not in varidents:
                                 success = 0
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t{lexeme[i-1][0]} should be a variable identifier.')
                                 break
