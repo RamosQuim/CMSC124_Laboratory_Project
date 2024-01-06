@@ -1071,7 +1071,7 @@ def syntax(text):
                                                     if lexeme[visible_indexcounter-1][1] != 'TROOF Literal':
                                                         if lexeme[visible_indexcounter-1][1] != 'String Delimiter':
                                                             if lexeme[visible_indexcounter-1][1] != 'Concatenation Delimiter':
-                                                                if lexeme[visible_indexcounter-1][0] != "IT":
+                                                                if lexeme[visible_indexcounter-1][0] != "IT" and lexeme[visible_indexcounter+1][1] != 'Identifier':
                                                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only1')
                                                                     success = 0
                                                                     break
@@ -1085,7 +1085,7 @@ def syntax(text):
                                                                 if lexeme[visible_indexcounter+1][1] != 'TROOF Literal':
                                                                     if lexeme[visible_indexcounter+1][0] not in inifinitebooleans:
                                                                         if lexeme[visible_indexcounter+1][1] != 'String Delimiter':
-                                                                            if lexeme[visible_indexcounter+1][0] != "IT":
+                                                                            if lexeme[visible_indexcounter+1][0] != "IT" and lexeme[visible_indexcounter+1][1] != 'Identifier':
                                                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only2')
                                                                                 success = 0
                                                                                 break
@@ -1105,9 +1105,12 @@ def syntax(text):
                                                                             if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
                                                                                 if lexeme [visible_indexcounter][0] not in inifinitebooleans:
                                                                                     if lexeme[visible_indexcounter][0] != 'SMOOSH':
-                                                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
-                                                                                        success = 0
-                                                                                        break
+                                                                                        if lexeme[visible_indexcounter][1] != 'Identifier':
+                                                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
+                                                                                            success = 0
+                                                                                            break
+                                                                                        else:
+                                                                                            break
                                                                                     else:
                                                                                     #THIS IF THE SMOOSH
                                                                                         temp = []
@@ -1871,9 +1874,10 @@ def syntax(text):
                                 if lexeme[i+1][0] not in comparison:
                                     if lexeme[i+1][0] not in booleans:
                                         if lexeme[i+1][0] not in inifinitebooleans:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tFOUND YR only accepts expressions!')
-                                            success = 0
-                                            break
+                                            if lexeme[i+1][1] != 'Identifier':
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tFOUND YR only accepts expressions!')
+                                                success = 0
+                                                break
                                         else:
                                             result = booleanSyntax(lexeme[i+1:], h, i)
                                             if result is not None:
