@@ -613,7 +613,7 @@ def syntax(text):
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
                 
             for i in range(0, len(lexeme)):
-                print(f"starting lexeme sa while:{lexeme}")
+                # print(f"starting lexeme sa while:{lexeme}")
                 
                 ## PROGRAM BLOCK SYNTAX - HAI
                 if lexeme[i][0] == 'HAI' and hasHai == -1 and hasKthxbye == -1:
@@ -776,7 +776,7 @@ def syntax(text):
 
                     #PRINTING
                     if lexeme[i][0] == 'VISIBLE':
-                        print(f"lexeme sa visible: {lexeme}")
+                        # print(f"lexeme sa visible: {lexeme}")
                     #     # if less than
                         # print(f"lexeme in visible start: {lexeme}")
                         if len(lexeme) < 2:
@@ -786,8 +786,8 @@ def syntax(text):
                         else:
                             visible_indexcounter = 1
                             while visible_indexcounter < len(lexeme):
-                                print(f"visible_indexcounter:{visible_indexcounter}")
-                                print(f"len(lexeme): {len(lexeme)}")
+                                # print(f"visible_indexcounter:{visible_indexcounter}")
+                                # print(f"len(lexeme): {len(lexeme)}")
                                 # check muna yung "+"
                                 if lexeme[visible_indexcounter][1] == "Output Delimiter":
                                     #check yung before "+"
@@ -1495,7 +1495,7 @@ def syntax(text):
 
                             #checking the parameters
                             function_index = 2
-                            print(f"lexeme before while loop: {lexeme}")
+                            # print(f"lexeme before while loop: {lexeme}")
 
                             while function_index < len(lexeme):
                                 #print(f"function index: {function_index}")
@@ -1538,7 +1538,7 @@ def syntax(text):
                                 else:
                                     #POSSIBLE PARAMETER DELIMITER IS YR ONLY or AN 
                                     if lexeme[function_index][0] == 'YR':
-                                        print("nasa YR ako")
+                                        # print("nasa YR ako")
                                         if len(lexeme) == function_index+1:
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.3')
                                             success = 0

@@ -2,8 +2,18 @@ import keywords
 import syntax
 import for_input
 import math 
+import re
 # import ui 
 
+arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']  
+literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
+comparison = ['BOTH SAEM', 'DIFFRINT']
+booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+infinitebooleans = ['ANY OF', "ALL OF"]
+modified_varidents = {}
+temp_res = []
+explicit_typecast = []
+varidents = {}
 
 undefined_error = 0
 noob_error = 0
@@ -1041,17 +1051,14 @@ def concatenationAnalyzer(lexeme):
     return result
 
 
-modified_varidents = {}
-temp_res = []
-explicit_typecast = []
-booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
-literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
-varidents = {}
+
+# varidents = {}
 
 def getExplicitTypecast(text):
     if syntax.syntax(text) == '>> No syntax errors.':
         semantics(text)
-        print('>>>>', modified_varidents, explicit_typecast)
+        print('>>>>', varidents)
+        print("exp:", explicit_typecast)
         return explicit_typecast
 
 def getVaridents(text):
@@ -1059,21 +1066,181 @@ def getVaridents(text):
         # print("pasok", modified_varidents)
         semantics(text)
         print(modified_varidents)
-        return modified_varidents
+        print('>>>>getVar', varidents)
+        return varidents
     return 0
 
 def getVisibleValue(text):
     if syntax.syntax(text) == '>> No syntax errors.':
         # print("pasok", modified_varidents)
         semantics(text)
+        print('>>>>', varidents)
         print('>>>:', temp_res)
         return temp_res
     return 0
 
+def has_decimal(s):
+    return any(c.isdigit() or c == '.' for c in s) and s.count('.') <= 1
+
+#to numbar or float
+def nmbar(tk):
+    if tk in varidents:
+        if convertFloat(varidents[tk]): 
+            if has_decimal(varidents[tk]): #if numbar
+                varidents[tk] = int(float(varidents[tk]))
+            else: #number
+                varidents[tk] = int(varidents[tk])
+        else: #for yarn
+            if varidents[tk] == 'WIN':
+                varidents[tk] = 1
+            elif varidents[tk] == 'FAIL':
+                varidents[tk] = 0
+            
+            else:
+                if re.search(r'^\d+$', varidents[tk]):
+                    varidents[tk] = int(varidents[tk])
+
+#to number/int
+def nmbr(tk):
+    if tk in varidents:
+        if convertFloat(varidents[tk]): 
+            if has_decimal(varidents[tk]): #if numbar
+                varidents[tk] = int(float(varidents[tk]))
+            else: #number
+                varidents[tk] = int(varidents[tk])
+        else: #for yarn
+            if varidents[tk] == 'WIN':
+                varidents[tk] = 1
+            elif varidents[tk] == 'FAIL':
+                varidents[tk] = 0
+            elif varidents[tk] == 'NOOB':
+                varidents[tk] = 0
+            else:
+                if re.search(r'^\d+$', varidents[tk]):
+                    varidents[tk] = int(varidents[tk])
+
+#to troof
+def trf(tk):
+    if tk in varidents:
+        if convertFloat(varidents[tk]): 
+            if has_decimal(varidents[tk]): #if numbar
+                if varidents[tk] == 0.0:
+                    varidents[tk] = 'FAIL'
+                else:
+                    varidents[tk] = 'WIN'
+            else: #number
+                if varidents[tk] == 0:
+                    varidents[tk] = 'FAIL'
+                else:
+                    varidents[tk] = 'WIN'
+        else: #for yarn
+            if varidents[tk] == " " or varidents[tk] == "":
+                varidents[tk] = 'FAIL'
+            else:
+                varidents[tk] = 'WIN'
+#to yarn
+def yrn(tk):
+    if tk in varidents:
+        if convertFloat(varidents[tk]): 
+            if has_decimal(varidents[tk]): #if numbar, hanggang 2 decimals nalang
+
+                varidents[tk] = str(round(float(varidents[tk]),2))
+            else: #number
+                varidents[tk] = str(varidents[tk])
+
+
+# def symbolTable(str1):
+#     global symbol_table
+#     symbol_table = varidents
+#     it = []
+
+#     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+#     bool_inf = ['ALL OF', 'ANY OF']
+#     comparison = ['BOTH SAEM', 'DIFFRINT']
+#     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
+
+#     lexeme = keywords.lex(str1)
+
+#     for a in range(0, len(lexeme)):
+#         if len(lexeme) > 1 and a<len(lexeme): 
+#             if lexeme[a][1].rstrip().lstrip() == 'Variable Identifier':
+#                 if lexeme[a-1][1] == 'Variable Declaration':
+              
+#                     if lexeme[a+1][0].rstrip().lstrip() == 'ITZ':
+#                     # print(lexeme[a-1][0], lexeme[a][0],lexeme[a+1][0], lexeme[a+2][0])
+#                         checker = 0
+#                         for i in symbol_table:
+#                             if i[0] == lexeme[a][0]: #check if the variable is already in the symbol table
+#                                 checker = 1
+#                                 break
+#                         if checker == 0:
+#                             if lexeme[a+2][0] not in arithmetic and lexeme[a+2][0] not in booleans and lexeme[a+2][0] not in comparison:
+#                                     if lexeme[a+2][0] == '"' and lexeme[a+4][0] == '"':
+                                        
+#                                         symbol_table[lexeme[a][0]] = lexeme[a+3][0].replace('"','')
+#                                     else:
+#                                         symbol_table[lexeme[a][0]] = lexeme[a+2][0].replace('"','')
+#                             # modifiedVar(str1)
+#                             else:
+#                                 if lexeme[a+2][0] in comparison:
+#                                     res = comparison_expression(lexeme[a+2:a+6])
+#                                     symbol_table[lexeme[a][0]] = res
+#                                 elif lexeme[a+2][0] in booleans:
+#                                     q = 3
+#                                     current = lexeme[a+q][0]
+#                                     while current != 'I HAS A' and current != 'BUHBYE':
+#                                         q+=1
+#                                         current = lexeme[a+q][0]
+                                
+#                                     res = booleanAnalyzer(lexeme[a+2:a+q], 'no')
+#                                     symbol_table[lexeme[a][0]] = res
+#                                 elif lexeme[a+2][0] in bool_inf:
+                                
+#                                     q = 3
+#                                     current = lexeme[a+q][0]
+#                                     while current != 'I HAS A' and current != 'BUHBYE':
+#                                         q+=1
+#                                         current = lexeme[a+q][0]
+                                
+#                                     res = infiniteBooleanAnalyzer(lexeme[a+2:a+q], lexeme[a+2][0])
+#                                     symbol_table[lexeme[a][0]] = res
+#                                 elif lexeme[a+2][0] in arithmetic:
+                                
+#                                     q = 3
+#                                     current = lexeme[a+q][0]
+#                                     while current != 'I HAS A' and current != 'BUHBYE':
+#                                         q+=1
+#                                         current = lexeme[a+q][0]
+                                
+#                                     res = arithmeticAnalyzer(symbol_table,arithmetic, lexeme[a+2:a+q])
+#                                     symbol_table[lexeme[a][0]] = res
+
+#                 elif lexeme[a+1][0].rstrip().lstrip() == 'IS NOW A':   
+#                     if lexeme[a+2][0] =='NUMBAR':
+#                         nmbar(lexeme[a][0])
+#                     elif lexeme[a+2][0] =='NUMBR':
+#                         nmbr(lexeme[a][0])
+#                     elif lexeme[a+2][0] =='TROOF':
+#                         trf(lexeme[a][0])
+#                     elif lexeme[a+2][0] =='YARN':
+#                         yrn(lexeme[a][0])
+#                 elif lexeme[a+1][0].rstrip().lstrip() == 'R MAEK':   
+#                     if lexeme[a+2][0] =='NUMBAR':
+#                         nmbar(lexeme[a][0])
+#                     elif lexeme[a+2][0] =='NUMBR':
+#                         nmbr(lexeme[a][0])
+#                     elif lexeme[a+2][0] =='TROOF':
+#                         trf(lexeme[a][0])
+#                     elif lexeme[a+2][0] =='YARN':
+#                         yrn(lexeme[a][0])
+            # elif lexeme[a][0] == "VISIBLE":
+
+
+
 def semantics(text):
-    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
+    # arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     semanticsResult = ''
-    # global modified_varidents
+    global modified_varidents
     global varidents
     global explicit_typecast
     global undefined_error
@@ -1085,11 +1252,14 @@ def semantics(text):
     # temp_res = ""
     temp_list = []
     varidents = syntax.getVaridents(text)
+    new_varidents = {"IT": "NOOB", **varidents}
+    # print(new_varidents)
+    varidents = new_varidents
     # print(varidents)
-    literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
-    comparison = ['BOTH SAEM', 'DIFFRINT']
-    booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
-    infinitebooleans = ['ANY OF', "ALL OF"]
+    # literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
+    # comparison = ['BOTH SAEM', 'DIFFRINT']
+    # booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    # infinitebooleans = ['ANY OF', "ALL OF"]
     outsideWazzup = 0
     # print(varidents)
     undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
@@ -1119,10 +1289,79 @@ def semantics(text):
                     break
                 if lexeme[i][0] == 'I HAS A':
                     if outsideWazzup == 1:
-                        varidents[lexeme[i+1][0]] = lexeme[i+3][0]
+                        if lexeme[i+2][0] == 'ITZ':
+                            if lexeme[i+3][0] not in arithmetic and lexeme[i+3][0] not in booleans and lexeme[i+3][0] not in comparison and lexeme[i+3][0] not in infinitebooleans:
+                                    if lexeme[i+3][0] == '"' and lexeme[i+3][0] == '"':
+                                        
+                                        varidents[lexeme[i+1][0]] = lexeme[i+3][0].replace('"','')
+                                    else:
+                                        varidents[lexeme[i+1][0]] = lexeme[i+2][0].replace('"','')
+                            # modifiedVar(str1)
+                            else:
+                                if lexeme[i+3][0] in comparison:
+                                    q = 4
+                                    current = lexeme[i+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[i+q][0]
+                                
+                                    res = comparison_expression(lexeme[i+3:i+q])
+                                    varidents[lexeme[i+1][0]] = res
+
+                                elif lexeme[i+3][0] in booleans:
+                                    q = 4
+                                    current = lexeme[i+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[i+q][0]
+                                
+                                    res = booleanAnalyzer(lexeme[i+3:i+q], 'no')
+                                    varidents[lexeme[i+1][0]] = res
+
+                                elif lexeme[i+3][0] in infinitebooleans:
+                                    q = 4
+                                    current = lexeme[i+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[i+q][0]
+                                
+                                    res = infiniteBooleanAnalyzer(lexeme[i+2:i+q], lexeme[i+2][0])
+                                    varidents[lexeme[i+1][0]] = res
+
+                                    
+                                elif lexeme[i+3][0] in arithmetic:
+                                
+                                    q = 3
+                                    current = lexeme[i+q][0]
+                                    while current != 'I HAS A' and current != 'BUHBYE':
+                                        q+=1
+                                        current = lexeme[i+q][0]
+                                
+                                    res = arithmeticAnalyzer(varidents,arithmetic, lexeme[i+2:i+q])
+                                    varidents[lexeme[i+1][0]] = res
+
+                        # varidents[lexeme[i+1][0]] = lexeme[i+3][0]
                     break
+                elif lexeme[i][0].rstrip().lstrip() == 'IS NOW A':   
+                    if lexeme[i+1][0] =='NUMBAR':
+                        nmbar(lexeme[i-1][0])
+                    elif lexeme[i+1][0] =='NUMBR':
+                        nmbr(lexeme[i-1][0])
+                    elif lexeme[i+1][0] =='TROOF':
+                        trf(lexeme[i-1][0])
+                    elif lexeme[i+1][0] =='YARN':
+                        yrn(lexeme[i-1][0])
+                elif lexeme[i][0].rstrip().lstrip() == 'R MAEK':   
+                    if lexeme[i+1][0] =='NUMBAR':
+                        nmbar(lexeme[i-1][0])
+                    elif lexeme[i+1][0] =='NUMBR':
+                        nmbr(lexeme[i-1][0])
+                    elif lexeme[i+1][0] =='TROOF':
+                        trf(lexeme[i-1][0])
+                    elif lexeme[i+1][0] =='YARN':
+                        yrn(lexeme[i-1][0])
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
-                if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
+                elif lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
                     result = comparison_expression(lexeme)
                     return [result, text]
@@ -1166,116 +1405,118 @@ def semantics(text):
                 #R
                 elif lexeme[i][0] == 'R':
                     print('pasok dito')
+                    print(">>R",lexeme)
                     if len(lexeme) == 3:
                         # print(varidents, lexeme[i-1][0], lexeme[i+1][0])
-                        for j in varidents:
-                            if lexeme[i-1][0] == j:
+                        # for j in varidents:
+                            if lexeme[i-1][0] in varidents:
                                 # print(lexeme[i+1][0])
                             # print(lexeme[i+1][0].isnumeric())
                                 if lexeme[i+1][0].isnumeric():
-                                    varidents[j] = int(lexeme[i+1][0])
-                                    # print(varidents)
+                                    varidents[lexeme[i-1][0]] = int(lexeme[i+1][0])
                                     modified_varidents[lexeme[i-1][0]] = int(lexeme[i+1][0])
                                 else:
                                     if convertFloat(lexeme[i+1][0]):
-                                        varidents[j] = float(lexeme[i+1][0])
+                                        varidents[lexeme[i-1][0]] = float(lexeme[i+1][0])
                                         # print(varidents)
                                         modified_varidents[lexeme[i-1][0]] = float(lexeme[i+1][0])
                                     elif lexeme[i+1][0] in varidents:
-                                        for k in varidents:
-                                            if lexeme[i+1][0] == k:
+                                        # for k in varidents:
+                                        #     if lexeme[i+1][0] == k:
                                                 # print(k, varidents[k], lexeme[i-1][0])
                                                 # print(k, varidents[k][0])
-                                                varidents[lexeme[i-1][0]] = varidents[k]
-                                                modified_varidents[lexeme[i-1][0]] = varidents[k]
+                                                varidents[lexeme[i-1][0]] = varidents[lexeme[i+1][0]]
+                                                modified_varidents[lexeme[i-1][0]] = varidents[lexeme[i+1][0]]
                                                 
                                     else:
-                                        varidents[j] = lexeme[i+1][0]
+                                        varidents[lexeme[i-1][0]] = lexeme[i+1][0]
                                         # print(varidents)
                                         modified_varidents[lexeme[i-1][0]] = lexeme[i+1][0]
                                         
                                 
-                    elif len(lexeme) == 5:
+                    elif len(lexeme) == 5: #for var R "string"
                         # print(varidents)
-                        for j in varidents:
-                            if lexeme[i-1][0] == j:
+                        # for j in varidents:
+                            if lexeme[i-1][0] in varidents:
                                 if lexeme[i+1][0] == '"' and lexeme[i+3][0] == '"':
-                                    varidents[j] = lexeme[i+2][0]
+                                    varidents[lexeme[i-1][0]] = lexeme[i+2][0]
                                     modified_varidents[lexeme[i-1][0]] = str(lexeme[i+2][0])
                     else:
                         # print(lexeme[i+1][0])
                         if lexeme[i+1][0] == 'BOTH SAEM' or lexeme[i+1][0] == 'DIFFRINT':
-                            for j in varidents:
-                                if lexeme[i-1][0] == j:
+                            # for j in varidents:
+                                if lexeme[i-1][0] in varidents:
                                     result = comparison_expression(lexeme[i+1:])
+                                    # print(result)
                                     if len(result) != 0:
-                                        varidents[j] = result
+                                        varidents[lexeme[i-1][0]] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         
                         elif lexeme[i+1][0] in booleans:
                             # fin_boolean_expression(lexeme) booleanAnalyzer(thisLexeme, isInfinite)
-                            for j in varidents:
-                                if lexeme[i-1][0] == j:
+                            # for j in varidents:
+                                if lexeme[i-1][0] in varidents:
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     result = booleanAnalyzer(lexeme[i+1:], "no")
                                     # print(result)
                                     if len(result) != 0:
-                                        varidents[j] = result
+                                        varidents[lexeme[i-1][0]] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         
                         elif lexeme[i+1][0] == 'ANY OF':
-                            for j in varidents:
-                                if lexeme[i-1][0] == j:
+                            # for j in varidents:
+                                if lexeme[i-1][0] in varidents:
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     result = infiniteBooleanAnalyzer(lexeme[i+1:], "yes")
                                     # print(result)
                                     if len(result) != 0:
-                                        varidents[j] = result
+                                        varidents[lexeme[i-1][0]] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         
                         elif lexeme[i+1][0] == 'SMOOSH':
-                            for j in varidents:
-                                if lexeme[i-1][0] == j:
+                            # for j in varidents:
+                                if lexeme[i-1][0] in varidents:
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     # print(lexeme[i+1:])
                                     result = concatenationAnalyzer(lexeme[i+1:])
                                     result = infiniteBooleanAnalyzer(lexeme[i+1:], lexeme[i+1][0])
                                     # print(result)
                                     if len(result) != 0:
-                                        varidents[j] = result
+                                        varidents[lexeme[i-1][0]] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         
 
                         elif lexeme[i+1][0] == 'ALL OF':
-                            for j in varidents:
-                                if lexeme[i-1][0] == j:
+                            # for j in varidents:
+                                if lexeme[i-1][0] in varidents:
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     result = infiniteBooleanAnalyzer(lexeme[i+1:], lexeme[i+1][0])
                                     # print(result)
                                     if len(result) != 0:
-                                        varidents[j] = result
+                                        varidents[lexeme[i-1][0]] = result
                                         modified_varidents[lexeme[i-1][0]] = str(result)
                                         
                         elif lexeme[i+1][0] in arithmetic:
-                            for j in varidents:
-                                if lexeme[i-1][0] == j:
+                                print("arith",lexeme[i+1:])
+                            # for j in varidents:
+                                if lexeme[i-1][0] in varidents:
                                     # result = fin_boolean_expression(lexeme[i+1:])
                                     result = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:])
-                                    # print(f"result in arithmetic:{result}")
-                                    if result == "NOOBERROR":
-                                        temp_result += noob_error_prompt
-                                        noob_error = 1
-                                    elif result == 'UNDEFINEDERROR':
-                                        temp_result += undefined_error_prompt
-                                        undefined_error = 1
+                                    print(f"result in arithmetic:{result}")
+                                    # if result == "NOOBERROR":
+                                    #     temp_result += noob_error_prompt
+                                    #     noob_error = 1
+                                    # elif result == 'UNDEFINEDERROR':
+                                    #     temp_result += undefined_error_prompt
+                                    #     undefined_error = 1
                                         # print("UNDEFINEDERROR2")
                                         
-                                    else:
-                                        if len(result) != 0:
-                                            varidents[j] = result
-                                            modified_varidents[lexeme[i-1][0]] = str(result)
+                                    # else:
+                                    varidents[lexeme[i-1][0]] = result
+                                    modified_varidents[lexeme[i-1][0]] = str(result)
+                                    print("arith", varidents)
                                             
-                    print(modified_varidents)
+                    # print(modified_varidents)
                 #MAEK    
                 elif lexeme[i][0] == 'MAEK':
                     if len(lexeme) == 3 or len(lexeme) == 4 :
@@ -1448,18 +1689,16 @@ def semantics(text):
                                     temp_index+=1
                             temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
                             visible_index = temp_index
+                    varidents['IT'] = temp_result
                     text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    print('\n\n temp_result:', temp_result)
-                    # temp_res.append(temp_result)
-                    # print("temp_res:", temp_res)
-                    temp_list.append(temp_result)
-                    print(temp_list)
+                    print("ititit>>>", varidents)
+                    
                     return [f"{temp_result}\n", text]
                     # break
             lexeme.clear()
     text = text.replace(f'{text.splitlines()[h]}', '', 1)
     temp_res = temp_list
-    print('hey:', temp_res)
+    print('hey:', new_varidents)
     # temp_res.clear()
     return [None, text]
 

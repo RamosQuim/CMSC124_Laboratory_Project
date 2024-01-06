@@ -341,11 +341,7 @@ def symbolTable(str1):
     comparison = ['BOTH SAEM', 'DIFFRINT']
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
 
-    if len(it) == 0:
-        arr = []
-        arr.append('IT')   
-        arr.append('NOOB')
-        symbol_table.insert(0, arr) 
+    
 
     lexeme = lex(str1)
     counter_visible = 0
@@ -452,9 +448,9 @@ def symbolTable(str1):
                 
                 vis_val = semantics.getVisibleValue(str1)
                 print(vis_val)
-                # if len(vis_val) != 0:
-                #     for i in vis_val:
-                #         it.append(str(i))
+                if len(vis_val) != 0:
+                    for i in vis_val:
+                        it.append(str(i))
                 # dis = semantics.getVisibleValue(str1)
                 # print('\n\n',dis)
                 
@@ -571,6 +567,18 @@ def symbolTable(str1):
                         it.append(str(i))
 
     # print("\t\t",len(it))
+    
+    
+    symbol_table.clear()
+    semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
+    for k in semantics_varidents:
+        arr = []
+        arr.append(k)
+        arr.append(semantics_varidents[k])
+        symbol_table.append(arr)
+
+    
+
     if len(it) != 0:
         
         j = ""  
@@ -584,26 +592,25 @@ def symbolTable(str1):
         # symbol_table.insert(0, ['IT', j])
         symbol_table[0][1] = j
         it.clear()
-    
-    semantics_varidents = semantics.getVaridents(str1) #get modified varidents using R operation in semantics part
-    if semantics_varidents != 0:
-        sem_keys = semantics_varidents.keys()                
-        matchkeys = [key for key in sem_keys if any(key == sublist[0] for sublist in symbol_table)]
+   
+    # if semantics_varidents != 0:
+    #     sem_keys = semantics_varidents.keys()                
+    #     matchkeys = [key for key in sem_keys if any(key == sublist[0] for sublist in symbol_table)]
 
-        for k in symbol_table:
-            if k[0] in matchkeys:
-                if k[1] != semantics_varidents[k[0]]:
-                    k[1] = semantics_varidents[k[0]]
-                    semantics_varidents.pop(k[0])
+    #     for k in symbol_table:
+    #         if k[0] in matchkeys:
+    #             if k[1] != semantics_varidents[k[0]]:
+    #                 k[1] = semantics_varidents[k[0]]
+    #                 semantics_varidents.pop(k[0])
 
-    # print(semantics_varidents)
+    # # print(semantics_varidents)
 
-        if len(semantics_varidents) != 0:
-            for k in semantics_varidents:
-                arr = []
-                arr.append(k)
-                arr.append(semantics_varidents[k])
-                symbol_table.append(arr)
+    #     if len(semantics_varidents) != 0:
+    #         for k in semantics_varidents:
+    #             arr = []
+    #             arr.append(k)
+    #             arr.append(semantics_varidents[k])
+    #             symbol_table.append(arr)
 
 
     return symbol_table
