@@ -745,6 +745,9 @@ def syntax(text):
     wtfchecker = -1
     omgchecker = -1
     omgwtfchecker = -1
+    orlychecker = -1
+    yarlychecker = -1
+    nowaichecker = -1
     functionchecker = -1
     
     for h in range(0, len(text.splitlines())):
@@ -1693,7 +1696,11 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OIC should not be followed by anything.')
                                 success = 0
                                 break 
-                            elif omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
+
+                        ###### NOTEEEEE: Pa-adjust na lang ng condition ditooo thanksss, nilagyan 
+                        ###### ko muna yung pangalawang condition para di magprompt yung syntaxError sa console natin
+                        # elif omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
+                            elif (omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1) and (orlychecker != -1 and yarlychecker != -1 and nowaichecker != -1):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?3')
                                 success = 0
                                 break   
