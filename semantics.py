@@ -881,7 +881,7 @@ def semantics(text):
                     if outsideWazzup == 1:
                         if len(lexeme) == 4:
                             varidents[lexeme[i+1][0]] = lexeme[i+3][0]
-                        else:
+                        elif len(lexeme) > 4:
                             varidents[lexeme[i+1][0]] = lexeme[i+4][0]
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS

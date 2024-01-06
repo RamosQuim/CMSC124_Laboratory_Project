@@ -172,8 +172,8 @@ def lex(str):
                 elif 'OBTW' == val:
                 # print(tokens.value)
                 # comment = Token('Comment Delimiter', 'BTW')
-                    print(tokens[i+1].value)
-                    print(tokens, "\n", tokens[i+1].value)
+                    # print(tokens[i+1].value)
+                    # print(tokens, "\n", tokens[i+1].value)
                     if i != len(tokens):
                         count = 0
                         index = i+1
