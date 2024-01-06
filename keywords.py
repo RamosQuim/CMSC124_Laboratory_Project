@@ -37,7 +37,7 @@ class LOLLexer:
             if match:
                 value = match.group(0)
                 self.current_position += len(value)
-                # print(value)
+                print(value)
                 # if token_type == 'YARN Literal':
                     #  print("value" + value)
                     # print(value)S
@@ -130,20 +130,25 @@ def lex(str):
     # print('\n\n')
     # print(str)
     # print('\n\n')
+    literals=['YARN Literal', 'NUMBR Literal', 'NUMBAR Literal', 'Identifier', 'TROOF Literal', 'Type Literal']
     compiled_lex.clear()
     # global compiled_lex
     # compiled_lex = []
     varidents = []
     code = str
+    toRemove = []
     if code.strip() != "":  # to avoid error when there is no input
         lexer = LOLLexer(code)
         tokens = lexer.tokenize()
         # print(tokens)
+
         
         for i in range(0, len(tokens)):
             # print(tokens[i].value, tokens[i].type)
-            temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
-            val = temp.lstrip()
+
+            if i != len(tokens):
+                temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
+                val = temp.lstrip()
             # print(val, val[0], val[len(val)-1], len(val))
 
             # print(tokens[i+1].value)
@@ -151,21 +156,33 @@ def lex(str):
             # print(temp)
 
             # if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
-            if tokens[i].type == 'YARN Literal':
+                if tokens[i].type == 'YARN Literal':
                     
                 # print(tokens[i].value)
-                if val[0] == '"' and val[-1] == '"':
+                    if val[0] == '"' and val[-1] == '"':
                     # print(tokens[i].value)
-                    new = Token('String Delimiter', '"')
-                    tokens[i].value = val[1:-1]
-                    tokens.insert(i, new)
-                    tokens.insert(i+2, new)
-            elif 'BTW' in val:
-                tokens[i].value = val[4:]
-                comment = Token('Comment Delimiter', 'BTW')
-                tokens.insert(i, comment)
-            if i != len(tokens):
-                if tokens[i].type == 'Variable Declaration':
+                        new = Token('String Delimiter', '"')
+                        tokens[i].value = val[1:-1]
+                        tokens.insert(i, new)
+                        tokens.insert(i+2, new)
+                elif 'BTW' == val:
+                    tokens[i].value = val[4:]
+                    comment = Token('Comment Delimiter', 'BTW')
+                    tokens.insert(i, comment)
+                elif 'OBTW' == val:
+                # print(tokens.value)
+                # comment = Token('Comment Delimiter', 'BTW')
+                    print(tokens[i+1].value)
+                    print(tokens, "\n", tokens[i+1].value)
+                    if i != len(tokens):
+                        count = 0
+                        index = i+1
+                        for c in range(i+1, len(tokens)):
+                            if tokens[c].type in literals:
+                                toRemove.append(tokens[c])
+                            else: break
+                            
+                elif tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
                         varidents.append(tokens[i+1].value.lstrip().rstrip())
                         tokens[i+1].type = 'Variable Identifier'
@@ -179,6 +196,8 @@ def lex(str):
                         tokens[i].type = 'Variable Identifier'
 
         # print('\n\nTokens:')
+        for k in toRemove:
+            tokens.remove(k)
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
         
