@@ -785,6 +785,7 @@ isInCondition = -1      # -1 means unused
 conditionFlag = -1
 omgwtfFlag = -1
 gtfoFlag = -1
+nowaiFlag = -1
 modified_varidents = {}
 temp_res = []
 explicit_typecast = []
@@ -827,6 +828,7 @@ def semantics(text):
     global conditionFlag
     global omgwtfFlag
     global gtfoFlag
+    global nowaiFlag
 
     varidents = {'IT': 'NOOB'}
     # temp_res.clear()
@@ -859,12 +861,17 @@ def semantics(text):
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
-            print(lexeme, conditionFlag, gtfoFlag, omgwtfFlag, isInCondition, '<<<<<<<<<<<<<<')
             if conditionFlag == 0 and omgwtfFlag == 1 and lexeme[0][0] != 'OMGWTF':     # para sa mga statements na hindi ieexecute sa if else at switch case
-                print('true dapat to')
                 continue
             elif conditionFlag == 1 and gtfoFlag == 1 and lexeme[0][0] != 'OIC':
                 continue
+            elif conditionFlag == 0 and nowaiFlag == 1:
+                if len(lexeme) != 2 or lexeme[0][0] != 'NO' or lexeme[1][0] != 'WAI':
+                    continue
+            elif conditionFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
+                continue 
+
+
             # print(f"len(lexeme): {len(lexeme)}")
             for i in range(0, len(lexeme)):                
                 if lexeme[i][0] == 'BUHBYE':
@@ -879,22 +886,23 @@ def semantics(text):
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
                 if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
-                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
                     result = comparison_expression(lexeme)
-                    return [result, text, varidents]
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
+                    return ['', text, varidents]
                 
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
                 elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
-                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    return [f'{infiniteBooleanAnalyzer(lexeme, lexeme[i][0])}\n', text, varidents]
+                    result = infiniteBooleanAnalyzer(lexeme[i+1:], "ALL OF")
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
+                    return ['', text, varidents]
                     
                 elif lexeme[i][0] in booleans:
-                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
-                    return [f'{booleanAnalyzer(lexeme, 0)}\n', text, varidents]
+                    result = infiniteBooleanAnalyzer(lexeme[i+1:], "ANY OF")
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
+                    return ['', text, varidents]
 
                 #THIS PART IS FOR THE COMPUTATIONS!!
                 elif lexeme[i][0] in arithmetic:
-                    text = text.replace(f'{text.splitlines()[h]}', '', 1)
                     arithmeticresult = str(arithmeticAnalyzer(varidents,arithmetic,lexeme))
                     # print(f"arithmetic result:{arithmeticresult}")
                     if arithmeticresult == "NOOBERROR":
@@ -907,6 +915,7 @@ def semantics(text):
                         # print("UNDEFINEDERROR1")
                         break
                     else:
+                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {arithmeticresult}', 1)
                         return [arithmeticresult, text, varidents]
                         break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
@@ -989,7 +998,7 @@ def semantics(text):
                             for j in varidents:
                                 if lexeme[i-1][0] == j:
                                     # result = fin_boolean_expression(lexeme[i+1:])
-                                    result = infiniteBooleanAnalyzer(lexeme[i+1:], "yes")
+                                    result = infiniteBooleanAnalyzer(lexeme[i+1:], "ANY OF")
                                     # print(result)
                                     if len(result) != 0:
                                         varidents[j] = result
@@ -1287,6 +1296,25 @@ def semantics(text):
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[lexeme[i][0]]}', 1)
                     return [f'', text, varidents]
 
+                elif len(lexeme) == 2 and lexeme[i][0] == 'O' and lexeme[i+1][0] == 'RLY':
+                    isInCondition = 1
+
+                elif len(lexeme) == 2 and lexeme[i][0] == 'YA' and lexeme[i+1][0] == 'RLY':
+                    if varidents['IT'] == 'WIN':
+                        conditionFlag = 1
+                    elif varidents['IT'] == 'FAIL':
+                        conditionFlag = 0
+                        nowaiFlag = 1
+                    else:
+                        if f'{int(float(varidents["IT"]))}' != '0' or varidents["IT"] != 'NOOB':
+                            conditionFlag = 1
+                        else:
+                            conditionFlag = 0
+                            nowaiFlag = 1
+                
+                elif len(lexeme) == 2 and lexeme[i][0] == 'NO' and lexeme[i+1][0] == 'WAI':
+                    nowaiFlag = 0
+
                 elif lexeme[i][0] == 'WTF':
                     isInCondition = 1
                 
@@ -1314,8 +1342,7 @@ def semantics(text):
                         gtfoFlag = -1
                     isInCondition == -1
                     conditionFlag = -1
-
-
+                    nowaiFlag = -1
 
                 elif lexeme[i][0] == 'VISIBLE':
                     # print(f"lexeme:{lexeme}")
