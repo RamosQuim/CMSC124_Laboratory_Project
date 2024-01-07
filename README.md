@@ -1,4 +1,4 @@
-# # CMSC 124: Splitwise Project
+# # CMSC 124: TayLOL Shesh: A LOLCode Interpreter
 
 ## Program Description
 An interpreter for the LOLCode Programming Language using Python Programming Language. More information regarding LOLCode can be found on the following:
