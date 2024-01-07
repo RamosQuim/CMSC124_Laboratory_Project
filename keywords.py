@@ -23,10 +23,6 @@ class LOLLexer:
             current_value = self.source_code[self.current_position:self.current_position + 10]
             
             token = self.match_token()
-            
-            
-            
-
             if token is not None:
                 if hasobtw == 0 and token.value[0:4] == 'OBTW':
                     hasobtw = 1 
