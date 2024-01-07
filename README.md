@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # # CMSC 124: TayLOL Shesh: A LOLCode Interpreter
+=======
+# # CMSC 124: Splitwise Project
+>>>>>>> ed845353f4c8cad342a42379157042170bbbd4ae
 
 ## Program Description
 An interpreter for the LOLCode Programming Language using Python Programming Language. More information regarding LOLCode can be found on the following:
@@ -22,4 +26,8 @@ An interpreter for the LOLCode Programming Language using Python Programming Lan
 ## Group Members
 -  Ramos, Quim Zyrelle
 - Rosello, Ma. Jazmine 
+<<<<<<< HEAD
 - Asuncion, Shane Austin
+=======
+- Asuncion, Shane Austin
+>>>>>>> ed845353f4c8cad342a42379157042170bbbd4ae
