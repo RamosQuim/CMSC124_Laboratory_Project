@@ -1,4 +1,4 @@
-# # CMSC 124: TayLOL Shesh: A LOLCode Interpreter
+# # TayLOL Shesh: A LOLCode Interpreter
 
 ## Program Description
 An interpreter for the LOLCode Programming Language using Python Programming Language. More information regarding LOLCode can be found on the following:
@@ -26,7 +26,7 @@ source: https://kinsta.com/knowledgebase/install-python/
 
 ### Ensuring TKinter is installed
 1. The tkinter package (“Tk interface”) is the standard Python interface to the Tk GUI toolkit. 
-2. To try if TKinter is really installed you may use the command: python -m tkinter 
+2. To try if TKinter is really installed you may type this in the command line: python -m tkinter 
 
 source: https://docs.python.org/3.8/library/tkinter.html#:~:text=Running%20python%20%2Dm%20tkinter%20from,documentation%20specific%20to%20that%20version.
 
