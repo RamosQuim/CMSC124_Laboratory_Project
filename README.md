@@ -14,12 +14,21 @@ An interpreter for the LOLCode Programming Language using Python Programming Lan
 1. Install Python Programming Language in your OS.
 2. Ensure that TKinter is installed together with Python.
 
+### Installing Python
+1. Download the Python installer (https://kinsta.com/knowledgebase/install-python/#windows-1)
+2. Run the installer
+3. Customize the installation (optional)
+4. Install Python
+5. Verify the installion
+6. Alternate installation via Microsoft Store
+source: https://kinsta.com/knowledgebase/install-python/
+
+### Ensuring TKinter is installed
+1. The tkinter package (“Tk interface”) is the standard Python interface to the Tk GUI toolkit. 
+2. To try if TKinter is really installed you may use the command: python -m tkinter 
+source: https://docs.python.org/3.8/library/tkinter.html#:~:text=Running%20python%20%2Dm%20tkinter%20from,documentation%20specific%20to%20that%20version.
+
 ## How To Run
 1. Open the ui.py file
 2. Run ui.py file
 3. Use the application
-
-## Group Members
--  Ramos, Quim Zyrelle
-- Rosello, Ma. Jazmine 
-- Asuncion, Shane Austin
