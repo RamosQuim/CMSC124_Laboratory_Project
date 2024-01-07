@@ -1036,7 +1036,7 @@ def semantics(text):
     
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
-        # print(">>>>>>lexeme in semantics",lexeme)
+        print(">>>>>>lexeme in semantics",lexeme)
         # print('\n\n')
         if undefined_error == 1 or noob_error:
             undefined_error = 0
@@ -1699,7 +1699,7 @@ def semantics(text):
                     #     # print('ito ang loop body', loops)
 
                 elif lexeme[i][0] == 'VISIBLE' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
-                    print('ito na ung current >>>>>>>>>>><<<<<<<', text, loopDone)
+                    print('ito na ung current >>>>>>>>>>><<<<<<<', lexeme)
                     # print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
@@ -1714,10 +1714,12 @@ def semantics(text):
                         #print(f"visible_index: {visible_index}")
                         #print(f"currently pointed to right now: {lexeme[visible_index]}")
                         if lexeme[visible_index][1] == 'String Delimiter':
-                            if lexeme[visible_index+1][0].isspace():
-                                temp_result += " "
-                                visible_index +=3
-                            else:
+                            # if lexeme[visible_index+1][0].isspace():
+                            #     temp_result += " "
+                            #     visible_index +=3
+                            # else:
+                                print("PASOK ANG QUOTEEEEEEEEEEEE")
+
                                 print(">>>>>> ETO ", lexeme[visible_index+1][0])
                                 temp_result += str(lexeme[visible_index+1][0])
                                 visible_index +=3
