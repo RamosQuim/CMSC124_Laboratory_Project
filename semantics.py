@@ -8,15 +8,14 @@ import math
 undefined_error = 0
 noob_error = 0
 #this part is for the semantics of the arithmetic operations (SUM OF, DIFF OF, ETC.)
-def arithmeticAnalyzer(varidents, arithmetic,lexeme): 
-    # print(f'ARITHMETIC ANALYZER LEXEME: {lexeme}')           
+def arithmeticAnalyzer(varidents, arithmetic,lexeme):      
     if lexeme[0][0] in arithmetic:
         remover_index = 0
         is_float = False
         valid_checker = 0
         #this is created to remove the literal naming in lexeme and checking if it's a float or not
         while remover_index < len(lexeme):
-            
+            #tanggalin muna yung mga string delimiter para madali
             if lexeme[remover_index][1] == "String Delimiter":
                     lexeme.pop(remover_index)
                     remover_index = remover_index - 1
@@ -59,20 +58,17 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
             result = "NOOBERROR"
             return result 
 
-
+        #magloloop lang siya hanggat di pa nareread yung buong line
         while arithmetic_index < len(lexeme) and valid_checker == 0:
-            #THIS IS FOR CHECKING IF MAY KATABI BA SIYA OR WALA NA OPERATION
-            # print(f"current lexeme sa arithemtic: {lexeme}")
-            # print(f"currently pointed to: {lexeme[arithmetic_index][0]}")
-            # print(f"varidents: {varidents}")
+            #THIS IS FOR CHECKING IF MAY KATABI BA SIYA OR WALA NA OPERATION (para mas madali yung pag compute)
             # OPERATOR OPERAND1 OPERAND2
             if lexeme[arithmetic_index][0] in arithmetic:
                 #check 1ST OPERAND POSITION
                 if lexeme[arithmetic_index+1][0] not in arithmetic:
                     #check THE 2ND OPERAND POSITION
                     if lexeme[arithmetic_index+3][0] not in arithmetic:
+                        #if accepted then proceed to performing the operations!
                         if lexeme[arithmetic_index][0] == 'SUM OF':
-                            # print(lexeme[arithmetic_index+1][1], lexeme[arithmetic_index+1][0], float(varidents[lexeme[arithmetic_index+1][0]]),float(lexeme[arithmetic_index+3][0]) )
                             #this is created to cater the variables!!!
                             if (lexeme[arithmetic_index+1][1] == 'Identifier' or lexeme[arithmetic_index+1][1] == 'Variable Identifier') and (lexeme[arithmetic_index+3][1] == 'Identifier' or lexeme[arithmetic_index+3][1] == 'Variable Identifier'):                                        
                                 result = float(varidents[lexeme[arithmetic_index+1][0]])+float(varidents[lexeme[arithmetic_index+3][0]])
@@ -348,22 +344,15 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                         arithmetic_index = arithmetic_index + 4
                     else:
                         operation_list.append(lexeme[arithmetic_index][0])
-                        # print(f"lexeme[arithmetic_index+1][0]]: {lexeme[arithmetic_index+1][0]}")
-                        # print(f"varidents:{varidents}")
                         if lexeme[arithmetic_index+1][0] in varidents:
                             values_list.append(float(varidents[lexeme[arithmetic_index+1][0]]))
                         else:
                             values_list.append(float(lexeme[arithmetic_index+1][0])) 
                         arithmetic_index = arithmetic_index + 3
                         an_counter = an_counter + 1
-                        # print(f"next current index is : {lexeme[arithmetic_index][0]}")
-                        # print(f"current operation list: {operation_list}")
-                        # print(f"current values list: {values_list}")
                 else:
                     operation_list.append(lexeme[arithmetic_index][0])
-                    arithmetic_index = arithmetic_index + 1
-                # print(f"arithmetic_index:{arithmetic_index}")
-                # print(f"len of lexeme: {len(lexeme)}")                            
+                    arithmetic_index = arithmetic_index + 1                          
             elif lexeme[arithmetic_index][0] == 'AN':
                 if lexeme[arithmetic_index+1][0] not in arithmetic:
                     if operation_list[-1] == 'SUM OF':
@@ -457,16 +446,14 @@ def arithmeticAnalyzer(varidents, arithmetic,lexeme):
                     arithmetic_index = arithmetic_index + 1
                     values_list.append(result)
                     result = 0
-                    # print("reset")
-        
+
         #this one is created to cater yung mga nauna  (SUM OF SUM OF 3 AN 4 AN DIFF OF 3 AN 2)
-        # print(f"an_counter:{an_counter}")
+        #parang nag babacktracking kana dito 
         is_onelement = 0
         if an_counter == 1:
             is_onelement = 1
             an_counter = 2
 
-        # print(f"updated an_counter: {an_counter}")
         for i in range (an_counter):
             if operation_list[-(1+i)] == 'SUM OF':
                 result = values_list[-(1+i)] + result   
@@ -845,13 +832,12 @@ def functionExecute(text, parameters):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
             for i in range(0, len(lexeme)):    
+
+                #VISIBLE SEMANTICS
                 if lexeme[i][0] == 'VISIBLE':
-                    # print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
                     while visible_index < len(lexeme):
-                        #print(f"visible_index: {visible_index}")
-                        #print(f"currently pointed to right now: {lexeme[visible_index]}")
                         print(lexeme[visible_index][0], parameters, '<<<<<<<<<<<<<<<<>>>>>>>>>>')
                         if lexeme[visible_index][1] == 'String Delimiter':
                             temp_result += str(lexeme[visible_index+1][0])
@@ -946,8 +932,6 @@ def functionExecute(text, parameters):
                             temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
                             visible_index = temp_index
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
-                    # temp_res.append(temp_result)
-                    # print("temp_res:", temp_res)
                     print('ito ang current result', temp_result)
                     print('ito ang current result',varidents)
                     varidents['IT'] = temp_result
@@ -1700,19 +1684,11 @@ def semantics(text):
 
                 elif lexeme[i][0] == 'VISIBLE' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     print('ito na ung current >>>>>>>>>>><<<<<<<', text, loopDone)
-                    # print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
                     print('hey:', varidents)
-                    #result = "uwu"
-                    # print(f"i: {i}")
                     print(f"current lexeme: {lexeme}")
-                    # print(f"len(lexeme) sa visible: {len(lexeme)}")
-                    # print(f"visible_index: {visible_index}")
-                    #print(f"currently pointed to: {lexeme[visible_index]}")
                     while visible_index < len(lexeme):
-                        #print(f"visible_index: {visible_index}")
-                        #print(f"currently pointed to right now: {lexeme[visible_index]}")
                         if lexeme[visible_index][1] == 'String Delimiter':
                             if lexeme[visible_index+1][0].isspace():
                                 temp_result += " "
