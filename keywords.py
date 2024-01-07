@@ -202,7 +202,7 @@ def lex(str):
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
         
         # print(compiled_lex)
-        # print(compiled_lex)
+        # print(">>> COMPILED LEX <<<<\n",compiled_lex)
         return compiled_lex
     
 # def nmbar(tk):  

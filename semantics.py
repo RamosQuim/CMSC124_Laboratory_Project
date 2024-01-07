@@ -975,8 +975,8 @@ def functionExecute(text, parameters):
                     return IT
 
 def semantics(text):
-    print("<<<<,>>>>>>>")
-    print(text, "\n\n\n")
+    # print("<<<<,>>>>>>>")
+    # print(text, "\n\n\n")
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     semanticsResult = ''
     # global modified_varidents

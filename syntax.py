@@ -737,7 +737,7 @@ def getModifVaridents(text):
     # return 0
 
 def syntax(text):
-    print("in syntax", text)
+    # print("in syntax", text)
     global varidents
     global modif_var
     global prev_lexeme
