@@ -1634,9 +1634,10 @@ def semantics(text):
                     # print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
+                    print('hey:', varidents)
                     #result = "uwu"
                     # print(f"i: {i}")
-                    # print(f"current lexeme: {lexeme}")
+                    print(f"current lexeme: {lexeme}")
                     # print(f"len(lexeme) sa visible: {len(lexeme)}")
                     # print(f"visible_index: {visible_index}")
                     #print(f"currently pointed to: {lexeme[visible_index]}")
@@ -1644,8 +1645,13 @@ def semantics(text):
                         #print(f"visible_index: {visible_index}")
                         #print(f"currently pointed to right now: {lexeme[visible_index]}")
                         if lexeme[visible_index][1] == 'String Delimiter':
-                            temp_result += str(lexeme[visible_index+1][0])
-                            visible_index +=3
+                            if lexeme[visible_index+1][0].isspace():
+                                temp_result += " "
+                                visible_index +=3
+                            else:
+                                print(">>>>>> ETO ", lexeme[visible_index+1][0])
+                                temp_result += str(lexeme[visible_index+1][0])
+                                visible_index +=3
                         elif lexeme[visible_index][1] == 'Output Delimiter':
                             visible_index +=1
                         elif lexeme[visible_index][0] in varidents:
@@ -1763,10 +1769,12 @@ def semantics(text):
                     # print('ito ang current ipapasa',varidents)
                     return [f"{temp_result}\n", text, varidents]
                     # break
+                
             lexeme.clear()
+    
     text = text.replace(f'{text.splitlines()[h]}', '', 1)
     temp_res = temp_list
-    # print('hey:', varidents)
+    
     return [None, text, varidents]
 
 
