@@ -1849,7 +1849,7 @@ def comparison_expression(lexeme):
                         if lexeme[i+1][0] in arithmetic:
                             num_operations = 1
             
-                            index =i+1
+                            index = i+1
                             # num_operations += 1
                             for j in range(2, len(lexeme)):
                                 if lexeme[j][0] in arithmetic:
@@ -1943,13 +1943,13 @@ def comparison_expression(lexeme):
                                     else:
                                         result = 'FAIL'
                             elif one == False and three == False:
-                                value = []
-                                for j in varidents:
-                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                        value.append(varidents[j])
+                                # value = []
+                                # for j in varidents:
+                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                #         value.append(varidents[j])
                                 if len(value) == 2:
-                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                        if float(value[0]) <= float(value[1]):
+                                    if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
+                                        if float(varidents[lexeme[i+1][0]]) <= float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
                                            result = 'FAIL'
@@ -1957,7 +1957,7 @@ def comparison_expression(lexeme):
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
                             if one == True and three == True:
-                                if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
+                                if float(lexeme[i+1][0]) >= float(lexeme[i+6][0]):
                                    result = 'WIN'
                                 else:
                                     result = 'FAIL'
@@ -1967,7 +1967,7 @@ def comparison_expression(lexeme):
                                     if j == lexeme[i+1][0]:
                                         value = varidents[j]
                                 if convertFloat(value) == True:
-                                    if float(value) <= float(lexeme[i+6][0]):
+                                    if float(value) >= float(lexeme[i+6][0]):
                                         result = 'WIN'
                                     else:
                                         result = 'FAIL'
@@ -1977,21 +1977,21 @@ def comparison_expression(lexeme):
                                     if j == lexeme[i+6][0]:
                                         value = varidents[j]
                                 if convertFloat(value) == True:
-                                    if float(lexeme[i+1][0]) <= float(value):
+                                    if float(lexeme[i+1][0]) >= float(value):
                                         result = 'WIN'
                                     else:
                                        result = 'FAIL'
                             elif one == False and three == False:
-                                value = []
-                                for j in varidents:
-                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                        value.append(varidents[j])
+                                # value = []
+                                # for j in varidents:
+                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                #         value.append(varidents[j])
                                 if len(value) == 2:
-                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                        if float(value[0]) <= float(value[1]):
+                                    if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
+                                        if float(varidents[lexeme[i+1][0]]) >= float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
-                                            result = 'FAIL'
+                                           result = 'FAIL'
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
                             num_operations = 1

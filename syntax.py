@@ -761,6 +761,8 @@ def syntax(text):
     yarlychecker = -1
     nowaichecker = -1
     functionchecker = -1
+    hasobtw = -1
+    hastldr = -1
     
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
@@ -1306,6 +1308,20 @@ def syntax(text):
                                                 visible_indexcounter +=3
                                 break
                     
+                    if lexeme[i][0] == 'OBTW':
+                        hasobtw = 0
+                    
+                    if lexeme[i][0] == 'TLDR':
+                        hastldr = 0
+                        if hasobtw == -1:
+                            hastldr = -1
+                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tthere should be an OBTW before TLDR')
+                            success = 0
+                            break
+
+
+                    
+
                     
                     #RETURN WITH SOMETHING
                     if lexeme[i][0]=='FOUND YR':
@@ -2268,7 +2284,7 @@ def syntax(text):
                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tStatements must be inside HAI and KTHXBYE')
                     success = 0
                     break
-
+                
                 ## PROGRAM BLOCK SYNTAX - KTHXBYE
                 if lexeme[i][0] == 'KTHXBYE' and hasHai == 0:
                         hasKthxbye = 0
@@ -2291,6 +2307,13 @@ def syntax(text):
                 exp_lexeme = 0
             lexeme.clear()
 
+    if hasobtw == 0 and hastldr == -1:
+        success = 0
+        syntaxResult += (f'\n>> SyntaxError in line {h+1} in <OBTW>: \n\tOBTW must be enclosed with TLDR')
+    else:
+        hasobtw = -1
+        hastldr = -1
+        
     if hasHai == 0 and hasKthxbye == -1:
         syntaxResult += (f'\n>> SyntaxError in line {h+1} in <HAI>: \n\tHAI must be enclosed with KTHXBYE')
 
