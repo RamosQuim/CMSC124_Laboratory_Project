@@ -15,6 +15,7 @@ class LOLLexer:
 
     #
     def tokenize(self):
+        hasobtw = 0
         while self.current_position < len(self.source_code):
             # print(f"Current position: {self.current_position}")
             
@@ -22,8 +23,14 @@ class LOLLexer:
             current_value = self.source_code[self.current_position:self.current_position + 10]
             
             token = self.match_token()
-
             if token is not None:
+                if hasobtw == 0 and token.value[0:4] == 'OBTW':
+                    hasobtw = 1 
+
+                if token.type == 'Special Characters' :
+                    if hasobtw != 1:
+                        continue
+               
                 self.tokens.append(token) #appends the token to the tokens list
             else:
                 break
@@ -37,17 +44,6 @@ class LOLLexer:
             if match:
                 value = match.group(0)
                 self.current_position += len(value)
-                print(value)
-                # if token_type == 'YARN Literal':
-                    #  print("value" + value)
-                    # print(value)S
-                    # if value[0] == '"' and value[len(value)-1] == '"':
-                    #       print(value)
-                    # value = value.replace('"', "")
-                        #   print(val)
-                    # return Token(token_type, value)
-
-                    # value = value.replace('"',"")
                 return Token(token_type, value)     #returns the Token
         return None
 
@@ -64,9 +60,9 @@ token_patterns = {
     r'\s*KTHXBYE\s+': 'Code Delimiter',
     r'\s*WAZZUP\s+': 'Variable Declaration Delimiter',
     r'\s*BUHBYE\s+': 'Variable Declaration Delimiter',
-    r'\s*OBTW\s+': 'Comment Delimiter',
+    # r'\s*OBTW\s+': 'Comment Delimiter',
     r'\s*TLDR\s+': 'Comment Delimiter',
-    r'((\s*BTW .*)|( BTW .*))': 'Comment Line',
+    r'((\s*^BTW .*)|( ^BTW .*)|(\s*^OBTW .*)|( ^OBTW .*))': 'Comment Line',
     r'\s*I HAS A\s+': 'Variable Declaration',
     r'\s*ITZ\s+': 'Variable Assignment',
     r'\s*R\s+': 'Variable Assignment',
@@ -123,7 +119,8 @@ token_patterns = {
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
     r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
     # r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',    
-    r'\s*\"[^\"]*\"\s*': 'YARN Literal',             
+    r'\s*\"[^\"]*\"\s*': 'YARN Literal',   
+    r'\s?.*\s?': 'Special Characters'          
 }
 
 def lex(str):
@@ -141,7 +138,13 @@ def lex(str):
         lexer = LOLLexer(code)
         tokens = lexer.tokenize()
         # print(tokens)
+        hastldr = -1
+        hasobtw = -1
+        comment_line = ""
+        toRemove = []
+        indexToinsert = []
 
+        
         
         for i in range(0, len(tokens)):
             # print(tokens[i].value, tokens[i].type)
@@ -149,14 +152,23 @@ def lex(str):
             if i != len(tokens):
                 temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
                 val = temp.lstrip()
+                # print(">>>>val", val)
             # print(val, val[0], val[len(val)-1], len(val))
 
             # print(tokens[i+1].value)
             
             # print(temp)
+                if hasobtw == 0 and val != 'TLDR':
+
+                    # if tokens[i].type == 'Identifier':
+                    comment_line += tokens[i].value
+                    print("<><><><><><><><><><><><><><><><", tokens[i].value)
+                    toRemove.append(tokens[i])
+                    
+                        # tokens.remove(tokens[i])
 
             # if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
-                if tokens[i].type == 'YARN Literal':
+                elif tokens[i].type == 'YARN Literal':
                     
                 # print(tokens[i].value)
                     if val[0] == '"' and val[-1] == '"':
@@ -165,23 +177,20 @@ def lex(str):
                         tokens[i].value = val[1:-1]
                         tokens.insert(i, new)
                         tokens.insert(i+2, new)
-                elif 'BTW' == val:
-                    tokens[i].value = val[4:]
+                elif 'BTW' == val[0:3]:
+                    tokens[i].value = val[3:]
                     comment = Token('Comment Delimiter', 'BTW')
                     tokens.insert(i, comment)
-                elif 'OBTW' == val:
-                # print(tokens.value)
-                # comment = Token('Comment Delimiter', 'BTW')
-                    # print(tokens[i+1].value)
-                    # print(tokens, "\n", tokens[i+1].value)
-                    if i != len(tokens):
-                        count = 0
-                        index = i+1
-                        for c in range(i+1, len(tokens)):
-                            if tokens[c].type in literals:
-                                toRemove.append(tokens[c])
-                            else: break
-                            
+                elif 'OBTW' == val[0:4]:
+                    print(">>>>>PLS PLS PLS",val)
+                    hasobtw = 0
+                    # print(">>>>> OBTW:", val)
+                    tokens[i].value = val[4:]
+                    comment = Token('Comment Delimiter', 'OBTW')
+                    tokens.insert(i, comment)
+                elif 'TLDR' == val:
+                    indexToinsert.append(tokens[i])
+                    hasobtw = 1
                 elif tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
                         varidents.append(tokens[i+1].value.lstrip().rstrip())
@@ -197,7 +206,16 @@ def lex(str):
 
         # print('\n\nTokens:')
         for k in toRemove:
+            # comment_line += k.value
             tokens.remove(k)
+
+        if comment_line != '' and hasobtw == 1:
+            comment_block = comment_line.replace('\n',' ').rstrip().lstrip()
+            comment = Token('Comment Line', comment_block)
+            index = tokens.index(indexToinsert[0])
+            tokens.insert(index, comment)
+        
+        comment_line = ''
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
         
