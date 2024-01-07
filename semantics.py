@@ -955,23 +955,25 @@ def functionExecute(text, parameters):
                     break
                 elif lexeme[i][0] == 'FOUND YR':
                     #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
-                    if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
+                    if lexeme[i+1][0] in parameters:
+                        varidents['IT'] = parameters[lexeme[i+1][0]]
+                    elif lexeme[i+1][0] == 'BOTH SAEM' or lexeme[i+1][0] == 'DIFFRINT':
                         result = comparison_expression(lexeme[i+1:])
                         varidents['IT'] = result
                     
                     ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                    elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                    elif lexeme[i+1][0] == 'ANY OF' or lexeme[i+1][0] == 'ALL OF':
                         result = infiniteBooleanAnalyzer(lexeme[i+2:], "ALL OF")
                         varidents['IT'] = result
                         
-                    elif lexeme[i][0] in booleans:
+                    elif lexeme[i+1][0] in booleans:
                         result = infiniteBooleanAnalyzer(lexeme[i+2:], "ANY OF")
                         varidents['IT'] = result
 
                     #THIS PART IS FOR THE COMPUTATIONS!!
-                    elif lexeme[i][0] in arithmetic:
+                    elif lexeme[i+1][0] in arithmetic:
                         arithmeticresult = str(arithmeticAnalyzer(parameters,arithmetic,lexeme[i+1:]))
-                        varidents['IT'] = result
+                        varidents['IT'] = arithmeticresult
                     return IT
                 elif lexeme[i][0] == 'GTFO':
                     return IT
@@ -1544,10 +1546,20 @@ def semantics(text):
                     currentFunction = lexeme[i+1][0]
                     if len(lexeme) == 4:
                         parameter_list[lexeme[i+1][0]] = lexeme[i+3][0]
+                    else:
+                        parameters = []
+                        param_index = 3
+
+                        while param_index < len(lexeme):
+                            parameters.append(lexeme[param_index][0])
+                            param_index += 3
+                        
+                        parameter_list[lexeme[i+1][0]] = parameters
+
                     isInFunction = 1
                 
                 elif lexeme[i][0] == 'I IZ':
-                    if len(lexeme) == 5:
+                    if len(lexeme) != 8 or lexeme[i+3][0] in arithmetic:
                         if lexeme[i+3][0] in varidents:
                             print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',functions[lexeme[i+1][0]])
                             it = functionExecute(functions[lexeme[i+1][0]], {parameter_list[lexeme[i+1][0]]: varidents[lexeme[i+3][0]]})
@@ -1562,6 +1574,53 @@ def semantics(text):
                                 varidents['IT'] = it[-1]
                                 return [f"{to_print}", text, varidents]
                             return [f'', text, varidents]
+                        elif lexeme[i+3][0] in arithmetic:
+                            print('PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+                            arithresult = arithmeticAnalyzer(varidents, arithmetic, lexeme[i+3:-1])
+                            it = functionExecute(functions[lexeme[i+1][0]], {parameter_list[lexeme[i+1][0]]: arithresult})
+                            if len(it) != 0:
+                                to_print = ''
+                                for value in it:
+                                    to_print += f'{value}\n'
+                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{it[-1]}"', 1)
+                                # temp_res.append(temp_result)
+                                # print("temp_res:", temp_res)
+                                varidents['IT'] = it[-1]
+                                return [f"{to_print}", text, varidents]
+                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{varidents["IT"]}"', 1)
+                            return [f'', text, varidents]
+                    else:
+                        parameter_index = 3
+                        parameters = []
+                        param_counter = 0
+                        to_pass = {}
+                        print('ito statemeeeeeeeetnaaaaaaaaaaaaaaaaaaaaaaaaa', lexeme)
+                        while parameter_index < len(lexeme):
+                            if lexeme[parameter_index][0] in varidents:
+                                parameters.append(varidents[lexeme[parameter_index][0]])
+                                parameter_index += 3
+                        
+                        for value in parameter_list[lexeme[i+1][0]]:
+                            to_pass[value] = parameters[param_counter]
+                            param_counter += 1
+                        print('ito to paaaaaaaaaaaaaaaaaaaaass', to_pass)
+                        it = functionExecute(functions[lexeme[i+1][0]], to_pass)
+                            
+                        if len(it) != 0:
+                            to_print = ''
+                            for value in it:
+                                to_print += f'{value}\n'
+                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{it[-1]}"', 1)
+                            # temp_res.append(temp_result)
+                            # print("temp_res:", temp_res)
+                            varidents['IT'] = it[-1]
+                            return [f"{to_print}", text, varidents]
+                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{varidents["IT"]}"', 1)
+                        return [f'', text, varidents]
+
+
+
+
                                 
 
                 elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO':
