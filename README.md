@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# # CMSC 124: TayLOL Shesh: A LOLCode Interpreter
-=======
-# # CMSC 124: Splitwise Project
->>>>>>> ed845353f4c8cad342a42379157042170bbbd4ae
+## TayLOL Sheesh: A LOLCode Interpreter
 
 ## Program Description
 An interpreter for the LOLCode Programming Language using Python Programming Language. More information regarding LOLCode can be found on the following:
@@ -25,11 +21,13 @@ An interpreter for the LOLCode Programming Language using Python Programming Lan
 4. Install Python
 5. Verify the installion
 6. Alternate installation via Microsoft Store
+
 source: https://kinsta.com/knowledgebase/install-python/
 
 ### Ensuring TKinter is installed
 1. The tkinter package (“Tk interface”) is the standard Python interface to the Tk GUI toolkit. 
-2. To try if TKinter is really installed you may use the command: python -m tkinter 
+2. To try if TKinter is really installed you may type this in the command line: python -m tkinter 
+
 source: https://docs.python.org/3.8/library/tkinter.html#:~:text=Running%20python%20%2Dm%20tkinter%20from,documentation%20specific%20to%20that%20version.
 
 ## How To Run
@@ -37,11 +35,11 @@ source: https://docs.python.org/3.8/library/tkinter.html#:~:text=Running%20pytho
 2. Run ui.py file
 3. Use the application
 
-## Group Members
--  Ramos, Quim Zyrelle
-- Rosello, Ma. Jazmine 
-<<<<<<< HEAD
-- Asuncion, Shane Austin
-=======
-- Asuncion, Shane Austin
->>>>>>> ed845353f4c8cad342a42379157042170bbbd4ae
+## UI Navigation
+![image](https://github.com/RamosQuim/CMSC124_Laboratory_Project/assets/125535569/e27a1358-d893-4726-af4c-539f4b032d4c)
+1. **Open File:** Can open a LOL file in the Text Editor
+2. **Text Editor:** A field where LOLCode is inserted
+3. **Lexeme Table:** Will provide all tokens collected after the Lexical Analyzer is ran
+4. **Symbol Table:** Will provide all variable identifiers and the implicit variable with corresponding values
+5. **Execute:** This will run activate Lexical, Syntax, and Semantic Analyzer
+6. **Console:** This is where syntaxErrors and result of LOLCode (if there is any) will prompt
