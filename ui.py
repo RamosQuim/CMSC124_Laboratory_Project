@@ -40,6 +40,7 @@ def analyzetext():
 
     #this part will get all the input in the text editor
     textEditor_Content = textEditor.get("1.0", "end")
+    # print("<<<<<from >>>>>,\n\n", textEditor_Content)
     # print(f"returned_value: {returned_value}")
     results.append(keywords.lex(textEditor_Content))
 
@@ -54,8 +55,11 @@ def analyzetext():
     if syntax.syntax(textEditor_Content) != '>> No syntax errors.':
         console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
     else:
+        print("hello fnsfsfiess>>>>>,\n\n", textEditor_Content)
         while True:
+            
             newtext = semantics.semantics(textEditor_Content)
+            # print("hello fnsfsfiess>>>>>,\n\n", textEditor_Content)
             for row in symbolTable.get_children():
                 symbolTable.delete(row)
             print('ito ang nareceive', newtext[2])

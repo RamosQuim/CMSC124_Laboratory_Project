@@ -787,15 +787,30 @@ omgwtfFlag = -1
 gtfoFlag = -1
 nowaiFlag = -1
 isInFunction = -1
+isLoops = -1
+loopOut = -1
+hasObtw = -1
 functionBody = ''
 currentFunction = ''
 functions = {}
 modified_varidents = {}
+loopDone = -1
+loops = {}
+loopsLabel = ''
+loopsOperation = ''
+loopsVar = ''
+loopsCondition = ''
+loopsExpression = ''
+loopsBody = []
+loopStatement = ''
+# loopsCodeBlock = []
+
 temp_res = []
 explicit_typecast = []
 booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
 literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
 varidents = {}
+
 
 # def getExplicitTypecast(text):
 #     if syntax.syntax(text) == '>> No syntax errors.':
@@ -941,28 +956,33 @@ def functionExecute(text, parameters):
                     break
                 elif lexeme[i][0] == 'FOUND YR':
                     #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
-                    if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
+                    if lexeme[i+1][0] in parameters:
+                        varidents['IT'] = parameters[lexeme[i+1][0]]
+                    elif lexeme[i+1][0] == 'BOTH SAEM' or lexeme[i+1][0] == 'DIFFRINT':
                         result = comparison_expression(lexeme[i+1:])
                         varidents['IT'] = result
                     
                     ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                    elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                    elif lexeme[i+1][0] == 'ANY OF' or lexeme[i+1][0] == 'ALL OF':
                         result = infiniteBooleanAnalyzer(lexeme[i+2:], "ALL OF")
                         varidents['IT'] = result
                         
-                    elif lexeme[i][0] in booleans:
+                    elif lexeme[i+1][0] in booleans:
                         result = infiniteBooleanAnalyzer(lexeme[i+2:], "ANY OF")
                         varidents['IT'] = result
 
                     #THIS PART IS FOR THE COMPUTATIONS!!
-                    elif lexeme[i][0] in arithmetic:
+                    elif lexeme[i+1][0] in arithmetic:
                         arithmeticresult = str(arithmeticAnalyzer(parameters,arithmetic,lexeme[i+1:]))
-                        varidents['IT'] = result
+                        varidents['IT'] = arithmeticresult
                     return IT
                 elif lexeme[i][0] == 'GTFO':
                     return IT
 
 def semantics(text):
+    print(text, 'ito ang text anu baaaaa')
+    # print("<<<<,>>>>>>>")
+    # print(text, "\n\n\n")
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     semanticsResult = ''
     # global modified_varidents
@@ -977,9 +997,22 @@ def semantics(text):
     global gtfoFlag
     global nowaiFlag
     global isInFunction
+    global isLoops
     global functionBody
     global functions
     global currentFunction
+    global loops
+    global loopsBody
+    global loopsCondition
+    global loopsExpression
+    global loopsLabel
+    global loopsOperation
+    global loopsVar
+    global loopDone
+    global loopStatement
+    global hasObtw
+    # global loops
+   
 
     varidents = {'IT': 'NOOB'}
     # temp_res.clear()
@@ -1000,8 +1033,11 @@ def semantics(text):
     noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
     #undefined_error = 0
     parameter_list = {}
+    
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
+        # print(">>>>>>lexeme in semantics",lexeme)
+        # print('\n\n')
         if undefined_error == 1 or noob_error:
             undefined_error = 0
             noob_error = 0
@@ -1012,6 +1048,7 @@ def semantics(text):
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
+            
             if conditionFlag == 0 and omgwtfFlag == 1 and lexeme[0][0] != 'OMGWTF':     # para sa mga statements na hindi ieexecute sa if else at switch case
                 continue
             elif conditionFlag == 1 and gtfoFlag == 1 and lexeme[0][0] != 'OIC':
@@ -1021,45 +1058,55 @@ def semantics(text):
                     continue
             elif conditionFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
                 continue 
-            print('><><><><><', lexeme)
+            # print('><><><><><', lexeme, "loop: ",isLoops)
             if isInFunction == 1:
                 if lexeme[0][0] != 'IF' or lexeme[1][0] != 'U' or lexeme[2][0] != 'SAY' or lexeme[3][0] != 'SO':
                     functionBody += f'{text.splitlines()[h]}\n'
                     print('CURRENT FUNCTION BODY ><><><><', functionBody)
                     continue
 
-            print(lexeme, '<<<<<<<<<<<<<<<<<')
+            # print(lexeme, '<<<<<<<<<<<<<<<<<')
             # print(f"len(lexeme): {len(lexeme)}")
-            for i in range(0, len(lexeme)):                
+            for i in range(0, len(lexeme)):   
+                # print("\nkeyword:",lexeme[i][0], "\n")  
+                # if lexeme[i][1] == "Loop Keyword":
+                #     print(f"\n\nLOOP KEYWORD: {lexeme[i][0]}\n\n")   
+                # if isLoops == 0 and lexeme[i][1] != 'Loop Keyword':
+                #     print(lexeme[i])
+                    # loopsBody.append(lexeme[i:])   
+                if lexeme[i][0] == 'OBTW':
+                    hasObtw = 0
+                if lexeme[i][0] == 'TLDR':
+                    hasObtw = -1     
                 if lexeme[i][0] == 'BUHBYE':
                     outsideWazzup = 1
                     break
-                if lexeme[i][0] == 'I HAS A':
+                if lexeme[i][0] == 'I HAS A' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if outsideWazzup == 1:
                         if len(lexeme) == 4:
                             varidents[lexeme[i+1][0]] = lexeme[i+3][0]
-                        else:
+                        elif len(lexeme) > 4:
                             varidents[lexeme[i+1][0]] = lexeme[i+4][0]
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
-                if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
+                if lexeme[i][0] == 'BOTH SAEM' and hasObtw == -1 and lexeme[i-1][0] != 'BTW' or lexeme[i][0] == 'DIFFRINT' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     result = comparison_expression(lexeme)
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
                     return ['', text, varidents]
                 
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                elif lexeme[i][0] == 'ANY OF' and hasObtw == -1 and lexeme[i-1][0] != 'BTW' or lexeme[i][0] == 'ALL OF' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     result = infiniteBooleanAnalyzer(lexeme[i+1:], "ALL OF")
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
                     return ['', text, varidents]
                     
-                elif lexeme[i][0] in booleans:
+                elif lexeme[i][0] in booleans and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     result = infiniteBooleanAnalyzer(lexeme[i+1:], "ANY OF")
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
                     return ['', text, varidents]
 
                 #THIS PART IS FOR THE COMPUTATIONS!!
-                elif lexeme[i][0] in arithmetic:
+                elif lexeme[i][0] in arithmetic and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     arithmeticresult = str(arithmeticAnalyzer(varidents,arithmetic,lexeme))
                     # print(f"arithmetic result:{arithmeticresult}")
                     if arithmeticresult == "NOOBERROR":
@@ -1077,7 +1124,7 @@ def semantics(text):
                         break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
-                elif lexeme[i][0] == 'GIMMEH':
+                elif lexeme[i][0] == 'GIMMEH' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     # resolved na :>>
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
@@ -1086,7 +1133,7 @@ def semantics(text):
                     return [f'{input_value}\n', text, varidents]
                     
                 #R
-                elif lexeme[i][0] == 'R':
+                elif lexeme[i][0] == 'R' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) == 3:
                         # print(varidents, lexeme[i-1][0], lexeme[i+1][0])
                         for j in varidents:
@@ -1291,7 +1338,7 @@ def semantics(text):
                                                     return [f'', text, varidents]                    
                     print(modified_varidents)
 
-                elif lexeme[i][0] == 'IS NOW A':
+                elif lexeme[i][0] == 'IS NOW A' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     for j in varidents:
                         if j == lexeme[i-1][0]:
                             if varidents[j] == 'NOOB':
@@ -1369,7 +1416,7 @@ def semantics(text):
                                         text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"NOOB"}', 1)
                                         return [f'', text, varidents]
                 #MAEK    
-                elif lexeme[i][0] == 'MAEK':
+                elif lexeme[i][0] == 'MAEK' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) == 3 or len(lexeme) == 4 :
                         for j in varidents:
                             if j == lexeme[i+1][0]:
@@ -1449,14 +1496,15 @@ def semantics(text):
                                             text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"NOOB"}', 1)
                                             return [f'', text, varidents]
                 
-                elif lexeme[i][0] in varidents and len(lexeme) == 1:
+                elif lexeme[i][0] in varidents and len(lexeme) == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    print('>>>>><><><>< dito napprinted', lexeme[i][0])
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[lexeme[i][0]]}', 1)
                     return [f'', text, varidents]
 
-                elif len(lexeme) == 2 and lexeme[i][0] == 'O' and lexeme[i+1][0] == 'RLY':
+                elif len(lexeme) == 2 and lexeme[i][0] == 'O' and lexeme[i+1][0] == 'RLY' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     isInCondition = 1
 
-                elif len(lexeme) == 2 and lexeme[i][0] == 'YA' and lexeme[i+1][0] == 'RLY':
+                elif len(lexeme) == 2 and lexeme[i][0] == 'YA' and lexeme[i+1][0] == 'RLY' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if varidents['IT'] == 'WIN':
                         conditionFlag = 1
                     elif varidents['IT'] == 'FAIL':
@@ -1469,13 +1517,13 @@ def semantics(text):
                             conditionFlag = 0
                             nowaiFlag = 1
                 
-                elif len(lexeme) == 2 and lexeme[i][0] == 'NO' and lexeme[i+1][0] == 'WAI':
+                elif len(lexeme) == 2 and lexeme[i][0] == 'NO' and lexeme[i+1][0] == 'WAI' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     nowaiFlag = 0
 
-                elif lexeme[i][0] == 'WTF':
+                elif lexeme[i][0] == 'WTF' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     isInCondition = 1
                 
-                elif lexeme[i][0] == 'OMG' and isInCondition == 1:
+                elif lexeme[i][0] == 'OMG' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) > 2:     # pag string ang condition
                         if lexeme[i+2][0] == varidents['IT']:
                             conditionFlag = 1
@@ -1488,29 +1536,42 @@ def semantics(text):
                             conditionFlag = 0
                             omgwtfFlag = 1
                 
-                elif lexeme[i][0] == 'GTFO' and isInCondition == 1:
+                elif lexeme[i][0] == 'GTFO' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     gtfoFlag = 1
 
-                elif lexeme[i][0] == 'OMGWTF' and isInCondition == 1:
+                elif lexeme[i][0] == 'OMGWTF' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     omgwtfFlag = -1
 
-                elif lexeme[i][0] == 'OIC' and isInCondition == 1:  # reset all flags
+                elif lexeme[i][0] == 'OIC' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':  # reset all flags
                     if gtfoFlag != -1:
                         gtfoFlag = -1
                     isInCondition == -1
                     conditionFlag = -1
                     nowaiFlag = -1
+                
+                # elif lexeme[i][0] == 'IM IN YR':
+                #     isLoops = 1
 
-                elif lexeme[i][0] == 'HOW IZ I':
+                elif lexeme[i][0] == 'HOW IZ I' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     currentFunction = lexeme[i+1][0]
                     if len(lexeme) == 4:
                         parameter_list[lexeme[i+1][0]] = lexeme[i+3][0]
+                    else:
+                        parameters = []
+                        param_index = 3
+
+                        while param_index < len(lexeme):
+                            parameters.append(lexeme[param_index][0])
+                            param_index += 3
+                        
+                        parameter_list[lexeme[i+1][0]] = parameters
+
                     isInFunction = 1
                 
-                elif lexeme[i][0] == 'I IZ':
-                    if len(lexeme) == 4:
+                elif lexeme[i][0] == 'I IZ' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    if len(lexeme) != 8 or lexeme[i+3][0] in arithmetic:
                         if lexeme[i+3][0] in varidents:
-                            print(functions[lexeme[i+1][0]])
+                            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',functions[lexeme[i+1][0]])
                             it = functionExecute(functions[lexeme[i+1][0]], {parameter_list[lexeme[i+1][0]]: varidents[lexeme[i+3][0]]})
                             
                             if len(it) != 0:
@@ -1523,22 +1584,129 @@ def semantics(text):
                                 varidents['IT'] = it[-1]
                                 return [f"{to_print}", text, varidents]
                             return [f'', text, varidents]
+                        elif lexeme[i+3][0] in arithmetic:
+                            print('PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+                            arithresult = arithmeticAnalyzer(varidents, arithmetic, lexeme[i+3:-1])
+                            it = functionExecute(functions[lexeme[i+1][0]], {parameter_list[lexeme[i+1][0]]: arithresult})
+                            if len(it) != 0:
+                                to_print = ''
+                                for value in it:
+                                    to_print += f'{value}\n'
+                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{it[-1]}"', 1)
+                                # temp_res.append(temp_result)
+                                # print("temp_res:", temp_res)
+                                varidents['IT'] = it[-1]
+                                return [f"{to_print}", text, varidents]
+                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{varidents["IT"]}"', 1)
+                            return [f'', text, varidents]
+                    else:
+                        parameter_index = 3
+                        parameters = []
+                        param_counter = 0
+                        to_pass = {}
+                        print('ito statemeeeeeeeetnaaaaaaaaaaaaaaaaaaaaaaaaa', lexeme)
+                        while parameter_index < len(lexeme):
+                            if lexeme[parameter_index][0] in varidents:
+                                parameters.append(varidents[lexeme[parameter_index][0]])
+                                parameter_index += 3
+                        
+                        for value in parameter_list[lexeme[i+1][0]]:
+                            to_pass[value] = parameters[param_counter]
+                            param_counter += 1
+                        print('ito to paaaaaaaaaaaaaaaaaaaaass', to_pass)
+                        it = functionExecute(functions[lexeme[i+1][0]], to_pass)
+                            
+                        if len(it) != 0:
+                            to_print = ''
+                            for value in it:
+                                to_print += f'{value}\n'
+                            text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{it[-1]}"', 1)
+                            # temp_res.append(temp_result)
+                            # print("temp_res:", temp_res)
+                            varidents['IT'] = it[-1]
+                            return [f"{to_print}", text, varidents]
+                        text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{varidents["IT"]}"', 1)
+                        return [f'', text, varidents]
+
+
+
+
                                 
 
-                elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO':
+                elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     print('PAPASOK DITOOOO <<<,')
                     functions[currentFunction] = functionBody
                     functionBody = ''
                     isInFunction = -1
                     print('ito ang functions', functions)
+                
+                
+                elif lexeme[i][0] == 'IM IN YR' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    loopStatement = text.splitlines()[h]
+                    print(loopStatement, ',,,,,,,,,,,,,,,,,,,,,,,,,,,, ITO LOOP')
+                    isLoops = 0
+                    loopsLabel = lexeme[i+1][0] #label
+                    loopsOperation = lexeme[i+2][0]
+                    loopsVar = lexeme[i+4][0]
+                    loopsCondition = lexeme[i+5][0]
+                    if lexeme[i+6][0] == 'BOTH SAEM' or lexeme[i+6][0] == 'DIFFRINT':
+                        print(loopsCondition, '<<<<<<<<<<<<<<<PASOOOOOOOK')
+                        if lexeme[i+6][0] == 'BOTH SAEM' and loopsCondition == 'TIL':
+                            result = comparison_expression(lexeme[i+6:])
+                            if result == 'FAIL':
+                                loopDone = 0
+                                # if loopsOperation != 'NERFIN':
+                            else:
+                                loopDone = 1
 
-                elif lexeme[i][0] == 'VISIBLE':
+                        elif lexeme[i+6][0] == 'BOTH SAEM' and loopsCondition == 'WILE':
+                            result = comparison_expression(lexeme[i+6:])
+                            if result == 'WIN':
+                                loopsExpression = result
+                                loopDone = 0
+                            else:
+                                loopDone = 1
+                    break
+                
+                
+                    
+
+                elif lexeme[i][0] == 'IM OUTTA YR' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    
+                    text = text.replace(f'{text.splitlines()[h]}', f'', 1)
+                    return ['', text, varidents]
+                    # arr = []
+                    # arr.append(loopsOperation)
+                    # arr.append(loopsVar)
+                    # arr.append(loopsCondition)
+                    # arr.append(loopsExpression)
+                    # arr.append(loopsBody)
+
+                    # loops[loopsLabel] = arr
+                    # print("loopsie hoops:",loops)
+                    # loopsLabel = ''
+                    # loopsOperation = ''
+                    # loopsVar = ''
+                    # loopsCondition = ''
+                    # loopsExpression = ''
+                    # loopsBody = []
+                    # isLoops = -1
+                    #     # loopOut = 1
+                    #     # loopsBody
+                    #     # loopsCodeBlock[currentLoops] = loopsBody
+                    #     # loopsBody = ''
+                    #     # isInForLoops = 0
+                    #     # print('ito ang loop body', loops)
+
+                elif lexeme[i][0] == 'VISIBLE' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    print('ito na ung current >>>>>>>>>>><<<<<<<', text, loopDone)
                     # print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
+                    print('hey:', varidents)
                     #result = "uwu"
                     # print(f"i: {i}")
-                    # print(f"current lexeme: {lexeme}")
+                    print(f"current lexeme: {lexeme}")
                     # print(f"len(lexeme) sa visible: {len(lexeme)}")
                     # print(f"visible_index: {visible_index}")
                     #print(f"currently pointed to: {lexeme[visible_index]}")
@@ -1546,8 +1714,13 @@ def semantics(text):
                         #print(f"visible_index: {visible_index}")
                         #print(f"currently pointed to right now: {lexeme[visible_index]}")
                         if lexeme[visible_index][1] == 'String Delimiter':
-                            temp_result += str(lexeme[visible_index+1][0])
-                            visible_index +=3
+                            if lexeme[visible_index+1][0].isspace():
+                                temp_result += " "
+                                visible_index +=3
+                            else:
+                                print(">>>>>> ETO ", lexeme[visible_index+1][0])
+                                temp_result += str(lexeme[visible_index+1][0])
+                                visible_index +=3
                         elif lexeme[visible_index][1] == 'Output Delimiter':
                             visible_index +=1
                         elif lexeme[visible_index][0] in varidents:
@@ -1646,19 +1819,31 @@ def semantics(text):
                                     temp_index+=1
                             temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
                             visible_index = temp_index
+                    if loopDone == 0:
+                        print(varidents, loopsVar,loopStatement,loopsOperation, 'PASOK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>')
+                        if loopsOperation != 'NERFIN':
+                            text = text.replace(f'{loopStatement}', f'I HAS A {loopsVar} ITZ {int(varidents[loopsVar])+1}\n{loopStatement}', 1)
+                        else:
+                            print()
+                            text = text.replace(f'{loopStatement}', f'I HAS A {loopsVar} ITZ {int(varidents[loopsVar])-1}\n{loopStatement}', 1)
+                            print('pasooooooooooook',text)
+                        return [f"{temp_result}\n", text, varidents]
+                    print('dapat dito naaaa >>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<')
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
                     # temp_res.append(temp_result)
                     # print("temp_res:", temp_res)
-                    print('ito ang current result', temp_result)
-                    print('ito ang current result',varidents)
+                    # print('ito ang current result', temp_result)
+                    # print('ito ang current result',varidents)
                     varidents['IT'] = temp_result
-                    print('ito ang current ipapasa',varidents)
+                    # print('ito ang current ipapasa',varidents)
                     return [f"{temp_result}\n", text, varidents]
                     # break
+                
             lexeme.clear()
+    
     text = text.replace(f'{text.splitlines()[h]}', '', 1)
     temp_res = temp_list
-    print('hey:', varidents)
+    
     return [None, text, varidents]
 
 
@@ -1797,6 +1982,7 @@ def fin_boolean_expression(lexeme):
 def comparison_expression(lexeme):
     # print(lexeme, "comparison exp", len(lexeme))
     # len(lexeme)
+    print(lexeme, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     result = []
     for i in range(0, len(lexeme)):
@@ -1831,13 +2017,13 @@ def comparison_expression(lexeme):
                                 else:
                                     result = 'FAIL'
                         elif one == False and three == False:
-                            value = []
-                            for j in varidents:
-                                if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                                    value.append(varidents[j])
-                            if len(value) == 2:
-                                if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                    if float(value[0]) == float(value[1]):
+                            # value = []
+                            # for j in varidents:
+                            #     if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
+                            #         value.append(varidents[j])
+                            # if len(value) == 2:
+                                if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+3][0]]) == True:
+                                    if float(varidents[lexeme[i+1][0]]) == float(varidents[lexeme[i+3][0]]):
                                         result = 'WIN'
                                     else:
                                         result = 'FAIL'
@@ -1845,11 +2031,11 @@ def comparison_expression(lexeme):
                         #BOTH SAEM/DIFFRINT x AN y
 
                         #assuming x is in arithmetic
-                        print(lexeme[i+1][0] )
+                        
                         if lexeme[i+1][0] in arithmetic:
                             num_operations = 1
             
-                            index = i+1
+                            index =i+1
                             # num_operations += 1
                             for j in range(2, len(lexeme)):
                                 if lexeme[j][0] in arithmetic:
@@ -1859,7 +2045,7 @@ def comparison_expression(lexeme):
 
                             temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:num_AN])
                             # print(lexeme[index+4+1])
-                            print(temp)
+                            # print(temp)
                             one = convertFloat(temp)
                             three = convertFloat(lexeme[index+4+1][0])
                             last_operand = lexeme[index+4+1][0]
@@ -1915,9 +2101,11 @@ def comparison_expression(lexeme):
                         #     print(result)
                 
                         elif lexeme[i+3][0] == 'SMALLR OF':
+                            
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
                             if one == True and three == True:
+                                print('comparisoooon >>>>>>>>>>', one, three)
                                 if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
                                     result = 'WIN'
                                 else:
@@ -1947,12 +2135,18 @@ def comparison_expression(lexeme):
                                 # for j in varidents:
                                 #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
                                 #         value.append(varidents[j])
-                                if len(value) == 2:
+                                # if len(value) == 2:
                                     if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
                                         if float(varidents[lexeme[i+1][0]]) <= float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
-                                           result = 'FAIL'
+                                            result = 'FAIL'
+                                    # print(convertFloat(value[0]),convertFloat(value[1]), '<<<<<<<<<<<<<<<<<')
+                                    # if convertFloat(value[0]) == True and convertFloat(value[1]) == True:
+                                    #     if float(value[0]) >= float(value[1]):
+                                    #         result = 'WIN'
+                                    #     else:
+                                    #        result = 'FAIL'
                         elif lexeme[i+3][0] == 'BIGGR OF':
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
@@ -1982,16 +2176,22 @@ def comparison_expression(lexeme):
                                     else:
                                        result = 'FAIL'
                             elif one == False and three == False:
+                                if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
+                                        if float(varidents[lexeme[i+1][0]]) >= float(varidents[lexeme[i+6][0]]):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
                                 # value = []
                                 # for j in varidents:
                                 #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
                                 #         value.append(varidents[j])
-                                if len(value) == 2:
-                                    if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
-                                        if float(varidents[lexeme[i+1][0]]) >= float(varidents[lexeme[i+6][0]]):
-                                            result = 'WIN'
-                                        else:
-                                           result = 'FAIL'
+                                
+                                # if len(value) == 2:
+                                #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                #         if float(value[0]) <= float(value[1]):
+                                #             result = 'WIN'
+                                #         else:
+                                #             result = 'FAIL'
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
                             num_operations = 1
@@ -2056,18 +2256,23 @@ def comparison_expression(lexeme):
                                 else:
                                     result = 'FAIL'
                         elif one == False and three == False:
-                            value = []
-                            for j in varidents:
-                                if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                                    value.append(varidents[j])
-                            if len(value) == 2:
-                                if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                    if float(value[0]) != float(value[1]):
-                                        result = 'WIN'
-                                    else:
-                                       result = 'FAIL'
+                            if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+3][0]]) == True:
+                                        if float(varidents[lexeme[i+1][0]]) != float(varidents[lexeme[i+3][0]]):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                            # value = []
+                            # for j in varidents:
+                            #     if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
+                            #         value.append(varidents[j])
+                            # if len(value) == 2:
+                            #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                            #         if float(value[0]) != float(value[1]):
+                            #             result = 'WIN'
+                            #         else:
+                            #            result = 'FAIL'
                     else: #for SMALLR OF and BIGGR OF
-                        print(lexeme[i+1][0])
+                        # print(lexeme[i+1][0])
                         if lexeme[i+1][0] in arithmetic:
                             num_operations = 1
             
@@ -2161,16 +2366,21 @@ def comparison_expression(lexeme):
                                     else:
                                         result = 'FAIL'
                             elif one == False and three == False:
-                                value = []
-                                for j in varidents:
-                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                        value.append(varidents[j])
-                                if len(value) == 2:
-                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                        if float(value[0]) > float(value[1]):
-                                           result = 'WIN'
+                                if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
+                                        if float(varidents[lexeme[i+1][0]]) > float(varidents[lexeme[i+6][0]]):
+                                            result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                                # value = []
+                                # for j in varidents:
+                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                #         value.append(varidents[j])
+                                # if len(value) == 2:
+                                #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                #         if float(value[0]) > float(value[1]):
+                                #            result = 'WIN'
+                                #         else:
+                                #             result = 'FAIL'
                         elif lexeme[i+3][0] == 'BIGGR OF':
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
@@ -2200,16 +2410,21 @@ def comparison_expression(lexeme):
                                     else:
                                         result = 'FAIL'
                             elif one == False and three == False:
-                                value = []
-                                for j in varidents:
-                                    if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                        value.append(varidents[j])
-                                if len(value) == 2:
-                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                        if float(value[0]) < float(value[1]):
+                                if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
+                                        if float(varidents[lexeme[i+1][0]]) < float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                                # value = []
+                                # for j in varidents:
+                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
+                                #         value.append(varidents[j])
+                                # if len(value) == 2:
+                                #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
+                                #         if float(value[0]) < float(value[1]):
+                                #             result = 'WIN'
+                                #         else:
+                                #             result = 'FAIL'
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
                             num_operations = 1

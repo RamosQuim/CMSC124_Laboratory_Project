@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # # CMSC 124: TayLOL Shesh: A LOLCode Interpreter
+=======
+# # CMSC 124: Splitwise Project
+>>>>>>> ed845353f4c8cad342a42379157042170bbbd4ae
 
 ## Program Description
 An interpreter for the LOLCode Programming Language using Python Programming Language. More information regarding LOLCode can be found on the following:
@@ -32,3 +36,12 @@ source: https://docs.python.org/3.8/library/tkinter.html#:~:text=Running%20pytho
 1. Open the ui.py file
 2. Run ui.py file
 3. Use the application
+
+## Group Members
+-  Ramos, Quim Zyrelle
+- Rosello, Ma. Jazmine 
+<<<<<<< HEAD
+- Asuncion, Shane Austin
+=======
+- Asuncion, Shane Austin
+>>>>>>> ed845353f4c8cad342a42379157042170bbbd4ae

@@ -15,6 +15,7 @@ class LOLLexer:
 
     #
     def tokenize(self):
+        hasobtw = 0
         while self.current_position < len(self.source_code):
             # print(f"Current position: {self.current_position}")
             
@@ -22,11 +23,26 @@ class LOLLexer:
             current_value = self.source_code[self.current_position:self.current_position + 10]
             
             token = self.match_token()
-
             if token is not None:
+                if hasobtw == 0 and token.value[0:4] == 'OBTW':
+                    hasobtw = 1 
+                if hasobtw == 1:
+                    if token.value == 'TLDR':
+                        hasobtw = 0
+                    # else: continue
+
+                if token.type == 'Special Characters' : #para makuha rin mga may special char sa loob ng obtw
+                    if hasobtw != 1:
+                        continue
+                
+                
+
+
+               
                 self.tokens.append(token) #appends the token to the tokens list
             else:
                 break
+        print("is there an obtw?",hasobtw)
         return self.tokens
 
 
@@ -112,12 +128,13 @@ token_patterns = {
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
     r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
     # r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',    
-    r'\s*\"[^\"]*\"\s*': 'YARN Literal',             
+    r'\s*\"[^\"]*\"\s*': 'YARN Literal',   
+    r'\s?.*\s?': 'Special Characters'          
 }
 
 def lex(str):
-    # print('\n\n')
-    # print(str)
+    # print('\n\nFROM KEYWORD:')
+    # print(str) 
     # print('\n\n')
     literals=['YARN Literal', 'NUMBR Literal', 'NUMBAR Literal', 'Identifier', 'TROOF Literal', 'Type Literal']
     compiled_lex.clear()
@@ -135,7 +152,7 @@ def lex(str):
         comment_line = ""
         toRemove = []
         indexToinsert = []
-
+        yarnLiterals = []
         
         
         for i in range(0, len(tokens)):
@@ -144,16 +161,17 @@ def lex(str):
             if i != len(tokens):
                 temp = tokens[i].value.rstrip()  # remove leading and trailing space characters 
                 val = temp.lstrip()
-                print(">>>>val", val)
+                # print(">>>>val", val)
             # print(val, val[0], val[len(val)-1], len(val))
 
             # print(tokens[i+1].value)
             
             # print(temp)
                 if hasobtw == 0 and val != 'TLDR':
+
                     # if tokens[i].type == 'Identifier':
                     comment_line += tokens[i].value
-                        # print("<><><><><><><><><><><><><><><><", tokens[i].value)
+                    # print("<><><><><><><><><><><><><><><><", tokens[i].value)
                     toRemove.append(tokens[i])
                     
                         # tokens.remove(tokens[i])
@@ -161,18 +179,22 @@ def lex(str):
             # if len(val) > 1 and val[0] == '"' and val[-1] == '"':   # when token is a string literal separate the string delimiter
                 elif tokens[i].type == 'YARN Literal':
                     
-                # print(tokens[i].value)
+                    print(f'{val[0]} whole:{val[1:-1]} end:{val[-1]}')
                     if val[0] == '"' and val[-1] == '"':
-                    # print(tokens[i].value)
-                        new = Token('String Delimiter', '"')
-                        tokens[i].value = val[1:-1]
-                        tokens.insert(i, new)
-                        tokens.insert(i+2, new)
+                    # # print(tokens[i].value)
+                    #     new = Token('String Delimiter', '"')
+                    #     tokens[i].value = val[1:-1]
+                    #     tokens.insert(i, new)
+                    #     tokens.insert(i+2, new)
+                        yarnLiterals.append(tokens[i])
+                    # elif tokens[i].value == " ":
+                    #     print("eto eto eto eto")
                 elif 'BTW' == val[0:3]:
                     tokens[i].value = val[3:]
                     comment = Token('Comment Delimiter', 'BTW')
                     tokens.insert(i, comment)
                 elif 'OBTW' == val[0:4]:
+                    # print(">>>>>PLS PLS PLS",val)
                     hasobtw = 0
                     # print(">>>>> OBTW:", val)
                     tokens[i].value = val[4:]
@@ -180,7 +202,7 @@ def lex(str):
                     tokens.insert(i, comment)
                 elif 'TLDR' == val:
                     indexToinsert.append(tokens[i])
-                    hasobtw = -1
+                    hasobtw = 1
                 elif tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
                         varidents.append(tokens[i+1].value.lstrip().rstrip())
@@ -199,18 +221,36 @@ def lex(str):
             # comment_line += k.value
             tokens.remove(k)
 
-        if comment_line != '':
+        if comment_line != '' and hasobtw == 1:
             comment_block = comment_line.replace('\n',' ').rstrip().lstrip()
             comment = Token('Comment Line', comment_block)
             index = tokens.index(indexToinsert[0])
             tokens.insert(index, comment)
         
+        if len(yarnLiterals) != 0:
+               
+                for i in yarnLiterals: #i is tokens[i]
+                    temp = i.value.rstrip()  # remove leading and trailing space characters 
+                    val = temp.lstrip()
+
+                    print("YARN YARN:", val[1:-1])
+                    new = Token('String Delimiter', '"')
+                    index = tokens.index(i)
+                    
+
+                    i.value = val[1:-1]
+                    print("after",i.value)
+                    # print(i.value[1:-1])
+                    tokens.insert(index, new)
+                    tokens.insert(index+2, new)
+
+        yarnLiterals.clear()   
         comment_line = ''
         for token in tokens:
             compiled_lex.append([token.value.rstrip().lstrip(), token.type])
         
         # print(compiled_lex)
-        # print(compiled_lex)
+        # print(">>> COMPILED LEX <<<<\n",compiled_lex)
         return compiled_lex
     
 # def nmbar(tk):  
