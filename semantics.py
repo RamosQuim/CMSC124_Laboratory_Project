@@ -1048,8 +1048,9 @@ def semantics(text):
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
-            
-            if conditionFlag == 0 and omgwtfFlag == 1 and lexeme[0][0] != 'OMGWTF':     # para sa mga statements na hindi ieexecute sa if else at switch case
+            print('>>>>>>>>>>>>>>>> current lexemeee', text)
+            if conditionFlag == 0 and (lexeme[0][0] != 'OMG' and lexeme[0][0] != 'OMGWTF'):     # para sa mga statements na hindi ieexecute sa if else at switch case
+                text = text.replace(f'{text.splitlines()[h]}', f'', 1)
                 continue
             elif conditionFlag == 1 and gtfoFlag == 1 and lexeme[0][0] != 'OIC':
                 continue
@@ -1058,6 +1059,7 @@ def semantics(text):
                     continue
             elif conditionFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
                 continue 
+           
             # print('><><><><><', lexeme, "loop: ",isLoops)
             if isInFunction == 1:
                 if lexeme[0][0] != 'IF' or lexeme[1][0] != 'U' or lexeme[2][0] != 'SAY' or lexeme[3][0] != 'SO':
@@ -1527,19 +1529,20 @@ def semantics(text):
                     if len(lexeme) > 2:     # pag string ang condition
                         if lexeme[i+2][0] == varidents['IT']:
                             conditionFlag = 1
-                        else:
-                            omgwtfFlag = 1
+                        # else:
+                        #     omgwtfFlag = 1
                     else:                   # pag other literals
                         if lexeme[i+1][0] == varidents['IT']:
                             conditionFlag = 1
                         else:
                             conditionFlag = 0
-                            omgwtfFlag = 1
+                            # omgwtfFlag = 1
                 
                 elif lexeme[i][0] == 'GTFO' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     gtfoFlag = 1
 
                 elif lexeme[i][0] == 'OMGWTF' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    conditionFlag = -1
                     omgwtfFlag = -1
 
                 elif lexeme[i][0] == 'OIC' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':  # reset all flags
