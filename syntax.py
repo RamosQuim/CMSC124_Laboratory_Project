@@ -4,8 +4,10 @@ import semantics
 #note: 
 #VARIABLE ASSIGNMENT USING R = wala pang syntax para sa expression
 varidents = {}
-prev_lexeme = []
+exp_lexeme = 0 #this is for the expression checker
+prev_checker = 0 #checker for exp_lexeme 
 func_parameters = [] 
+
 
 def isfloat(num):
     try:
@@ -221,7 +223,6 @@ def comparisonSyntax(lexeme, h, i):
                 num_AN = num_operations * 2 + 3
                 result = arithmeticSyntax(h,arithmetic, lexeme[comparison_index+1:num_AN])
                 if result[0] == 0:
-                    
                     success = result[0]
                     return result[1]
                 
@@ -242,8 +243,6 @@ def comparisonSyntax(lexeme, h, i):
                 check = 1
                 return(f"\n>> SyntaxError in line {h+1} near <{lexeme[comparison_index][0]}>: \n\t{lexeme[comparison_index+2][0]} is recognized incorrectly. Perhaps you need an 'AN' keyword?")
             elif lexeme[comparison_index+3][0] in arithmetic and lexeme[comparison_index+3][0] !='BIGGR OF' and lexeme[comparison_index+3][0] != 'SMALLR OF':
-
-                            # print(lexeme[comparison_index+3][0])
                            
                             index = comparison_index+1
                             num_operations = 1
@@ -736,7 +735,8 @@ def getModifVaridents(text):
 def syntax(text):
     global varidents
     global modif_var
-    global prev_lexeme
+    global exp_lexeme
+    global prev_checker
     global func_parameters
     modif_var.clear()
     varidents.clear()
@@ -765,7 +765,15 @@ def syntax(text):
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
-            print(f"starting prev_lexeme:{prev_lexeme}")
+            #this is for the if else 
+            print(f"exp_lexeme sa start: {exp_lexeme}")
+            print(f"prev_checker sa start: {prev_checker}")
+            if exp_lexeme == 1:
+                prev_checker = 1
+            #elif exp_lexeme < 1:
+            #    exp_lexeme -= 1
+
+
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
@@ -1039,7 +1047,6 @@ def syntax(text):
                     if lexeme[i][0] == 'VISIBLE':
                         print(f"lexeme sa visible: {lexeme}")
                         print(f"func_parameters: {func_parameters}")
-                        print(f"previous lexeme3:{prev_lexeme}")
                     #     # if less than
                         # print(f"lexeme in visible start: {lexeme}")
                         if len(lexeme) < 2:
@@ -1546,7 +1553,9 @@ def syntax(text):
                                 success = 0
                                 syntaxResult += result
                                 break
+                            exp_lexeme = 1 
                             break
+                        
 
                     if lexeme[i][0] in booleans:
                         count = 0
@@ -1567,6 +1576,7 @@ def syntax(text):
                                 success = 0
                                 syntaxResult += result
                                 break
+                            exp_lexeme = 1 #for if else 
                             break
 
                    
@@ -1802,7 +1812,9 @@ def syntax(text):
                             if result[0] == 0:
                                 syntaxResult += result[1]
                                 success = result[0]
+                            exp_lexeme = 1
                             break    
+                            
                     
                     if lexeme[i][0] in comparison:
                         checker = 0
@@ -1822,7 +1834,7 @@ def syntax(text):
                             if result is not None:
                                 success = 0
                                 syntaxResult += result
-                            
+                            exp_lexeme = 1
                             break
 
 
@@ -1912,7 +1924,7 @@ def syntax(text):
                                 success = 0
                                 break                                    
 
-                    if lexeme[i][0] == "OMGWTF?":
+                    if lexeme[i][0] == "OMGWTF":
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1937,6 +1949,8 @@ def syntax(text):
                                 break   
 
                     if lexeme[i][0] == 'OIC':
+                        print(f"ya rly checker sa OIC: {yarlychecker}")
+                        print(f"nowai checker sa OIC: {nowaichecker}")
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1954,32 +1968,48 @@ def syntax(text):
                                 success = 0
                                 break 
 
-                        ###### NOTEEEEE: Pa-adjust na lang ng condition ditooo thanksss, nilagyan 
-                        ###### ko muna yung pangalawang condition para di magprompt yung syntaxError sa console natin
-                        # elif omgwtfchecker != 1 and omgchecker != 1 and wtfchecker != 1:
+
                             elif wtfchecker != 1 and orlychecker != 1:
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t OIC can only be used in If-Then and Switch Statements.')
                                 success = 0
                                 break  
                             elif wtfchecker == 1:
+                                print(f"omgwtfchecker sa wtf: {omgwtfchecker}")
+                                print(f"omgchecker sa wtf: {omgchecker}")
                                 if omgchecker !=1 and wtfchecker !=1:
-                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?')
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?3')
                                     success = 0
                                     break
                                 else:
-                                    wtfchecker = -1
-                                    omgchecker = -1
-                                    omgwtfchecker = -1  
+                                    if omgchecker == 1:
+                                        if omgwtfchecker != 1:
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?2')
+                                            success = 0
+                                            break
+                                        else:
+                                            wtfchecker = -1
+                                            omgchecker = -1
+                                            omgwtfchecker = -1
+                                    else:
+                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t Switch Statements required WTF?, OMG, and OMGWTF?1')
+                                        success = 0
+                                        break
+                                    
                             elif orlychecker == 1:
                                 if yarlychecker != 1 and nowaichecker !=1:
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t If-Then Statements required O RLY?, YA RLY, and NO WAI')
                                     success = 0
                                     break
                                 else:
-                                #we will now reset it 
-                                    orlychecker = -1
-                                    yarlychecker = -1
-                                    nowaichecker = -1  
+                                    if yarlychecker == 1 and nowaichecker != 1: #if lang ang nagamit 
+                                        orlychecker = -1
+                                        yarlychecker = -1
+                                        nowaichecker = -1  
+                                    else: #means lahat ay gamit 
+                                        orlychecker = -1
+                                        yarlychecker = -1
+                                        nowaichecker = -1 
+
 
 
                     #THIS ONE IS CREATED FOR THE GIMMEH INPUT!!
@@ -2009,12 +2039,10 @@ def syntax(text):
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t GIMMEH should only have a Variable')
                                 success = 0
                                 break   
-                        print(f"previous lexeme2: {prev_lexeme}")
 
                     #IF THEN SYNTAX
                     #O RLY
                     if lexeme[i][0] == 'O':
-                        print(f"previous lexeme1: {prev_lexeme}")
                         if len(lexeme) != 2:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t O RLY? should not have other characters in the same line.')
                             success = 0
@@ -2026,13 +2054,13 @@ def syntax(text):
                                 break 
                             #COMMENT OUT KO MUNA KASI AYAW GUMANA NETO HUHU
                             #check yung previous line expression
-                            #if prev_lexeme[0][0] not in arithmetic:
-                            #    if prev_lexeme[0][0] not in comparison:
-                            #        if prev_lexeme[0][0] not in booleans:
-                            #            if prev_lexeme[0][0] not in inifinitebooleans:
-                            #                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t Previous Expression is not valid.')
-                            #                success = 0
-                            #                break 
+                            print(f"prev checker sa o rly: {prev_checker}")
+                            if prev_checker != 1:
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <O RLY?>: \n\t Previous Expression is not valid.')
+                                success = 0
+                                break 
+                        print(f"ya rly: {yarlychecker}")
+                        print(f"no wai: {nowaichecker}")
                         orlychecker = 1
                     #YA RLY
                     if lexeme[i][0] == 'YA':
@@ -2051,6 +2079,7 @@ def syntax(text):
                                 break 
                             else:
                                 yarlychecker =1
+                                print(f"no wai after: sa ya rly: {nowaichecker}")
                     #NO WAI
                     if lexeme[i][0] == 'NO':
                         if len(lexeme)!= 2:  
@@ -2067,7 +2096,8 @@ def syntax(text):
                                 success = 0
                                 break 
                             else:
-                                nowaichecker = 1                                
+                                nowaichecker = 1        
+                                print('pumasok sa NO WAI')                        
                     
                     #FUNCTION SYNTAX
                     #note: hindi pa nacoconsider dito if valid ba yung parameters (???) not sure if need pa ba yon 
@@ -2253,10 +2283,12 @@ def syntax(text):
                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <KTHXBYE>: \n\tAlready has KTHXBYE; it must be declared once')
                         success = 0
                         break
-            #ADD SA PREVIOUS!!
-            prev_lexeme.clear()
-            prev_lexeme.append(lexeme)
-            print(f"update prev_lexeme:{prev_lexeme}")
+            #sa dulo pag both ay naging 
+            print(f"prev_checker sa end: {prev_checker}")
+            print(f"exp_lexeme sa end: {exp_lexeme}")
+            if prev_checker == 1 and exp_lexeme == 1:
+                prev_checker = 0
+                exp_lexeme = 0
             lexeme.clear()
 
     if hasHai == 0 and hasKthxbye == -1:
