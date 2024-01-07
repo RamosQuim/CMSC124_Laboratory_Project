@@ -1,4 +1,4 @@
-# # TayLOL Shesh: A LOLCode Interpreter
+## TayLOL Sheesh: A LOLCode Interpreter
 
 ## Program Description
 An interpreter for the LOLCode Programming Language using Python Programming Language. More information regarding LOLCode can be found on the following:
