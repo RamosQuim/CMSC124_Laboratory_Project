@@ -1898,9 +1898,10 @@ def syntax(text):
                             result = arithmeticSyntax(h,arithmetic,lexeme)
                         #this is to add pag may error po
                         # print(f"result: {result}")
-                            if result[0] == 0:
-                                syntaxResult += result[1]
-                                success = result[0]
+                            if result is not None:
+                                if result[0] == 0:
+                                    syntaxResult += result[1]
+                                    success = result[0]
                             break    
                     
                     if lexeme[i][0] in comparison:

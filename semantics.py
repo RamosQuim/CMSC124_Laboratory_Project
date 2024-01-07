@@ -793,6 +793,7 @@ functionBody = ''
 currentFunction = ''
 functions = {}
 modified_varidents = {}
+loopDone = -1
 loops = {}
 loopsLabel = ''
 loopsOperation = ''
@@ -800,6 +801,7 @@ loopsVar = ''
 loopsCondition = ''
 loopsExpression = ''
 loopsBody = []
+loopStatement = ''
 # loopsCodeBlock = []
 
 temp_res = []
@@ -975,6 +977,7 @@ def functionExecute(text, parameters):
                     return IT
 
 def semantics(text):
+    print(text, 'ito ang text anu baaaaa')
     # print("<<<<,>>>>>>>")
     # print(text, "\n\n\n")
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
@@ -1002,6 +1005,8 @@ def semantics(text):
     global loopsLabel
     global loopsOperation
     global loopsVar
+    global loopDone
+    global loopStatement
     # global loops
    
 
@@ -1480,6 +1485,7 @@ def semantics(text):
                                             return [f'', text, varidents]
                 
                 elif lexeme[i][0] in varidents and len(lexeme) == 1:
+                    print('>>>>><><><>< dito napprinted', lexeme[i][0])
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[lexeme[i][0]]}', 1)
                     return [f'', text, varidents]
 
@@ -1567,58 +1573,64 @@ def semantics(text):
                 
                 
                 elif lexeme[i][0] == 'IM IN YR':
+                    loopStatement = text.splitlines()[h]
+                    print(loopStatement, ',,,,,,,,,,,,,,,,,,,,,,,,,,,, ITO LOOP')
                     isLoops = 0
                     loopsLabel = lexeme[i+1][0] #label
                     loopsOperation = lexeme[i+2][0]
                     loopsVar = lexeme[i+4][0]
                     loopsCondition = lexeme[i+5][0]
                     if lexeme[i+6][0] == 'BOTH SAEM' or lexeme[i+6][0] == 'DIFFRINT':
-                        result = comparison_expression(lexeme)
-                        loopsExpression = result
-                        # text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
-                        # return ['', text, varidents]
+                        print(loopsCondition, '<<<<<<<<<<<<<<<PASOOOOOOOK')
+                        if lexeme[i+6][0] == 'BOTH SAEM' and loopsCondition == 'TIL':
+                            result = comparison_expression(lexeme[i+6:])
+                            if result == 'FAIL':
+                                loopDone = 0
+                                # if loopsOperation != 'NERFIN':
+                            else:
+                                loopDone = 1
+
+                        elif lexeme[i+6][0] == 'BOTH SAEM' and loopsCondition == 'WILE':
+                            result = comparison_expression(lexeme[i+6:])
+                            if result == 'WIN':
+                                loopsExpression = result
+                                loopDone = 0
+                            else:
+                                loopDone = 1
+                    break
                 
-                ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                    elif lexeme[i+6][0] == 'ANY OF' or lexeme[i+6][0] == 'ALL OF':
-                        result = infiniteBooleanAnalyzer(lexeme[i+1:], "ALL OF")
-                        loopsExpression = result
-                        # text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
-                        # return ['', text, varidents]
-                    
-                    elif lexeme[i+6][0] in booleans:
-                        result = infiniteBooleanAnalyzer(lexeme[i+1:], "ANY OF")
-                        loopsExpression = result
-                        # text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
-                        # return ['', text, varidents]  
-                    
-                    # isInForLoops = 1
+                
                     
 
                 elif lexeme[i][0] == 'IM OUTTA YR':
-                    arr = []
-                    arr.append(loopsOperation)
-                    arr.append(loopsVar)
-                    arr.append(loopsCondition)
-                    arr.append(loopsExpression)
-                    arr.append(loopsBody)
+                    
+                    text = text.replace(f'{text.splitlines()[h]}', f'', 1)
+                    return ['', text, varidents]
+                    # arr = []
+                    # arr.append(loopsOperation)
+                    # arr.append(loopsVar)
+                    # arr.append(loopsCondition)
+                    # arr.append(loopsExpression)
+                    # arr.append(loopsBody)
 
-                    loops[loopsLabel] = arr
-                    print("loopsie hoops:",loops)
-                    loopsLabel = ''
-                    loopsOperation = ''
-                    loopsVar = ''
-                    loopsCondition = ''
-                    loopsExpression = ''
-                    loopsBody = []
-                    isLoops = -1
-                        # loopOut = 1
-                        # loopsBody
-                        # loopsCodeBlock[currentLoops] = loopsBody
-                        # loopsBody = ''
-                        # isInForLoops = 0
-                        # print('ito ang loop body', loops)
+                    # loops[loopsLabel] = arr
+                    # print("loopsie hoops:",loops)
+                    # loopsLabel = ''
+                    # loopsOperation = ''
+                    # loopsVar = ''
+                    # loopsCondition = ''
+                    # loopsExpression = ''
+                    # loopsBody = []
+                    # isLoops = -1
+                    #     # loopOut = 1
+                    #     # loopsBody
+                    #     # loopsCodeBlock[currentLoops] = loopsBody
+                    #     # loopsBody = ''
+                    #     # isInForLoops = 0
+                    #     # print('ito ang loop body', loops)
 
                 elif lexeme[i][0] == 'VISIBLE':
+                    print('ito na ung current >>>>>>>>>>><<<<<<<', text, loopDone)
                     # print(f"lexeme:{lexeme}")
                     visible_index = i + 1
                     temp_result = ""
@@ -1732,6 +1744,16 @@ def semantics(text):
                                     temp_index+=1
                             temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
                             visible_index = temp_index
+                    if loopDone == 0:
+                        print(varidents, loopsVar,loopStatement,loopsOperation, 'PASOK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>')
+                        if loopsOperation != 'NERFIN':
+                            text = text.replace(f'{loopStatement}', f'I HAS A {loopsVar} ITZ {int(varidents[loopsVar])+1}\n{loopStatement}', 1)
+                        else:
+                            print()
+                            text = text.replace(f'{loopStatement}', f'I HAS A {loopsVar} ITZ {int(varidents[loopsVar])-1}\n{loopStatement}', 1)
+                            print('pasooooooooooook',text)
+                        return [f"{temp_result}\n", text, varidents]
+                    print('dapat dito naaaa >>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<')
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
                     # temp_res.append(temp_result)
                     # print("temp_res:", temp_res)
@@ -1883,6 +1905,7 @@ def fin_boolean_expression(lexeme):
 def comparison_expression(lexeme):
     # print(lexeme, "comparison exp", len(lexeme))
     # len(lexeme)
+    print(lexeme, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     result = []
     for i in range(0, len(lexeme)):
@@ -1931,7 +1954,7 @@ def comparison_expression(lexeme):
                         #BOTH SAEM/DIFFRINT x AN y
 
                         #assuming x is in arithmetic
-                        print(lexeme[i+1][0] )
+                        
                         if lexeme[i+1][0] in arithmetic:
                             num_operations = 1
             
@@ -2001,9 +2024,11 @@ def comparison_expression(lexeme):
                         #     print(result)
                 
                         elif lexeme[i+3][0] == 'SMALLR OF':
+                            
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
                             if one == True and three == True:
+                                print('comparisoooon >>>>>>>>>>', one, three)
                                 if float(lexeme[i+1][0]) <= float(lexeme[i+6][0]):
                                     result = 'WIN'
                                 else:
@@ -2034,8 +2059,9 @@ def comparison_expression(lexeme):
                                     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
                                         value.append(varidents[j])
                                 if len(value) == 2:
-                                    if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                        if float(value[0]) <= float(value[1]):
+                                    print(convertFloat(value[0]),convertFloat(value[1]), '<<<<<<<<<<<<<<<<<')
+                                    if convertFloat(value[0]) == True and convertFloat(value[1]) == True:
+                                        if float(value[0]) >= float(value[1]):
                                             result = 'WIN'
                                         else:
                                            result = 'FAIL'
@@ -2072,6 +2098,7 @@ def comparison_expression(lexeme):
                                 for j in varidents:
                                     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
                                         value.append(varidents[j])
+                                
                                 if len(value) == 2:
                                     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
                                         if float(value[0]) <= float(value[1]):
