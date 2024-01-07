@@ -789,6 +789,7 @@ nowaiFlag = -1
 isInFunction = -1
 isLoops = -1
 loopOut = -1
+hasObtw = -1
 functionBody = ''
 currentFunction = ''
 functions = {}
@@ -1009,6 +1010,7 @@ def semantics(text):
     global loopsVar
     global loopDone
     global loopStatement
+    global hasObtw
     # global loops
    
 
@@ -1031,8 +1033,11 @@ def semantics(text):
     noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
     #undefined_error = 0
     parameter_list = {}
+    
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
+        # print(">>>>>>lexeme in semantics",lexeme)
+        # print('\n\n')
         if undefined_error == 1 or noob_error:
             undefined_error = 0
             noob_error = 0
@@ -1043,6 +1048,7 @@ def semantics(text):
             if ['BTW', 'Comment Delimiter'] in lexeme:
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter'])+1)
                 lexeme.pop(lexeme.index(['BTW', 'Comment Delimiter']))
+            
             if conditionFlag == 0 and omgwtfFlag == 1 and lexeme[0][0] != 'OMGWTF':     # para sa mga statements na hindi ieexecute sa if else at switch case
                 continue
             elif conditionFlag == 1 and gtfoFlag == 1 and lexeme[0][0] != 'OIC':
@@ -1067,11 +1073,15 @@ def semantics(text):
                 #     print(f"\n\nLOOP KEYWORD: {lexeme[i][0]}\n\n")   
                 # if isLoops == 0 and lexeme[i][1] != 'Loop Keyword':
                 #     print(lexeme[i])
-                    # loopsBody.append(lexeme[i:])        
+                    # loopsBody.append(lexeme[i:])   
+                if lexeme[i][0] == 'OBTW':
+                    hasObtw = 0
+                if lexeme[i][0] == 'TLDR':
+                    hasObtw = -1     
                 if lexeme[i][0] == 'BUHBYE':
                     outsideWazzup = 1
                     break
-                if lexeme[i][0] == 'I HAS A':
+                if lexeme[i][0] == 'I HAS A' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if outsideWazzup == 1:
                         if len(lexeme) == 4:
                             varidents[lexeme[i+1][0]] = lexeme[i+3][0]
@@ -1079,24 +1089,24 @@ def semantics(text):
                             varidents[lexeme[i+1][0]] = lexeme[i+4][0]
                     break
                 #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
-                if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
+                if lexeme[i][0] == 'BOTH SAEM' and hasObtw == -1 and lexeme[i-1][0] != 'BTW' or lexeme[i][0] == 'DIFFRINT' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     result = comparison_expression(lexeme)
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
                     return ['', text, varidents]
                 
                 ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
-                elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                elif lexeme[i][0] == 'ANY OF' and hasObtw == -1 and lexeme[i-1][0] != 'BTW' or lexeme[i][0] == 'ALL OF' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     result = infiniteBooleanAnalyzer(lexeme[i+1:], "ALL OF")
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
                     return ['', text, varidents]
                     
-                elif lexeme[i][0] in booleans:
+                elif lexeme[i][0] in booleans and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     result = infiniteBooleanAnalyzer(lexeme[i+1:], "ANY OF")
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
                     return ['', text, varidents]
 
                 #THIS PART IS FOR THE COMPUTATIONS!!
-                elif lexeme[i][0] in arithmetic:
+                elif lexeme[i][0] in arithmetic and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     arithmeticresult = str(arithmeticAnalyzer(varidents,arithmetic,lexeme))
                     # print(f"arithmetic result:{arithmeticresult}")
                     if arithmeticresult == "NOOBERROR":
@@ -1114,7 +1124,7 @@ def semantics(text):
                         break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
-                elif lexeme[i][0] == 'GIMMEH':
+                elif lexeme[i][0] == 'GIMMEH' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     # resolved na :>>
                     input_value = for_input.get_user_input()
                     varidents[lexeme[i+1][0]] = str(input_value)
@@ -1123,7 +1133,7 @@ def semantics(text):
                     return [f'{input_value}\n', text, varidents]
                     
                 #R
-                elif lexeme[i][0] == 'R':
+                elif lexeme[i][0] == 'R' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) == 3:
                         # print(varidents, lexeme[i-1][0], lexeme[i+1][0])
                         for j in varidents:
@@ -1328,7 +1338,7 @@ def semantics(text):
                                                     return [f'', text, varidents]                    
                     print(modified_varidents)
 
-                elif lexeme[i][0] == 'IS NOW A':
+                elif lexeme[i][0] == 'IS NOW A' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     for j in varidents:
                         if j == lexeme[i-1][0]:
                             if varidents[j] == 'NOOB':
@@ -1406,7 +1416,7 @@ def semantics(text):
                                         text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i-1][0]} ITZ {"NOOB"}', 1)
                                         return [f'', text, varidents]
                 #MAEK    
-                elif lexeme[i][0] == 'MAEK':
+                elif lexeme[i][0] == 'MAEK' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) == 3 or len(lexeme) == 4 :
                         for j in varidents:
                             if j == lexeme[i+1][0]:
@@ -1486,15 +1496,15 @@ def semantics(text):
                                             text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {"NOOB"}', 1)
                                             return [f'', text, varidents]
                 
-                elif lexeme[i][0] in varidents and len(lexeme) == 1:
+                elif lexeme[i][0] in varidents and len(lexeme) == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     print('>>>>><><><>< dito napprinted', lexeme[i][0])
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {varidents[lexeme[i][0]]}', 1)
                     return [f'', text, varidents]
 
-                elif len(lexeme) == 2 and lexeme[i][0] == 'O' and lexeme[i+1][0] == 'RLY':
+                elif len(lexeme) == 2 and lexeme[i][0] == 'O' and lexeme[i+1][0] == 'RLY' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     isInCondition = 1
 
-                elif len(lexeme) == 2 and lexeme[i][0] == 'YA' and lexeme[i+1][0] == 'RLY':
+                elif len(lexeme) == 2 and lexeme[i][0] == 'YA' and lexeme[i+1][0] == 'RLY' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if varidents['IT'] == 'WIN':
                         conditionFlag = 1
                     elif varidents['IT'] == 'FAIL':
@@ -1507,13 +1517,13 @@ def semantics(text):
                             conditionFlag = 0
                             nowaiFlag = 1
                 
-                elif len(lexeme) == 2 and lexeme[i][0] == 'NO' and lexeme[i+1][0] == 'WAI':
+                elif len(lexeme) == 2 and lexeme[i][0] == 'NO' and lexeme[i+1][0] == 'WAI' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     nowaiFlag = 0
 
-                elif lexeme[i][0] == 'WTF':
+                elif lexeme[i][0] == 'WTF' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     isInCondition = 1
                 
-                elif lexeme[i][0] == 'OMG' and isInCondition == 1:
+                elif lexeme[i][0] == 'OMG' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) > 2:     # pag string ang condition
                         if lexeme[i+2][0] == varidents['IT']:
                             conditionFlag = 1
@@ -1526,13 +1536,13 @@ def semantics(text):
                             conditionFlag = 0
                             omgwtfFlag = 1
                 
-                elif lexeme[i][0] == 'GTFO' and isInCondition == 1:
+                elif lexeme[i][0] == 'GTFO' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     gtfoFlag = 1
 
-                elif lexeme[i][0] == 'OMGWTF' and isInCondition == 1:
+                elif lexeme[i][0] == 'OMGWTF' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     omgwtfFlag = -1
 
-                elif lexeme[i][0] == 'OIC' and isInCondition == 1:  # reset all flags
+                elif lexeme[i][0] == 'OIC' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':  # reset all flags
                     if gtfoFlag != -1:
                         gtfoFlag = -1
                     isInCondition == -1
@@ -1542,7 +1552,7 @@ def semantics(text):
                 # elif lexeme[i][0] == 'IM IN YR':
                 #     isLoops = 1
 
-                elif lexeme[i][0] == 'HOW IZ I':
+                elif lexeme[i][0] == 'HOW IZ I' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     currentFunction = lexeme[i+1][0]
                     if len(lexeme) == 4:
                         parameter_list[lexeme[i+1][0]] = lexeme[i+3][0]
@@ -1558,7 +1568,7 @@ def semantics(text):
 
                     isInFunction = 1
                 
-                elif lexeme[i][0] == 'I IZ':
+                elif lexeme[i][0] == 'I IZ' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if len(lexeme) != 8 or lexeme[i+3][0] in arithmetic:
                         if lexeme[i+3][0] in varidents:
                             print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',functions[lexeme[i+1][0]])
@@ -1623,7 +1633,7 @@ def semantics(text):
 
                                 
 
-                elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO':
+                elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     print('PAPASOK DITOOOO <<<,')
                     functions[currentFunction] = functionBody
                     functionBody = ''
@@ -1631,7 +1641,7 @@ def semantics(text):
                     print('ito ang functions', functions)
                 
                 
-                elif lexeme[i][0] == 'IM IN YR':
+                elif lexeme[i][0] == 'IM IN YR' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     loopStatement = text.splitlines()[h]
                     print(loopStatement, ',,,,,,,,,,,,,,,,,,,,,,,,,,,, ITO LOOP')
                     isLoops = 0
@@ -1661,7 +1671,7 @@ def semantics(text):
                 
                     
 
-                elif lexeme[i][0] == 'IM OUTTA YR':
+                elif lexeme[i][0] == 'IM OUTTA YR' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     
                     text = text.replace(f'{text.splitlines()[h]}', f'', 1)
                     return ['', text, varidents]
@@ -1688,7 +1698,7 @@ def semantics(text):
                     #     # isInForLoops = 0
                     #     # print('ito ang loop body', loops)
 
-                elif lexeme[i][0] == 'VISIBLE':
+                elif lexeme[i][0] == 'VISIBLE' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     print('ito na ung current >>>>>>>>>>><<<<<<<', text, loopDone)
                     # print(f"lexeme:{lexeme}")
                     visible_index = i + 1

@@ -902,17 +902,17 @@ def syntax(text):
                         success = 0
                         break
                 else:
-                        if lexeme[i][0] == 'HAI' and hasHai > -1:
+                        if lexeme[i][0] == 'HAI' and hasHai > -1 and hasobtw == -1:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <HAI>: \n\tAlready has HAI; it must be declared once')
                             success = 0
                             break
-                        elif lexeme[i][0] == 'HAI' and hasKthxbye > -1:
+                        elif lexeme[i][0] == 'HAI' and hasKthxbye > -1 and hasobtw == -1:
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <HAI>: \n\HAI must be declared before KTHXBYE')
                             success = 0
                             break
                 if hasHai == 0:
                     ## VARIABLE BLOCK SYNTAX - WAZZUP
-                    if lexeme[i][0] == 'WAZZUP' and hasWazzup == -1 and hasBuhbye == -1:
+                    if lexeme[i][0] == 'WAZZUP' and hasWazzup == -1 and hasBuhbye == -1 and hasobtw == -1:
                         count = 0
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -943,7 +943,7 @@ def syntax(text):
                     # print("has",hasWazzup)
                     # print(lexeme[i][0], lexeme[i][1])
                     ## VARIABLE DECLARATION SYNTAX
-                    if lexeme[i][0] == 'I HAS A' and hasWazzup == 0:
+                    if lexeme[i][0] == 'I HAS A' and hasWazzup == 0 and hasobtw == -1:
                         print(len(lexeme))
                         count = 0
                         checker = 0
@@ -1095,7 +1095,7 @@ def syntax(text):
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} in <WAZZUP> block: \n\tonly I HAS A statements can be inside WAZZUP and BUHBYE')
                             success = 0
                             break
-                        elif lexeme[i][0] == 'I HAS A':
+                        elif lexeme[i][0] == 'I HAS A' and hasobtw == -1:
                                     count = 0
                                     checker = 0
                                     for c in range(i+1, len(lexeme)):
@@ -1113,7 +1113,7 @@ def syntax(text):
                                         success = 0
                                         break
                     ## VARIABLE BLOCK SYNTAX - BUHBYE
-                    if lexeme[i][0] == 'BUHBYE' and hasWazzup == 0:
+                    if lexeme[i][0] == 'BUHBYE' and hasWazzup == 0 and hasobtw == -1:
                                     count = 0
                                     checker = 0
                                     for c in range(i+1, len(lexeme)):
@@ -1141,7 +1141,7 @@ def syntax(text):
                             break
 
                     #PRINTING
-                    if lexeme[i][0] == 'VISIBLE':
+                    if lexeme[i][0] == 'VISIBLE' and hasobtw == -1:
                         # print(f"lexeme sa visible: {lexeme}")
                         # print(f"func_parameters: {func_parameters}")
                         # print(f"previous lexeme3:{prev_lexeme}")
@@ -1406,7 +1406,7 @@ def syntax(text):
                     
                     
                     #RETURN WITH SOMETHING
-                    if lexeme[i][0]=='FOUND YR':
+                    if lexeme[i][0]=='FOUND YR' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1457,7 +1457,7 @@ def syntax(text):
                             break
                     
                     #THIS IS FOR CALLING
-                    if lexeme[i][0] == 'I IZ':
+                    if lexeme[i][0] == 'I IZ' and hasobtw == -1:
                         if len(lexeme) < 4:
                             success = 0
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tI IZ <function name> [YR <expression1> [AN YR <expression2> AN YR <expression2>]] MKAY1')
@@ -1635,7 +1635,7 @@ def syntax(text):
 
                                 
                     ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF and ALL OF
-                    if lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                    if lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF' and hasobtw == -1:
                         count = 0
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -1656,7 +1656,7 @@ def syntax(text):
                                 break
                             break
 
-                    if lexeme[i][0] in booleans:
+                    if lexeme[i][0] in booleans and hasobtw == -1:
                         count = 0
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -1680,7 +1680,7 @@ def syntax(text):
                    
 
                     ## CONCATENATION BLOCK SYNTAX - SMOOSH
-                    if lexeme[i][0] == 'SMOOSH':
+                    if lexeme[i][0] == 'SMOOSH' and hasobtw == -1:
                         count = 0
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -1717,7 +1717,7 @@ def syntax(text):
                         
                     #  #FOR VARIABLE ASSIGNMENT USING R AND R WITH MAEK
                     # wala pang ano para sa expression
-                    if lexeme[i][0] == 'R':
+                    if lexeme[i][0] == 'R' and hasobtw == -1:
                         count = 0
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -1801,7 +1801,7 @@ def syntax(text):
                         
                     
                     #MAEK TYPECASTING
-                    if lexeme[i][0] == 'MAEK':
+                    if lexeme[i][0] == 'MAEK' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1855,7 +1855,7 @@ def syntax(text):
                                                 break
 
                     #IS NOW A
-                    if lexeme[i][0] == 'IS NOW A':
+                    if lexeme[i][0] == 'IS NOW A' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1890,7 +1890,7 @@ def syntax(text):
                                 break
                         
                     # #ARITHMETIC OPERATIONS SYNTAX - FOR ALL ARITHMETIC OPERATIONS!
-                    if lexeme[i][0] in arithmetic: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
+                    if lexeme[i][0] in arithmetic and hasobtw == -1: # 'SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF'
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1913,7 +1913,7 @@ def syntax(text):
                                     success = result[0]
                             break    
                     
-                    if lexeme[i][0] in comparison:
+                    if lexeme[i][0] in comparison and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1939,7 +1939,7 @@ def syntax(text):
 
                     #SWITCH CASES STATEMENTS
                     #temporary tinanggal muna yung ? WTF
-                    if lexeme[i][0] == 'WTF':
+                    if lexeme[i][0] == 'WTF' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -1965,7 +1965,7 @@ def syntax(text):
                         
 
                     #OMG STATEMENTS 
-                    if lexeme[i][0] == "OMG":
+                    if lexeme[i][0] == "OMG" and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2022,7 +2022,7 @@ def syntax(text):
                                 success = 0
                                 break                                    
 
-                    if lexeme[i][0] == "OMGWTF?":
+                    if lexeme[i][0] == "OMGWTF?" and hasobtw == -1:
                         print("omgwtf",len(lexeme), lexeme)
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -2047,7 +2047,7 @@ def syntax(text):
                                 success = 0
                                 break   
 
-                    if lexeme[i][0] == 'OIC':
+                    if lexeme[i][0] == 'OIC' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2094,7 +2094,7 @@ def syntax(text):
 
 
                     #THIS ONE IS CREATED FOR THE GIMMEH INPUT!!
-                    if lexeme[i][0] == 'GIMMEH':
+                    if lexeme[i][0] == 'GIMMEH' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2124,7 +2124,7 @@ def syntax(text):
 
                     #IF THEN SYNTAX
                     #O RLY
-                    if lexeme[i][0] == 'O':
+                    if lexeme[i][0] == 'O' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2158,7 +2158,7 @@ def syntax(text):
                             #                break 
                             orlychecker = 1
                     #YA RLY
-                    if lexeme[i][0] == 'YA':
+                    if lexeme[i][0] == 'YA' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2187,7 +2187,7 @@ def syntax(text):
                                 else:
                                     yarlychecker =1
                     #NO WAI
-                    if lexeme[i][0] == 'NO':
+                    if lexeme[i][0] == 'NO' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2218,7 +2218,7 @@ def syntax(text):
                     
                     #FUNCTION SYNTAX
                     #note: hindi pa nacoconsider dito if valid ba yung parameters (???) not sure if need pa ba yon 
-                    if lexeme[i][0] == 'HOW IZ I':
+                    if lexeme[i][0] == 'HOW IZ I' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2334,7 +2334,7 @@ def syntax(text):
                             break
                         
                     #THIS IS THE RETURN OF EMPTY (USED IN FUNCTIONS AND SWITCH CASE)
-                    if lexeme[i][0] == 'GTFO':
+                    if lexeme[i][0] == 'GTFO' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2356,6 +2356,7 @@ def syntax(text):
                                 success = 0
                                 break
                             break
+
                     if lexeme[i][0] == 'OBTW':
                         hasobtw = 0
                     
@@ -2366,9 +2367,10 @@ def syntax(text):
                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tthere should be an OBTW before TLDR')
                             success = 0
                             break
+                        else: hasobtw = -1
 
                     #THIS IS THE END OF THE FUNCTION 
-                    if lexeme[i][0] == 'IF U SAY SO':
+                    if lexeme[i][0] == 'IF U SAY SO' and hasobtw == -1:
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2392,7 +2394,7 @@ def syntax(text):
                         #reset the checker
                             functionchecker = -1
 
-                    if lexeme[i][0] == 'IM IN YR' :
+                    if lexeme[i][0] == 'IM IN YR' and hasobtw == -1 :
                         hasinyr = 0
                         checker = 0
                         inyrcount += 1
@@ -2488,7 +2490,7 @@ def syntax(text):
                         #     break
                     # print('im in yr2',hasIminyr)
 
-                    if lexeme[i][0] == 'IM OUTTA YR':
+                    if lexeme[i][0] == 'IM OUTTA YR' and hasobtw == -1:
                         hasoutta = 0
                         outtayrcount +=1
                         c = 0
@@ -2557,7 +2559,7 @@ def syntax(text):
                     break
 
                 ## PROGRAM BLOCK SYNTAX - KTHXBYE
-                if lexeme[i][0] == 'KTHXBYE' and hasHai == 0:
+                if lexeme[i][0] == 'KTHXBYE' and hasHai == 0 and hasobtw == -1:
                         hasKthxbye = 0
                         hasHai = 1
                         break

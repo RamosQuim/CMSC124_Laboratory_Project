@@ -26,14 +26,23 @@ class LOLLexer:
             if token is not None:
                 if hasobtw == 0 and token.value[0:4] == 'OBTW':
                     hasobtw = 1 
+                if hasobtw == 1:
+                    if token.value == 'TLDR':
+                        hasobtw = 0
+                    # else: continue
 
-                if token.type == 'Special Characters' :
+                if token.type == 'Special Characters' : #para makuha rin mga may special char sa loob ng obtw
                     if hasobtw != 1:
                         continue
+                
+                
+
+
                
                 self.tokens.append(token) #appends the token to the tokens list
             else:
                 break
+        print("is there an obtw?",hasobtw)
         return self.tokens
 
 
