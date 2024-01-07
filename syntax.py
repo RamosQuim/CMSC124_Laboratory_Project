@@ -1417,9 +1417,12 @@ def syntax(text):
                                 if lexeme[i+1][0] not in comparison:
                                     if lexeme[i+1][0] not in booleans:
                                         if lexeme[i+1][0] not in inifinitebooleans:
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tFOUND YR only accepts expressions!')
-                                            success = 0
-                                            break
+                                            if lexeme[i+1][1] != 'Identifier':
+                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>:  \n\tFOUND YR only accepts expressions!')
+                                                success = 0
+                                                break
+                                            else:
+                                                break
                                         else:
                                             result = infiniteBooleanSyntax(lexeme[i+1:], h, i)
                                             if result is not None:

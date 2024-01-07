@@ -1547,9 +1547,9 @@ def semantics(text):
                     isInFunction = 1
                 
                 elif lexeme[i][0] == 'I IZ':
-                    if len(lexeme) == 4:
+                    if len(lexeme) == 5:
                         if lexeme[i+3][0] in varidents:
-                            print(functions[lexeme[i+1][0]])
+                            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',functions[lexeme[i+1][0]])
                             it = functionExecute(functions[lexeme[i+1][0]], {parameter_list[lexeme[i+1][0]]: varidents[lexeme[i+3][0]]})
                             
                             if len(it) != 0:
