@@ -786,12 +786,28 @@ conditionFlag = -1
 omgwtfFlag = -1
 gtfoFlag = -1
 nowaiFlag = -1
+isInFunction = -1
+isLoops = -1
+loopOut = -1
+functionBody = ''
+currentFunction = ''
+functions = {}
 modified_varidents = {}
+loops = {}
+loopsLabel = ''
+loopsOperation = ''
+loopsVar = ''
+loopsCondition = ''
+loopsExpression = ''
+loopsBody = []
+# loopsCodeBlock = []
+
 temp_res = []
 explicit_typecast = []
 booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
 literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
 varidents = {}
+
 
 # def getExplicitTypecast(text):
 #     if syntax.syntax(text) == '>> No syntax errors.':
@@ -815,7 +831,152 @@ varidents = {}
 #         return temp_res
 #     return 0
 
+def functionExecute(text, parameters):
+    global varidents
+    comparison = ['BOTH SAEM', 'DIFFRINT']
+    booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
+    arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
+    infinitebooleans = ['ANY OF', "ALL OF"]
+    IT = []
+    for h in range(0, len(text.splitlines())):
+        lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
+        if lexeme is not None:
+            for i in range(0, len(lexeme)):    
+                if lexeme[i][0] == 'VISIBLE':
+                    # print(f"lexeme:{lexeme}")
+                    visible_index = i + 1
+                    temp_result = ""
+                    while visible_index < len(lexeme):
+                        #print(f"visible_index: {visible_index}")
+                        #print(f"currently pointed to right now: {lexeme[visible_index]}")
+                        print(lexeme[visible_index][0], parameters, '<<<<<<<<<<<<<<<<>>>>>>>>>>')
+                        if lexeme[visible_index][1] == 'String Delimiter':
+                            temp_result += str(lexeme[visible_index+1][0])
+                            visible_index +=3
+                        elif lexeme[visible_index][1] == 'Output Delimiter':
+                            visible_index +=1
+                        elif lexeme[visible_index][0] in parameters:
+                            temp_result += str(parameters[lexeme[visible_index][0]])
+                            visible_index +=1
+                        #this is for IT
+                        elif lexeme[visible_index][0] == 'IT':
+                            temp_result += str(keywords.get_IT())
+                            visible_index+=1
+                        #THIS IS FOR THE TROOF LITERAL
+                        elif lexeme[visible_index][1] == 'TROOF Literal':
+                            temp_result += str(lexeme[visible_index][0])
+                            visible_index+=1
+                        #THIS IS FOR GETTING THE NUMBR
+                        elif lexeme[visible_index][1] == 'NUMBAR Literal':
+                            temp_result += str(lexeme[visible_index][0])
+                            visible_index+=1
+                        #FOR GETTING THE NUMBAR
+                        elif lexeme[visible_index][1] == 'NUMBR Literal':
+                            temp_result += str(lexeme[visible_index][0])
+                            visible_index+=1
+                        elif lexeme[visible_index][0] in arithmetic:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            arithmeticresult = str(arithmeticAnalyzer(parameters,arithmetic,temp)) 
+                            temp_result += arithmeticresult
+                            visible_index = temp_index
+                        #COMPARISON 
+                        elif lexeme[visible_index][0] in comparison:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            # print(f"current lexeme sa comparison: {lexeme}")
+                            # print(f"temp_index: {temp_index}")
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    # print(f"temp_index: {temp_index}")
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(comparison_expression(temp))
+                            visible_index = temp_index
+
+                        #BOOLEANS
+                        elif lexeme[visible_index][0] in booleans:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(booleanAnalyzer(temp, 0))
+                            visible_index = temp_index
+                        #INFINITE BOOLEANS
+                        elif lexeme[visible_index][0] in infinitebooleans:
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(infiniteBooleanAnalyzer(temp, lexeme[visible_index][0]))
+                            visible_index = temp_index
+                        elif lexeme[visible_index][0] == 'SMOOSH':
+                            #kunin ang lexeme until +
+                            temp = []
+                            temp_index = visible_index
+                            while temp_index < len(lexeme):
+                                if lexeme[temp_index][1] == "Output Delimiter":
+                                    break
+                                else:
+                                    temp.append(lexeme[temp_index])
+                                    temp_index+=1
+                            temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
+                            visible_index = temp_index
+                    text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
+                    # temp_res.append(temp_result)
+                    # print("temp_res:", temp_res)
+                    print('ito ang current result', temp_result)
+                    print('ito ang current result',varidents)
+                    varidents['IT'] = temp_result
+                    print('ito ang current ipapasa',varidents)
+                    IT.append(temp_result)
+                    break
+                elif lexeme[i][0] == 'FOUND YR':
+                    #-- BOTH SAEM AND DIFFRINT WITH VARIDENTS
+                    if lexeme[i][0] == 'BOTH SAEM' or lexeme[i][0] == 'DIFFRINT':
+                        result = comparison_expression(lexeme[i+1:])
+                        varidents['IT'] = result
+                    
+                    ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
+                    elif lexeme[i][0] == 'ANY OF' or lexeme[i][0] == 'ALL OF':
+                        result = infiniteBooleanAnalyzer(lexeme[i+2:], "ALL OF")
+                        varidents['IT'] = result
+                        
+                    elif lexeme[i][0] in booleans:
+                        result = infiniteBooleanAnalyzer(lexeme[i+2:], "ANY OF")
+                        varidents['IT'] = result
+
+                    #THIS PART IS FOR THE COMPUTATIONS!!
+                    elif lexeme[i][0] in arithmetic:
+                        arithmeticresult = str(arithmeticAnalyzer(parameters,arithmetic,lexeme[i+1:]))
+                        varidents['IT'] = result
+                    return IT
+                elif lexeme[i][0] == 'GTFO':
+                    return IT
+
 def semantics(text):
+    print("<<<<,>>>>>>>")
+    print(text, "\n\n\n")
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     semanticsResult = ''
     # global modified_varidents
@@ -829,6 +990,20 @@ def semantics(text):
     global omgwtfFlag
     global gtfoFlag
     global nowaiFlag
+    global isInFunction
+    global isLoops
+    global functionBody
+    global functions
+    global currentFunction
+    global loops
+    global loopsBody
+    global loopsCondition
+    global loopsExpression
+    global loopsLabel
+    global loopsOperation
+    global loopsVar
+    # global loops
+   
 
     varidents = {'IT': 'NOOB'}
     # temp_res.clear()
@@ -848,7 +1023,7 @@ def semantics(text):
     undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
     noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
     #undefined_error = 0
-
+    parameter_list = {}
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if undefined_error == 1 or noob_error:
@@ -870,10 +1045,22 @@ def semantics(text):
                     continue
             elif conditionFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
                 continue 
+            # print('><><><><><', lexeme, "loop: ",isLoops)
+            if isInFunction == 1:
+                if lexeme[0][0] != 'IF' or lexeme[1][0] != 'U' or lexeme[2][0] != 'SAY' or lexeme[3][0] != 'SO':
+                    functionBody += f'{text.splitlines()[h]}\n'
+                    print('CURRENT FUNCTION BODY ><><><><', functionBody)
+                    continue
 
-
+            # print(lexeme, '<<<<<<<<<<<<<<<<<')
             # print(f"len(lexeme): {len(lexeme)}")
-            for i in range(0, len(lexeme)):                
+            for i in range(0, len(lexeme)):   
+                # print("\nkeyword:",lexeme[i][0], "\n")  
+                # if lexeme[i][1] == "Loop Keyword":
+                #     print(f"\n\nLOOP KEYWORD: {lexeme[i][0]}\n\n")   
+                # if isLoops == 0 and lexeme[i][1] != 'Loop Keyword':
+                #     print(lexeme[i])
+                    # loopsBody.append(lexeme[i:])        
                 if lexeme[i][0] == 'BUHBYE':
                     outsideWazzup = 1
                     break
@@ -1343,6 +1530,93 @@ def semantics(text):
                     isInCondition == -1
                     conditionFlag = -1
                     nowaiFlag = -1
+                
+                # elif lexeme[i][0] == 'IM IN YR':
+                #     isLoops = 1
+
+                elif lexeme[i][0] == 'HOW IZ I':
+                    currentFunction = lexeme[i+1][0]
+                    if len(lexeme) == 4:
+                        parameter_list[lexeme[i+1][0]] = lexeme[i+3][0]
+                    isInFunction = 1
+                
+                elif lexeme[i][0] == 'I IZ':
+                    if len(lexeme) == 4:
+                        if lexeme[i+3][0] in varidents:
+                            print(functions[lexeme[i+1][0]])
+                            it = functionExecute(functions[lexeme[i+1][0]], {parameter_list[lexeme[i+1][0]]: varidents[lexeme[i+3][0]]})
+                            
+                            if len(it) != 0:
+                                to_print = ''
+                                for value in it:
+                                    to_print += f'{value}\n'
+                                text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{it[-1]}"', 1)
+                                # temp_res.append(temp_result)
+                                # print("temp_res:", temp_res)
+                                varidents['IT'] = it[-1]
+                                return [f"{to_print}", text, varidents]
+                            return [f'', text, varidents]
+                                
+
+                elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO':
+                    print('PAPASOK DITOOOO <<<,')
+                    functions[currentFunction] = functionBody
+                    functionBody = ''
+                    isInFunction = -1
+                    print('ito ang functions', functions)
+                
+                
+                elif lexeme[i][0] == 'IM IN YR':
+                    isLoops = 0
+                    loopsLabel = lexeme[i+1][0] #label
+                    loopsOperation = lexeme[i+2][0]
+                    loopsVar = lexeme[i+4][0]
+                    loopsCondition = lexeme[i+5][0]
+                    if lexeme[i+6][0] == 'BOTH SAEM' or lexeme[i+6][0] == 'DIFFRINT':
+                        result = comparison_expression(lexeme)
+                        loopsExpression = result
+                        # text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
+                        # return ['', text, varidents]
+                
+                ##INFINITE ARITY BOOLEAN SYNTAX - ANY OF
+                    elif lexeme[i+6][0] == 'ANY OF' or lexeme[i+6][0] == 'ALL OF':
+                        result = infiniteBooleanAnalyzer(lexeme[i+1:], "ALL OF")
+                        loopsExpression = result
+                        # text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
+                        # return ['', text, varidents]
+                    
+                    elif lexeme[i+6][0] in booleans:
+                        result = infiniteBooleanAnalyzer(lexeme[i+1:], "ANY OF")
+                        loopsExpression = result
+                        # text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {result}', 1)
+                        # return ['', text, varidents]  
+                    
+                    # isInForLoops = 1
+                    
+
+                elif lexeme[i][0] == 'IM OUTTA YR':
+                    arr = []
+                    arr.append(loopsOperation)
+                    arr.append(loopsVar)
+                    arr.append(loopsCondition)
+                    arr.append(loopsExpression)
+                    arr.append(loopsBody)
+
+                    loops[loopsLabel] = arr
+                    print("loopsie hoops:",loops)
+                    loopsLabel = ''
+                    loopsOperation = ''
+                    loopsVar = ''
+                    loopsCondition = ''
+                    loopsExpression = ''
+                    loopsBody = []
+                    isLoops = -1
+                        # loopOut = 1
+                        # loopsBody
+                        # loopsCodeBlock[currentLoops] = loopsBody
+                        # loopsBody = ''
+                        # isInForLoops = 0
+                        # print('ito ang loop body', loops)
 
                 elif lexeme[i][0] == 'VISIBLE':
                     # print(f"lexeme:{lexeme}")
@@ -1461,16 +1735,16 @@ def semantics(text):
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
                     # temp_res.append(temp_result)
                     # print("temp_res:", temp_res)
-                    print('ito ang current result', temp_result)
-                    print('ito ang current result',varidents)
+                    # print('ito ang current result', temp_result)
+                    # print('ito ang current result',varidents)
                     varidents['IT'] = temp_result
-                    print('ito ang current ipapasa',varidents)
+                    # print('ito ang current ipapasa',varidents)
                     return [f"{temp_result}\n", text, varidents]
                     # break
             lexeme.clear()
     text = text.replace(f'{text.splitlines()[h]}', '', 1)
     temp_res = temp_list
-    print('hey:', varidents)
+    # print('hey:', varidents)
     return [None, text, varidents]
 
 
@@ -1879,7 +2153,7 @@ def comparison_expression(lexeme):
                                     else:
                                        result = 'FAIL'
                     else: #for SMALLR OF and BIGGR OF
-                        print(lexeme[i+1][0])
+                        # print(lexeme[i+1][0])
                         if lexeme[i+1][0] in arithmetic:
                             num_operations = 1
             

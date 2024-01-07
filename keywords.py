@@ -127,8 +127,8 @@ token_patterns = {
 }
 
 def lex(str):
-    # print('\n\n')
-    # print(str)
+    # print('\n\nFROM KEYWORD:')
+    # print(str) 
     # print('\n\n')
     literals=['YARN Literal', 'NUMBR Literal', 'NUMBAR Literal', 'Identifier', 'TROOF Literal', 'Type Literal']
     compiled_lex.clear()
