@@ -8,6 +8,7 @@ varidents = {}
 exp_lexeme = 0 #this is for the expression checker
 prev_checker = 0 #checker for exp_lexeme 
 func_parameters = [] 
+func_names = []
 labelWord = ''
 visiblechecker = -1  
 
@@ -702,6 +703,7 @@ def syntax(text):
     global exp_lexeme
     global prev_checker
     global func_parameters
+    global func_names
     global visiblechecker
     modif_var.clear()
     varidents.clear()
@@ -1353,6 +1355,11 @@ def syntax(text):
                                 if lexeme[i+1][1] != "Function Identifier":
                                     success = 0
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tIncorrect number of parameters, see correct syntax. \n\tI IZ <function name> [YR <expression1> [AN YR <expression2> AN YR <expression2>]] MKAY2')
+                                    break
+                                #check if valid yung function identifier na nilagay
+                                elif lexeme[i+1][0] not in func_names:
+                                    success = 0
+                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tInvalid Function Name.')
                                     break
                             #check yung dulo
                                 elif lexeme[-1][0] != "MKAY":
@@ -2124,7 +2131,11 @@ def syntax(text):
                             success = 0
                             break
                         else:
-                            if len(lexeme)<2:
+                            if hasBuhbye != 0 and hasWazzup != 1:
+                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t HOW IZ I should be placed after WAZZUP and BUHBYE')
+                                success = 0
+                                break
+                            elif len(lexeme)<2:
                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\t HOW IZ I should have a function name!')
                                 success = 0
                                 break
@@ -2217,6 +2228,7 @@ def syntax(text):
                                                 break
                                             function_index+=1
                             functionchecker = 1
+                            func_names.append(lexeme[i+1][0])
                             break
                         
                     #THIS IS THE RETURN OF EMPTY (USED IN FUNCTIONS AND SWITCH CASE)
