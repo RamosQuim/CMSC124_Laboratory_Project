@@ -998,6 +998,7 @@ def syntax(text):
                     #PRINTING
                     if lexeme[i][0] == 'VISIBLE' and hasobtw == -1:
                         #if less than 2 means invalid
+                        visiblechecker = 0
                         if len(lexeme) < 2:
                                     count = 0
                                     checker = 0
