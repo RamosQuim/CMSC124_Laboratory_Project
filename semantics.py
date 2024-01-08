@@ -963,13 +963,10 @@ def semantics(text):
     global loopStatement
     global imOuttaFlag
     global hasObtw
-    # global loops
     ifElseFlag = -1
     nowaiFlag = -1
 
     varidents = {'IT': 'NOOB'}
-    # temp_res.clear()
-    # temp_res = ""
     temp_list = []
 
     temp_varident = syntax.getVaridents(text)
@@ -1065,7 +1062,7 @@ def semantics(text):
                     else:
                         text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ {arithmeticresult}', 1)
                         return [arithmeticresult, text, varidents]
-                        break #hindi ko alam baket nag break pa pero pag wala siya nag error shadkashdkadhaskhdahdsa
+                        break
                 
                 #THIS IS TO CATER GIMMEH - ASKING USER FOR INPUT
                 elif lexeme[i][0] == 'GIMMEH' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
@@ -1441,14 +1438,13 @@ def semantics(text):
                     if len(lexeme) > 2:     # pag string ang condition
                         if lexeme[i+2][0] == varidents['IT']:
                             conditionFlag = 1
-                        # else:
-                        #     omgwtfFlag = 1
+                        else:
+                            conditionFlag = 0
                     else:                   # pag other literals
                         if lexeme[i+1][0] == varidents['IT']:
                             conditionFlag = 1
                         else:
                             conditionFlag = 0
-                            # omgwtfFlag = 1
                 
                 elif lexeme[i][0] == 'GTFO' and isInCondition == 1 and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     gtfoFlag = 1
@@ -1694,138 +1690,6 @@ def semantics(text):
     
     return [None, text, varidents]
 
-
-
-def fin_boolean_expression(lexeme):
-    result = []
-    for i in range(0, len(lexeme)):
-        if lexeme[i][0] == 'BOTH OF' and len(lexeme) == 4:
-                    if lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'TROOF Literal':
-                        if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                           result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                            result = f'FAIL\n'
-                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][0] in varidents and lexeme[i+3][1] == 'TROOF Literal':
-                        if varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                            result = f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][0] in varidents:
-                        if lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'FAIL\n'
-                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result += f'FAIL\n'
-                    elif lexeme[i+1][0] in varidents and lexeme[i+3][0] in varidents:
-                        if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-        elif lexeme[i][0] == 'EITHER OF' and len(lexeme) == 4:
-                    if lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'TROOF Literal':
-                        if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][0] in varidents and lexeme[i+3][1] == 'TROOF Literal':
-                        if varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][0] in varidents:
-                        if lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][0] in varidents and lexeme[i+3][0] in varidents:
-                        if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-                #WON OF
-        elif lexeme[i][0] == 'WON OF' and len(lexeme) == 4:
-                    if lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][1] == 'TROOF Literal':
-                        if lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                            result = f'FAIL\n'
-                        elif lexeme[i+1][0] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][0] in varidents and lexeme[i+3][1] == 'TROOF Literal':
-                        if varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'WIN':
-                            result = f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'WIN' and lexeme[i+3][0] == 'FAIL':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and lexeme[i+3][0] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][1] == 'TROOF Literal' and lexeme[i+3][0] in varidents:
-                        if lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'FAIL\n'
-                        elif lexeme[i+1][0] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif lexeme[i+1][0] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-                    elif lexeme[i+1][0] in varidents and lexeme[i+3][0] in varidents:
-                        if varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'FAIL\n'
-                        elif varidents[lexeme[i+1][0]] == 'WIN' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'WIN':
-                            result = f'WIN\n'
-                        elif varidents[lexeme[i+1][0]] == 'FAIL' and varidents[lexeme[i+3][0]] == 'FAIL':
-                            result = f'FAIL\n'
-                #NOT
-        elif lexeme[i][0] == 'NOT' and len(lexeme) == 2:
-                
-                if lexeme[i+1][0] == 'WIN':
-                            result = f'FAIL\n'
-                elif lexeme[i+1][0] == 'FAIL':
-                            result = f'WIN\n'
-                elif lexeme[i+1][0] in varidents:
-
-                    if varidents[lexeme[i+1][0]] == 'WIN':
-                            result = f'FAIL\n'
-                    elif varidents[lexeme[i+1][0]] == 'FAIL':
-                            result = f'WIN\n'
-    return result
-
 def comparison_expression(lexeme):
     arithmetic = ['SUM OF','DIFF OF','PRODUKT OF', 'QUOSHUNT OF', 'MOD OF', 'BIGGR OF', 'SMALLR OF']
     result = []
@@ -1861,11 +1725,7 @@ def comparison_expression(lexeme):
                                 else:
                                     result = 'FAIL'
                         elif one == False and three == False:
-                            # value = []
-                            # for j in varidents:
-                            #     if j == lexeme[i+3][0] or j == lexeme[i+1][0]:
-                            #         value.append(varidents[j])
-                            # if len(value) == 2:
+                            
                                 if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+3][0]]) == True:
                                     if float(varidents[lexeme[i+1][0]]) == float(varidents[lexeme[i+3][0]]):
                                         result = 'WIN'
@@ -1978,17 +1838,7 @@ def comparison_expression(lexeme):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
-                                # value = []
-                                # for j in varidents:
-                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                #         value.append(varidents[j])
                                 
-                                # if len(value) == 2:
-                                #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                #         if float(value[0]) <= float(value[1]):
-                                #             result = 'WIN'
-                                #         else:
-                                #             result = 'FAIL'
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
                             num_operations = 1
@@ -2124,16 +1974,7 @@ def comparison_expression(lexeme):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
-                                # value = []
-                                # for j in varidents:
-                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                #         value.append(varidents[j])
-                                # if len(value) == 2:
-                                #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                #         if float(value[0]) > float(value[1]):
-                                #            result = 'WIN'
-                                #         else:
-                                #             result = 'FAIL'
+                                
                         elif lexeme[i+3][0] == 'BIGGR OF':
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
@@ -2168,16 +2009,7 @@ def comparison_expression(lexeme):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
-                                # value = []
-                                # for j in varidents:
-                                #     if j == lexeme[i+6][0] or j == lexeme[i+1][0]:
-                                #         value.append(varidents[j])
-                                # if len(value) == 2:
-                                #     if convertFloat(value[0]) == True and  convertFloat(value[1]) == True:
-                                #         if float(value[0]) < float(value[1]):
-                                #             result = 'WIN'
-                                #         else:
-                                #             result = 'FAIL'
+                                
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
                             num_operations = 1
