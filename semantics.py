@@ -934,6 +934,7 @@ def functionExecute(text, parameters):
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
                     print('ito ang current result', temp_result)
                     print('ito ang current result',varidents)
+                    
                     varidents['IT'] = temp_result
                     print('ito ang current ipapasa',varidents)
                     IT.append(temp_result)
