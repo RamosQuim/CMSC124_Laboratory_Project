@@ -787,6 +787,7 @@ loopsCondition = ''
 loopsExpression = ''
 loopsBody = []
 loopStatement = ''
+imOuttaFlag = -1
 # loopsCodeBlock = []
 
 temp_res = []
@@ -958,6 +959,7 @@ def semantics(text):
     global loopsVar
     global loopDone
     global loopStatement
+    global imOuttaFlag
     global hasObtw
     # global loops
    
@@ -1000,6 +1002,10 @@ def semantics(text):
                     continue
             elif conditionFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
                 continue 
+            
+            if imOuttaFlag == 1 and lexeme[0][0] != 'IM OUTTA YR':
+                text = text.replace(f'{text.splitlines()[h]}', f'', 1)
+                continue
 
             if isInFunction == 1:
                 if lexeme[0][0] != 'IF' or lexeme[1][0] != 'U' or lexeme[2][0] != 'SAY' or lexeme[3][0] != 'SO':
@@ -1450,9 +1456,6 @@ def semantics(text):
                     isInCondition == -1
                     conditionFlag = -1
                     nowaiFlag = -1
-                
-                # elif lexeme[i][0] == 'IM IN YR':
-                #     isLoops = 1
 
                 elif lexeme[i][0] == 'HOW IZ I' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     currentFunction = lexeme[i+1][0]
@@ -1520,11 +1523,6 @@ def semantics(text):
                         text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{varidents["IT"]}"', 1)
                         return [f'', text, varidents]
 
-
-
-
-                                
-
                 elif lexeme[i][0] == 'IF' and lexeme[i+1][0] == 'U' and lexeme[i+2][0] == 'SAY' and lexeme[i+3][0] == 'SO' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
 
                     functions[currentFunction] = functionBody
@@ -1538,24 +1536,30 @@ def semantics(text):
                     loopsOperation = lexeme[i+2][0]
                     loopsVar = lexeme[i+4][0]
                     loopsCondition = lexeme[i+5][0]
+                    
                     if lexeme[i+6][0] == 'BOTH SAEM' or lexeme[i+6][0] == 'DIFFRINT':
-                        if lexeme[i+6][0] == 'BOTH SAEM' and loopsCondition == 'TIL':
+                        if loopsCondition == 'TIL':
                             result = comparison_expression(lexeme[i+6:])
                             if result == 'FAIL':
                                 loopDone = 0
                             else:
+                                imOuttaFlag = 1
                                 loopDone = 1
+                                
 
-                        elif lexeme[i+6][0] == 'BOTH SAEM' and loopsCondition == 'WILE':
+                        elif loopsCondition == 'WILE':
                             result = comparison_expression(lexeme[i+6:])
                             if result == 'WIN':
-                                loopsExpression = result
                                 loopDone = 0
                             else:
+                                imOuttaFlag = 1
                                 loopDone = 1
+                                
                     break
 
                 elif lexeme[i][0] == 'IM OUTTA YR' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
+                    imOuttaFlag = -1
+                    text = text.replace(f'{loopStatement}', f'', 1)
                     text = text.replace(f'{text.splitlines()[h]}', f'', 1)
                     return ['', text, varidents]
                     
@@ -1666,14 +1670,12 @@ def semantics(text):
                             temp_result += str(concatenationAnalyzer(lexeme[i+1:]))
                             visible_index = temp_index
                     if loopDone == 0:
-                        
                         if loopsOperation != 'NERFIN':
-                            text = text.replace(f'{loopStatement}', f'I HAS A {loopsVar} ITZ {int(varidents[loopsVar])+1}\n{loopStatement}', 1)
+                            text = text.replace(f'{loopStatement}', f'I HAS A IT ITZ {temp_result}\nI HAS A {loopsVar} ITZ {int(varidents[loopsVar])+1}\n{loopStatement}', 1)
                         else:
-                            text = text.replace(f'{loopStatement}', f'I HAS A {loopsVar} ITZ {int(varidents[loopsVar])-1}\n{loopStatement}', 1)
+                            text = text.replace(f'{loopStatement}', f'I HAS A IT ITZ {temp_result}\nI HAS A {loopsVar} ITZ {int(varidents[loopsVar])-1}\n{loopStatement}', 1)
                         return [f"{temp_result}\n", text, varidents]
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A IT ITZ "{temp_result}"', 1)
-
                     varidents['IT'] = temp_result
                     return [f"{temp_result}\n", text, varidents]
                 
