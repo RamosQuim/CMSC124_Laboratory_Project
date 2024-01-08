@@ -1060,11 +1060,9 @@ def syntax(text):
                                                                                     break
                                         visible_indexcounter+=1
                                         visiblechecker = 0
-                                        print("reset visible checker")
                                     else:
                                         #check muna if may operand pa na nagamit at wala pang +
                                         if visiblechecker == 1:
-                                            print("visible checker may error")
                                             syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                             success = 0
                                             break
