@@ -8,7 +8,7 @@ import math
 undefined_error = 0
 noob_error = 0
 #this part is for the semantics of the arithmetic operations (SUM OF, DIFF OF, ETC.)
-def arithmeticAnalyzer(varidents, arithmetic,lexeme):      
+def arithmeticAnalyzer(varidents, arithmetic,lexeme):    
     if lexeme[0][0] in arithmetic:
         remover_index = 0
         is_float = False
@@ -978,12 +978,12 @@ def semantics(text):
     infinitebooleans = ['ANY OF', "ALL OF"]
     outsideWazzup = 0
     undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
-    noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
+    noob_error_prompt = "\n>> SyntaxError near arithmetic operation: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
     parameter_list = {}
 
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
-        if undefined_error == 1 or noob_error:
+        if undefined_error == 1 or noob_error == 1:
             undefined_error = 0
             noob_error = 0
             return [None,'', varidents]
@@ -1068,6 +1068,10 @@ def semantics(text):
                 elif lexeme[i][0] == 'GIMMEH' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     # resolved na :>>
                     input_value = for_input.get_user_input()
+                    if convertFloat(input_value) == False:
+                        input_value = '"' + input_value + '"'
+                        varidents[lexeme[i+1][0]] = str(input_value)
+                    
                     varidents[lexeme[i+1][0]] = str(input_value)
                     modified_varidents[lexeme[i+1][0]] = str(input_value)
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i+1][0]} ITZ {input_value}', 1)
@@ -1613,6 +1617,7 @@ def semantics(text):
                             arithmeticresult = str(arithmeticAnalyzer(varidents,arithmetic,temp)) 
                             if arithmeticresult == "NOOBERROR":
                                 temp_result += noob_error_prompt
+                                noob_error = 1
                                 break 
                             elif arithmeticresult == "UNDEFINEDERROR":
                                 temp_result += undefined_error_prompt
