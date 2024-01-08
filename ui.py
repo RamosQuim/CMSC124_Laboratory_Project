@@ -1,6 +1,6 @@
 import re
+from tkinter import*
 import tkinter as tk
-from tkinter import *
 from  tkinter import ttk
 import tkinter.font as font
 from tkinter import scrolledtext
@@ -65,24 +65,38 @@ def analyzetext():
             textEditor_Content = newtext[1]
         
 
-
 root = tk.Tk()
+photo = PhotoImage(file = 'logo.png')
+root.iconphoto(False, photo)
 root.title("TayLOL Sheesh-terpreter")
 root.configure(bg='#0c1818')
+root.geometry("1920x1080+-8+0")
+
+top = Toplevel()
+top.geometry("180x100")
+top.title("toplevel")
+top.geometry('400x300+580+300')
+top.overrideredirect(True)
+top.config(bg='white')
+photo1 = PhotoImage(file = 'logo.png').subsample(3,3)
+tile = Label(top, image=photo1, highlightthickness=0, borderwidth=0)
+tile.place(x=90, y=15)
+Label(top, text = 'TayLOL Sheesh', bg='white', fg = 'darkblue', font=font.Font(family='Bahnschrift', size = 20, weight='bold')).place(x=105,y=250)
+top.after(3000,lambda:top.destroy())
 
 #this is the opening file button
 openButton = tk.Button(root, text='Open File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:filename())
 openButton.grid(row=0, column=0, padx=5, pady=5, sticky="NSEW")
 
-title = Label(text = "TayLOL Sheesh-terpreter: A LOL CODE Interpreter", font=font.Font(size = 12, weight='bold'), fg='white',bg='#0c1818')
+title = Label(root, text = "TayLOL Sheesh-terpreter: A LOL CODE Interpreter", font=font.Font(size = 12, weight='bold'), fg='white',bg='#0c1818')
 title.grid(row=0, column=1, padx=5, pady=2.5, columnspan=2, sticky='W')
 
 
-lexemeHeader = Label(text = "Lexemes", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
+lexemeHeader = Label(root, text = "Lexemes", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
 lexemeHeader.grid(row=1, column=1, padx=5, sticky='NSEW')
 
 
-symbolHeader = Label(text = "Symbol Table", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
+symbolHeader = Label(root, text = "Symbol Table", font=font.Font(size = 12), fg='white', bg='#0c1818', borderwidth=1, relief="ridge")
 symbolHeader.grid(row=1, column=2, padx=5, sticky='NSEW')
 
 textEditor = scrolledtext.ScrolledText(root, width = 75, font = ("Courier New", 11), height = 15, bg='#193433', fg='white')
