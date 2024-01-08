@@ -75,12 +75,6 @@ root.configure(bg='#0c1818')
 openButton = tk.Button(root, text='Open File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:filename())
 openButton.grid(row=0, column=0, padx=5, pady=5, sticky="NSEW")
 
-
-#this is the button for the analyze
-#lexanalyzeButton = tk.Button(root, text='Analyze File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:analyzetext())
-#lexanalyzeButton.grid(row=1, column=0, padx=5, pady=2.5, sticky="NSEW")
-
-
 title = Label(text = "TayLOL Sheesh-terpreter: A LOL CODE Interpreter", font=font.Font(size = 12, weight='bold'), fg='white',bg='#0c1818')
 title.grid(row=0, column=1, padx=5, pady=2.5, columnspan=2, sticky='W')
 

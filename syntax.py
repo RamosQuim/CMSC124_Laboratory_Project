@@ -702,7 +702,6 @@ def syntax(text):
     global exp_lexeme
     global prev_checker
     global func_parameters
-    # global labelWord
     global visiblechecker
     modif_var.clear()
     varidents.clear()
@@ -734,8 +733,6 @@ def syntax(text):
     hastldr = -1
     hasinyr = -1
     hasoutta = -1
-    # labelWord = []
-    # not_accepted = ['!','-','_','0','1','2','2','3','4','5','6','7','8','9','0','?','~','+','*','&','^','$','#','@','[',']','|',':']
     
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
@@ -2308,7 +2305,6 @@ def syntax(text):
                                     break
                                 else:
                                     matches = re.match(r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*', lexeme[i+1][0])
-                            # label = matches.group(0)
                        
                                     if matches is None:
                                 # labelWord = ''
@@ -2317,9 +2313,6 @@ def syntax(text):
                                         break
                                     else:
                                         labelWord = lexeme[i+1][0]
-                            # else:
-                            #     label = matches.group(0)
-                            #     break
                     
                                 if lexeme[i+2][0] != "UPPIN" and lexeme[i+2][0] != "NERFIN":
                                     syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n{lexeme[i][0]} <operation> must be either UPPIN or NERFIN.')
