@@ -573,7 +573,7 @@ def concatenationSyntax(lexeme, h, i):
                                 if lexeme[visible_indexcounter-1][1] != 'String Delimiter':
                                     if lexeme[visible_indexcounter-1][1] != 'Concatenation Delimiter':
                                         if lexeme[visible_indexcounter-1][0] != "IT":
-                                            return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only1')
+                                            return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                             
                 #check yung after naman "+"
                 if lexeme[visible_indexcounter+1][0] not in varidents:
@@ -586,7 +586,7 @@ def concatenationSyntax(lexeme, h, i):
                                             if lexeme[visible_indexcounter+1][0] not in inifinitebooleans:
                                                 if lexeme[visible_indexcounter+1][1] != 'String Delimiter':
                                                     if lexeme[visible_indexcounter+1][0] != "IT":
-                                                        return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} SMOOSH <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only2')
+                                                        return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} SMOOSH <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                                         
                 visible_indexcounter+=1
             else:
@@ -603,7 +603,7 @@ def concatenationSyntax(lexeme, h, i):
                                                 if lexeme[visible_indexcounter][0] != "IT":
                                                     if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
                                                         if lexeme [visible_indexcounter][0] not in inifinitebooleans:
-                                                            return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} SMOOSH <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
+                                                            return (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} SMOOSH <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                                             
                                                         else:
                                                             #THIS IF THE INIFNITE BOOLEANS (ANY OF AND ALL OF)
@@ -1040,7 +1040,7 @@ def syntax(text):
                                                             if lexeme[visible_indexcounter-1][1] != 'String Delimiter':
                                                                 if lexeme[visible_indexcounter-1][1] != 'Concatenation Delimiter':
                                                                     if lexeme[visible_indexcounter-1][0] != "IT":
-                                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only1')
+                                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                                                         success = 0
                                                                         break
                                     #check yung after naman "+"
@@ -1055,7 +1055,7 @@ def syntax(text):
                                                                         if lexeme[visible_indexcounter+1][0] not in inifinitebooleans:
                                                                             if lexeme[visible_indexcounter+1][1] != 'String Delimiter':
                                                                                 if lexeme[visible_indexcounter+1][0] != "IT":
-                                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only2')
+                                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                                                                     success = 0
                                                                                     break
                                         visible_indexcounter+=1
@@ -1065,7 +1065,7 @@ def syntax(text):
                                         #check muna if may operand pa na nagamit at wala pang +
                                         if visiblechecker == 1:
                                             print("visible checker may error")
-                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only9')
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                             success = 0
                                             break
                                         else:
@@ -1084,7 +1084,7 @@ def syntax(text):
                                                                                     if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
                                                                                         if lexeme [visible_indexcounter][0] not in inifinitebooleans:
                                                                                             if lexeme[visible_indexcounter][0] != 'SMOOSH':
-                                                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
+                                                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only')
                                                                                                 success = 0
                                                                                                 break
                                                                                             else:
