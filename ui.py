@@ -82,7 +82,7 @@ photo1 = PhotoImage(file = 'logo.png').subsample(3,3)
 tile = Label(top, image=photo1, highlightthickness=0, borderwidth=0)
 tile.place(x=90, y=15)
 Label(top, text = 'TayLOL Sheesh', bg='white', fg = 'darkblue', font=font.Font(family='Bahnschrift', size = 20, weight='bold')).place(x=105,y=250)
-top.after(3000,lambda:top.destroy())
+top.after(2500,lambda:top.destroy())
 
 #this is the opening file button
 openButton = tk.Button(root, text='Open File', font=font.Font(size = 10), bd=1, bg='#365963', fg='white', command=lambda:filename())
