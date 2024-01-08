@@ -66,7 +66,7 @@ def analyzetext():
         
 
 root = tk.Tk()
-photo = PhotoImage(file = 'logo.png')
+photo = PhotoImage(file = 'logo-TLS.png')
 root.iconphoto(False, photo)
 root.title("TayLOL Sheesh-terpreter")
 root.configure(bg='#0c1818')
