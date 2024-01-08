@@ -17,32 +17,25 @@ class LOLLexer:
     def tokenize(self):
         hasobtw = 0
         while self.current_position < len(self.source_code):
-            # print(f"Current position: {self.current_position}")
             
             # Print the current value at the position
             current_value = self.source_code[self.current_position:self.current_position + 10]
             
             token = self.match_token()
             if token is not None:
-                if hasobtw == 0 and token.value[0:4] == 'OBTW':
+                if hasobtw == 0 and token.value[0:4] == 'OBTW': #check if the value of token is OBTW
                     hasobtw = 1 
                 if hasobtw == 1:
-                    if token.value == 'TLDR':
+                    if token.value == 'TLDR': #toggle the hasobtw if there is TLDR
                         hasobtw = 0
                     # else: continue
 
                 if token.type == 'Special Characters' : #para makuha rin mga may special char sa loob ng obtw
                     if hasobtw != 1:
                         continue
-                
-                
-
-
-               
                 self.tokens.append(token) #appends the token to the tokens list
             else:
                 break
-        # print("is there an obtw?",hasobtw)
         return self.tokens
 
 
@@ -69,7 +62,6 @@ token_patterns = {
     r'\s*KTHXBYE\s+': 'Code Delimiter',
     r'\s*WAZZUP\s+': 'Variable Declaration Delimiter',
     r'\s*BUHBYE\s+': 'Variable Declaration Delimiter',
-    # r'\s*OBTW\s+': 'Comment Delimiter',
     r'\s*TLDR\s+': 'Comment Delimiter',
     r'((\s*^BTW .*)|( ^BTW .*)|(\s*^OBTW .*)|( ^OBTW .*))': 'Comment Line',
     r'\s*I HAS A\s+': 'Variable Declaration',
@@ -126,8 +118,7 @@ token_patterns = {
     r'\s*(WIN|FAIL)\s*': 'TROOF Literal',                 
     r'\s*[a-zA-Z][a-zA-Z0-9_]*\s*': 'Identifier',           
     r'\s*-?(0|[1-9][0-9]*)?\.[0-9]+\s*': 'NUMBAR Literal',  
-    r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',        
-    # r'\s*\"[^\"]*\"\+?\s*': 'YARN Literal',    
+    r'\s*0\s*|^-?[1-9][0-9]*\s*': 'NUMBR Literal',     
     r'\s*\"[^\"]*\"\s*': 'YARN Literal',   
     r'\s?.*\s?': 'Special Characters'          
 }
@@ -155,21 +146,21 @@ def lex(str):
                 val = temp.lstrip()
                 if hasobtw == 0 and val != 'TLDR':
                     comment_line += tokens[i].value
-                    toRemove.append(tokens[i])
+                    toRemove.append(tokens[i]) #remove the words after the OBTW 
                 elif tokens[i].type == 'YARN Literal':
-                    if val[0] == '"' and val[-1] == '"':
+                    if val[0] == '"' and val[-1] == '"': #if it is enclosed by quotes then append it to list
                         yarnLiterals.append(tokens[i])
-                elif 'BTW' == val[0:3]:
+                elif 'BTW' == val[0:3]: #separate lexeme for BTW and for the comment line
                     tokens[i].value = val[3:]
                     comment = Token('Comment Delimiter', 'BTW')
                     tokens.insert(i, comment)
-                elif 'OBTW' == val[0:4]:
+                elif 'OBTW' == val[0:4]: #separate lexeme for OBTW and for the comment line
                     hasobtw = 0
                     tokens[i].value = val[4:]
                     comment = Token('Comment Delimiter', 'OBTW')
                     tokens.insert(i, comment)
                 elif 'TLDR' == val:
-                    indexToinsert.append(tokens[i])
+                    indexToinsert.append(tokens[i]) #get idex to insert the comment line after OBTW
                     hasobtw = 1
                 elif tokens[i].type == 'Variable Declaration':
                     if tokens[i+1].type == 'Identifier':
@@ -185,27 +176,21 @@ def lex(str):
                         tokens[i].type = 'Variable Identifier'
 
         
-        for k in toRemove:
+        for k in toRemove: #remove tokens made after OBTW in tokens
             tokens.remove(k)
 
-        if comment_line != '' and hasobtw == 1:
+        if comment_line != '' and hasobtw == 1: #add the comment line to lexeme
             comment_block = comment_line.replace('\n',' ').rstrip().lstrip()
             comment = Token('Comment Line', comment_block)
             index = tokens.index(indexToinsert[0])
             tokens.insert(index, comment)
         
-        if len(yarnLiterals) != 0:
-               
+        if len(yarnLiterals) != 0: # add the " " separately and the yarn
                 for i in yarnLiterals: #i is tokens[i]
-                
                         temp = i.value.rstrip()  # remove leading and trailing space characters 
                         val = temp.lstrip()
-
-                        # print(f"YARN YARN:{val[1:-1]}")
                         new = Token('String Delimiter', '"')
                         index = tokens.index(i)
-                    
-
                         i.value = val[1:-1]
                         tokens.insert(index, new)
                         tokens.insert(index+2, new)
@@ -213,16 +198,14 @@ def lex(str):
         yarnLiterals.clear()   
         comment_line = ''
         for token in tokens:
-                if token.type != "YARN Literal":
+                if token.type != "YARN Literal": #if it is not yarn, remove trailing and leading spaces
                     temp = token.value.rstrip() 
                     val = temp.lstrip()
                     compiled_lex.append([val, token.type])
-                else:
+                else: #if it is yarn, append the value as it is to retain spaces
                     compiled_lex.append([token.value, token.type])
         return compiled_lex
     
-
-
 def connect_UI(str):
     compiled_lex.clear()
     return lex(str)
@@ -230,28 +213,3 @@ def connect_UI(str):
 #IT VALUE GETTER
 def get_IT():
      return symbol_table[0][1]
-
-
-     
-
-# # for accepting many input lines from user
-# def main():
-#     # array_words = []
-#     con = True
-#     str = ""
-#     while con:
-#         line = sys.stdin.readline()
-    
-#         if line == "KTHXBYE\n": #if eto na-encounter mag stop sa pag-accept
-#             con = False
-#             str += line
-#             # array_words.append(str.strip('\n'))
-#             break
-#         str += line
-#         # array_words.append(str.strip('\n'))
-
-#     return str
-#     # for string in lex(str):
-#     #     print(f'{string[0]} is a {string[1]}')
-#     symbolTable(str)
-# # main()
