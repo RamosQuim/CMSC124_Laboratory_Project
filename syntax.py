@@ -9,6 +9,7 @@ exp_lexeme = 0 #this is for the expression checker
 prev_checker = 0 #checker for exp_lexeme 
 func_parameters = [] 
 labelWord = ''
+visiblechecker = -1  
 
 def isfloat(num):
     try:
@@ -734,7 +735,7 @@ def syntax(text):
     global prev_checker
     global func_parameters
     # global labelWord
-
+    global visiblechecker
     modif_var.clear()
     varidents.clear()
     syntaxResult = ''
@@ -1206,27 +1207,55 @@ def syntax(text):
                                                                                     success = 0
                                                                                     break
                                         visible_indexcounter+=1
+                                        visiblechecker = 0
+                                        print("reset visible checker")
                                     else:
-                                    #CHECK MUNA IF STRING SIYA 
-                                        if lexeme[visible_indexcounter][1] != 'String Delimiter':
-                                            if lexeme[visible_indexcounter][1] != 'TROOF Literal':
-                                                if lexeme[visible_indexcounter][1] != 'NUMBR Literal':
-                                                    if lexeme[visible_indexcounter][1] != 'NUMBAR Literal':
-                                                        if lexeme[visible_indexcounter][1] != 'TROOF Literal':
-                                                            if lexeme[visible_indexcounter][0] not in func_parameters:
-                                                                if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
-                                                                    if lexeme[visible_indexcounter][0] != "IT":
-                                                                        if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
-                                                                            if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
-                                                                            
-                                                                                if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
-                                                                                    if lexeme [visible_indexcounter][0] not in inifinitebooleans:
-                                                                                        if lexeme[visible_indexcounter][0] != 'SMOOSH':
-                                                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
-                                                                                            success = 0
-                                                                                            break
+                                        #check muna if may operand pa na nagamit at wala pang +
+                                        if visiblechecker == 1:
+                                            print("visible checker may error")
+                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only9')
+                                            success = 0
+                                            break
+                                        else:
+                                            #CHECK MUNA IF STRING SIYA 
+                                            if lexeme[visible_indexcounter][1] != 'String Delimiter':
+                                                if lexeme[visible_indexcounter][1] != 'TROOF Literal':
+                                                    if lexeme[visible_indexcounter][1] != 'NUMBR Literal':
+                                                        if lexeme[visible_indexcounter][1] != 'NUMBAR Literal':
+                                                            if lexeme[visible_indexcounter][1] != 'TROOF Literal':
+                                                                if lexeme[visible_indexcounter][0] not in func_parameters:
+                                                                    if lexeme[visible_indexcounter][0] not in varidents: #check if varidents
+                                                                        if lexeme[visible_indexcounter][0] != "IT":
+                                                                            if lexeme[visible_indexcounter][0] not in arithmetic: #check if expressions
+                                                                                if lexeme[visible_indexcounter][0] not in comparison: #check if comparison
+                                                                                
+                                                                                    if lexeme [visible_indexcounter][0] not in booleans: #check if boolean
+                                                                                        if lexeme [visible_indexcounter][0] not in inifinitebooleans:
+                                                                                            if lexeme[visible_indexcounter][0] != 'SMOOSH':
+                                                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax, see correct syntax. \n\t{lexeme[visible_indexcounter][0]} VISIBLE <x> + <y> where <x> and <y> are either Variable Identifiers, Expressions, String, or IT only3')
+                                                                                                success = 0
+                                                                                                break
+                                                                                            else:
+                                                                                            #THIS IF THE SMOOSH
+                                                                                                temp = []
+                                                                                                tempcounter = visible_indexcounter
+                                                                                                while tempcounter < len(lexeme):
+                                                                                                    if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                                                        break
+                                                                                                    else:
+                                                                                                        temp.append(lexeme[tempcounter])
+                                                                                                        tempcounter+=1
+                                                                                                result = concatenationSyntax(temp,h,i)
+                                                                                            #check kung ano yung irereturn
+                                                                                                if result is not None:
+                                                                                                    success = 0
+                                                                                                    syntaxResult += result
+                                                                                                    break
+                                                                                            #means walang error
+                                                                                                visible_indexcounter = tempcounter
+                                                                                                visiblechecker =1
                                                                                         else:
-                                                                                        #THIS IF THE SMOOSH
+                                                                                        #THIS IF THE INIFNITE BOOLEANS (ANY OF AND ALL OF)
                                                                                             temp = []
                                                                                             tempcounter = visible_indexcounter
                                                                                             while tempcounter < len(lexeme):
@@ -1235,7 +1264,7 @@ def syntax(text):
                                                                                                 else:
                                                                                                     temp.append(lexeme[tempcounter])
                                                                                                     tempcounter+=1
-                                                                                            result = concatenationSyntax(temp,h,i)
+                                                                                            result = infiniteBooleanSyntax(temp,h,i)
                                                                                         #check kung ano yung irereturn
                                                                                             if result is not None:
                                                                                                 success = 0
@@ -1243,8 +1272,9 @@ def syntax(text):
                                                                                                 break
                                                                                         #means walang error
                                                                                             visible_indexcounter = tempcounter
+                                                                                            visiblechecker =1 
                                                                                     else:
-                                                                                    #THIS IF THE INIFNITE BOOLEANS (ANY OF AND ALL OF)
+                                                                                    #THIS IS THE BOOLEANS
                                                                                         temp = []
                                                                                         tempcounter = visible_indexcounter
                                                                                         while tempcounter < len(lexeme):
@@ -1253,16 +1283,17 @@ def syntax(text):
                                                                                             else:
                                                                                                 temp.append(lexeme[tempcounter])
                                                                                                 tempcounter+=1
-                                                                                        result = infiniteBooleanSyntax(temp,h,i)
+                                                                                        result = booleanSyntax(temp, h, i)
                                                                                     #check kung ano yung irereturn
                                                                                         if result is not None:
                                                                                             success = 0
                                                                                             syntaxResult += result
                                                                                             break
-                                                                                    #means walang error
-                                                                                        visible_indexcounter = tempcounter 
+                                                                                    #move forward!
+                                                                                        visible_indexcounter = tempcounter
+                                                                                        visiblechecker =1
                                                                                 else:
-                                                                                #THIS IS THE BOOLEANS
+                                                                                #THIS IS THE COMPARISONS 
                                                                                     temp = []
                                                                                     tempcounter = visible_indexcounter
                                                                                     while tempcounter < len(lexeme):
@@ -1271,7 +1302,7 @@ def syntax(text):
                                                                                         else:
                                                                                             temp.append(lexeme[tempcounter])
                                                                                             tempcounter+=1
-                                                                                    result = booleanSyntax(temp, h, i)
+                                                                                    result = comparisonSyntax(temp, h, i)
                                                                                 #check kung ano yung irereturn
                                                                                     if result is not None:
                                                                                         success = 0
@@ -1279,8 +1310,9 @@ def syntax(text):
                                                                                         break
                                                                                 #move forward!
                                                                                     visible_indexcounter = tempcounter
+                                                                                    visiblechecker =1
                                                                             else:
-                                                                            #THIS IS THE COMPARISONS 
+                                                                            #get muna yung mga lexeme na pasok sa operation na ito 
                                                                                 temp = []
                                                                                 tempcounter = visible_indexcounter
                                                                                 while tempcounter < len(lexeme):
@@ -1289,113 +1321,111 @@ def syntax(text):
                                                                                     else:
                                                                                         temp.append(lexeme[tempcounter])
                                                                                         tempcounter+=1
-                                                                                result = comparisonSyntax(temp, h, i)
-                                                                            #check kung ano yung irereturn
-                                                                                if result is not None:
-                                                                                    success = 0
-                                                                                    syntaxResult += result
-                                                                                    break
-                                                                            #move forward!
+                                                                                result = arithmeticSyntax(h,arithmetic,temp)
+                                                                            #this is to add pag may error po
+                                                                                if result[0] == 0:
+                                                                                    syntaxResult += result[1]
+                                                                                    success = result[0]
                                                                                 visible_indexcounter = tempcounter
+                                                                                visiblechecker =1
                                                                         else:
-                                                                        #get muna yung mga lexeme na pasok sa operation na ito 
-                                                                            temp = []
-                                                                            tempcounter = visible_indexcounter
-                                                                            while tempcounter < len(lexeme):
-                                                                                if lexeme[tempcounter][1] == "Output Delimiter":
+                                                                        # +1 since naka zero indexing
+                                                                            if len(lexeme) != (visible_indexcounter+1):
+                                                                                if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
+                                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 1')
+                                                                                    success = 0
                                                                                     break
                                                                                 else:
-                                                                                    temp.append(lexeme[tempcounter])
-                                                                                    tempcounter+=1
-                                                                            result = arithmeticSyntax(h,arithmetic,temp)
-                                                                        #this is to add pag may error po
-                                                                            if result[0] == 0:
-                                                                                syntaxResult += result[1]
-                                                                                success = result[0]
-                                                                            visible_indexcounter = tempcounter
+                                                                                    visible_indexcounter+=1
+                                                                                    visiblechecker =1
+                                                                            else:
+                                                                                visible_indexcounter+=1
+                                                                                visiblechecker =1
                                                                     else:
                                                                     # +1 since naka zero indexing
                                                                         if len(lexeme) != (visible_indexcounter+1):
                                                                             if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
+                                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 2')
                                                                                 success = 0
                                                                                 break
                                                                             else:
                                                                                 visible_indexcounter+=1
+                                                                                visiblechecker =1
                                                                         else:
                                                                             visible_indexcounter+=1
+                                                                            visiblechecker =1
                                                                 else:
                                                                 # +1 since naka zero indexing
                                                                     if len(lexeme) != (visible_indexcounter+1):
                                                                         if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
+                                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 3')
                                                                             success = 0
                                                                             break
                                                                         else:
                                                                             visible_indexcounter+=1
+                                                                            visiblechecker =1
                                                                     else:
                                                                         visible_indexcounter+=1
+                                                                        visiblechecker =1
                                                             else:
                                                             # +1 since naka zero indexing
                                                                 if len(lexeme) != (visible_indexcounter+1):
                                                                     if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
+                                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 4')
                                                                         success = 0
                                                                         break
                                                                     else:
                                                                         visible_indexcounter+=1
+                                                                        visiblechecker =1
                                                                 else:
                                                                     visible_indexcounter+=1
+                                                                    visiblechecker =1
                                                         else:
                                                         # +1 since naka zero indexing
                                                             if len(lexeme) != (visible_indexcounter+1):
                                                                 if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
+                                                                    syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 5')
                                                                     success = 0
                                                                     break
                                                                 else:
                                                                     visible_indexcounter+=1
+                                                                    visiblechecker =1
                                                             else:
                                                                 visible_indexcounter+=1
+                                                                visiblechecker =1
                                                     else:
-                                                    # +1 since naka zero indexing
                                                         if len(lexeme) != (visible_indexcounter+1):
                                                             if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
+                                                                syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 6')
                                                                 success = 0
                                                                 break
                                                             else:
                                                                 visible_indexcounter+=1
+                                                                visiblechecker =1 
                                                         else:
                                                             visible_indexcounter+=1
+                                                            visiblechecker = 1
                                                 else:
                                                     if len(lexeme) != (visible_indexcounter+1):
                                                         if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
+                                                            syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + 7')
                                                             success = 0
                                                             break
                                                         else:
                                                             visible_indexcounter+=1
+                                                            visiblechecker = 1
                                                     else:
                                                         visible_indexcounter+=1
+                                                        visiblechecker = 1
                                             else:
-                                                if len(lexeme) != (visible_indexcounter+1):
-                                                    if lexeme[visible_indexcounter+1][1] != "Output Delimiter":
-                                                        syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter][0]}>: \n\tIncorrect syntax. Operand should be followed by + ')
-                                                        success = 0
-                                                        break
-                                                    else:
-                                                        visible_indexcounter+=1
+                                                if lexeme[visible_indexcounter+2][1] != 'String Delimiter':
+                                                    syntaxResult += (f'>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter+2][1]}>: \n\tVariable Identifier ')
+                                                    success = 0
+                                                    break
                                                 else:
-                                                    visible_indexcounter+=1
-                                        else:
-                                            if lexeme[visible_indexcounter+2][1] != 'String Delimiter':
-                                                syntaxResult += (f'>> SyntaxError in line {h+1} near <{lexeme[visible_indexcounter+2][1]}>: \n\tVariable Identifier ')
-                                                success = 0
-                                                break
-                                            else:
-                                            #move forward 
-                                                visible_indexcounter +=3
+                                                #move forward 
+                                                    visible_indexcounter +=3
+                                                    visiblechecker = 1
                                 break
                     
                     
