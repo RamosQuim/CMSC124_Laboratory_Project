@@ -38,8 +38,8 @@ source: https://docs.python.org/3.8/library/tkinter.html#:~:text=Running%20pytho
 ## UI Navigation
 ![image](https://github.com/RamosQuim/CMSC124_Laboratory_Project/assets/125535569/e27a1358-d893-4726-af4c-539f4b032d4c)
 1. **Open File:** Can open a LOL file in the Text Editor
-2. **Text Editor:** A field where LOLCode is inserted
-3. **Lexeme Table:** Will provide all tokens collected after the Lexical Analyzer is ran
-4. **Symbol Table:** Will provide all variable identifiers and the implicit variable with corresponding values
+2. **Lexeme Table:** Will provide all tokens collected after the Lexical Analyzer is ran
+3. **Symbol Table:** Will provide all variable identifiers and the implicit variable with corresponding values
+4. **Text Editor:** A field where LOLCode is inserted
 5. **Execute:** This will run activate Lexical, Syntax, and Semantic Analyzer
 6. **Console:** This is where syntaxErrors and result of LOLCode (if there is any) will prompt
