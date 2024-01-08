@@ -177,7 +177,7 @@ def comparisonSyntax(lexeme, h, i):
         # print(len(lexeme))
     # while comparison_index < len(lexeme):
     #     print(varidents)
-        print('comparison', lexeme)
+        # print('comparison', lexeme)
         
 
         if len(lexeme) == 4:
@@ -581,7 +581,7 @@ def concatenationSyntax(lexeme, h, i):
     varAssignment_literals = ['NUMBR Literal', 'NUMBAR Literal', 'YARN Literal', 'TROOF Literal', 'Type Literal']
     booleans = ['BOTH OF', 'EITHER OF', 'WON OF', 'NOT']
     inifinitebooleans = ['ALL OF', 'ANY OF']
-    print(f"lexeme sa smoosh: {lexeme}")
+    # print(f"lexeme sa smoosh: {lexeme}")
 #     # if less than
     if len(lexeme) < 2:
         return (f'>> SyntaxError in line {h+1} near <{lexeme[i][0]}>: \n\tSMOOSH must have a Variable Identifier, Literal, or an Expression')
@@ -772,9 +772,9 @@ def syntax(text):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if lexeme is not None:
             #this is for the if else 
-            print(f"lexeme sa pagstart ng loop: {lexeme}")
-            print(f"exp_lexeme sa start: {exp_lexeme}")
-            print(f"prev_checker sa start: {prev_checker}")
+            # print(f"lexeme sa pagstart ng loop: {lexeme}")
+            # print(f"exp_lexeme sa start: {exp_lexeme}")
+            # print(f"prev_checker sa start: {prev_checker}")
             if exp_lexeme == 1:
                 prev_checker = 1
             #elif exp_lexeme < 1:
@@ -944,7 +944,7 @@ def syntax(text):
                     # print(lexeme[i][0], lexeme[i][1])
                     ## VARIABLE DECLARATION SYNTAX
                     if lexeme[i][0] == 'I HAS A' and hasWazzup == 0 and hasobtw == -1:
-                        print(len(lexeme))
+                        # print(len(lexeme))
                         count = 0
                         checker = 0
                         for c in range(i+1, len(lexeme)):
@@ -2035,7 +2035,7 @@ def syntax(text):
                     
                     #OMGWTF - wala dapat siyang kasamang ibang characters at dapat merong ibang keywords needed for Switchcases
                     if lexeme[i][0] == "OMGWTF" and hasobtw == -1:
-                        print("omgwtf",len(lexeme), lexeme)
+                        # print("omgwtf",len(lexeme), lexeme)
                         checker = 0
                         for c in range(i+1, len(lexeme)):
                             if lexeme[c][0] == 'OBTW':
@@ -2287,7 +2287,7 @@ def syntax(text):
                                         #mag add lang if siya ay Identifer OR AN PARAMETER DELIMITER (AN)
                                             if lexeme[function_index][0] == 'AN':
                                             #check muna yung before ni AN
-                                                print("pumasok sa AN")
+                                                # print("pumasok sa AN")
                                                 if len(lexeme) == function_index+1:
                                                         syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.1')
                                                         success = 0
@@ -2315,12 +2315,12 @@ def syntax(text):
                                                     success = 0
                                                     break
                                                 func_parameters.append(lexeme[function_index][0])
-                                                print(f"function parameters: {func_parameters}")
+                                                # print(f"function parameters: {func_parameters}")
                                                 function_index += 1
                                     else:
                                     #POSSIBLE PARAMETER DELIMITER IS YR ONLY or AN 
                                         if lexeme[function_index][0] == 'YR':
-                                            print("nasa YR ako")
+                                            # print("nasa YR ako")
                                             if len(lexeme) == function_index+1:
                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.3')
                                                 success = 0
@@ -2341,7 +2341,7 @@ def syntax(text):
                                     #checking the AN
                                         elif lexeme[function_index][0] == 'AN':
                                         #check muna yung before ni AN
-                                            print("pumasok sa AN")
+                                            # print("pumasok sa AN")
                                             if len(lexeme) == function_index+1:
                                                 syntaxResult += (f'\n>> SyntaxError in line {h+1} near <{lexeme[function_index][0]}>: \n\tIncorrect syntax, see correct syntax: {lexeme[function_index][0]} should only have a precedent of Function Name or AN.6')
                                                 success = 0
@@ -2504,7 +2504,7 @@ def syntax(text):
                                                 break
                                             break
                                     else:
-                                        print("ipinapasa",lexeme[i+6:])
+                                        # print("ipinapasa",lexeme[i+6:])
                                         result = booleanSyntax(lexeme[i+6:], h, i)
                                         if result is not None:
                                             success = 0
@@ -2601,8 +2601,8 @@ def syntax(text):
                         success = 0
                         break
             #sa dulo pag both ay naging 
-            print(f"prev_checker sa end: {prev_checker}")
-            print(f"exp_lexeme sa end: {exp_lexeme}")
+            # print(f"prev_checker sa end: {prev_checker}")
+            # print(f"exp_lexeme sa end: {exp_lexeme}")
             if prev_checker == 1 and exp_lexeme == 1:
                 prev_checker = 0
                 exp_lexeme = 0

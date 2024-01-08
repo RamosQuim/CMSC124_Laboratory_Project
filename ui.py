@@ -55,14 +55,14 @@ def analyzetext():
     if syntax.syntax(textEditor_Content) != '>> No syntax errors.':
         console.insert("end", syntax.syntax(textEditor_Content), ("centered",))
     else:
-        print("hello fnsfsfiess>>>>>,\n\n", textEditor_Content)
+        # print("hello fnsfsfiess>>>>>,\n\n", textEditor_Content)
         while True:
             
             newtext = semantics.semantics(textEditor_Content)
             # print("hello fnsfsfiess>>>>>,\n\n", textEditor_Content)
             for row in symbolTable.get_children():
                 symbolTable.delete(row)
-            print('ito ang nareceive', newtext[2])
+            # print('ito ang nareceive', newtext[2])
             for item in newtext[2]:
                 symbolTable.insert("", "end", values=[item, newtext[2][item]])
             if newtext[0] is None:

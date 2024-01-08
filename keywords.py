@@ -42,7 +42,7 @@ class LOLLexer:
                 self.tokens.append(token) #appends the token to the tokens list
             else:
                 break
-        print("is there an obtw?",hasobtw)
+        # print("is there an obtw?",hasobtw)
         return self.tokens
 
 
@@ -201,7 +201,7 @@ def lex(str):
                         temp = i.value.rstrip()  # remove leading and trailing space characters 
                         val = temp.lstrip()
 
-                        print(f"YARN YARN:{val[1:-1]}")
+                        # print(f"YARN YARN:{val[1:-1]}")
                         new = Token('String Delimiter', '"')
                         index = tokens.index(i)
                     
