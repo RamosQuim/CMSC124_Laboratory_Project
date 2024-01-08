@@ -1071,8 +1071,14 @@ def semantics(text):
                     if convertFloat(input_value) == False:
                         input_value = '"' + input_value + '"'
                         varidents[lexeme[i+1][0]] = str(input_value)
+                    else:
+                        if convertFloat(input_value) == int(input_value):
+                            varidents[lexeme[i+1][0]] = int(input_value)
+                        else:
+                            varidents[lexeme[i+1][0]] = float(input_value)
                     
-                    varidents[lexeme[i+1][0]] = str(input_value)
+                    
+                    # varidents[lexeme[i+1][0]] = str(input_value)
                     modified_varidents[lexeme[i+1][0]] = str(input_value)
                     text = text.replace(f'{text.splitlines()[h]}', f'I HAS A {lexeme[i+1][0]} ITZ {input_value}', 1)
                     return [f'{input_value}\n', text, varidents]
@@ -1703,6 +1709,7 @@ def comparison_expression(lexeme):
                     if len(lexeme) == 4:
                         one = convertFloat(lexeme[i+1][0])
                         three = convertFloat(lexeme[i+3][0])
+                        
                         if one == True and three == True:
                             if float(lexeme[i+1][0]) == float(lexeme[i+3][0]):
                                 result = 'WIN'
@@ -1710,12 +1717,18 @@ def comparison_expression(lexeme):
                             else:
                                 result = 'FAIL'
                         elif one == False and three == True:
+                            
                             value = ""
                             for j in varidents:
                                 if j == lexeme[i+1][0]:
                                     value = varidents[j]
                             if convertFloat(value) == True:
                                 if float(value) == float(lexeme[i+3][0]):
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
+                            else:
+                                if value == float(lexeme[i+3][0]):
                                     result = 'WIN'
                                 else:
                                     result = 'FAIL'
@@ -1729,10 +1742,20 @@ def comparison_expression(lexeme):
                                     result = 'WIN'
                                 else:
                                     result = 'FAIL'
+                            else:
+                                if float(lexeme[i+1][0]) == value:
+                                    result = 'WIN'
+                                else:
+                                    result = 'FAIL'
                         elif one == False and three == False:
                             
                                 if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+3][0]]) == True:
                                     if float(varidents[lexeme[i+1][0]]) == float(varidents[lexeme[i+3][0]]):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
+                                else:
+                                    if varidents[lexeme[i+1][0]] == varidents[lexeme[i+3][0]]:
                                         result = 'WIN'
                                     else:
                                         result = 'FAIL'
@@ -1751,26 +1774,35 @@ def comparison_expression(lexeme):
                                     index = j
                             num_AN = num_operations * 2 + 3
 
+
                             temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:num_AN])
-                            one = convertFloat(temp)
-                            three = convertFloat(lexeme[index+4+1][0])
-                            last_operand = lexeme[index+4+1][0]
-                            if one == True and three == True:
-                                if float(temp) == float(last_operand):
-                                    result = 'WIN'
-                                else:
-                                    result = 'FAIL'
-                           
-                            elif one == True and three == False:
-                                value = ""
-                                for j in varidents:
-                                    if j == last_operand:
-                                        value = varidents[j]
-                                if convertFloat(value) == True:
-                                    if float(temp) == float(value):
-                                       result = 'WIN'
+                            if temp == 'NOOBERROR':
+                                result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
+                            else:
+                                one = convertFloat(temp)
+                                three = convertFloat(lexeme[index+4+1][0])
+                                last_operand = lexeme[index+4+1][0]
+                                if one == True and three == True:
+                                    if float(temp) == float(last_operand):
+                                        result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                           
+                                elif one == True and three == False:
+                                    value = ""
+                                    for j in varidents:
+                                        if j == last_operand:
+                                            value = varidents[j]
+                                    if convertFloat(value) == True:
+                                        if float(temp) == float(value):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                                    else:
+                                        if float(temp) == value:
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
                             break
                         
                 
@@ -1793,6 +1825,11 @@ def comparison_expression(lexeme):
                                         result = 'WIN'
                                     else:
                                        result = 'FAIL'
+                                else:
+                                    if value <= float(lexeme[i+6][0]):
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
                             elif one == True and three == False:
                                 value = ""
                                 for j in varidents:
@@ -1803,12 +1840,19 @@ def comparison_expression(lexeme):
                                        result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                                else:
+                                    if float(lexeme[i+1][0]) <= value:
+                                       result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
                             elif one == False and three == False:
                                     if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
                                         if float(varidents[lexeme[i+1][0]]) <= float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                                    else:
+                                        result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
                         elif lexeme[i+3][0] == 'BIGGR OF':
                             one = convertFloat(lexeme[i+1][0])
                             three = convertFloat(lexeme[i+6][0])
@@ -1827,6 +1871,11 @@ def comparison_expression(lexeme):
                                         result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                                else:
+                                    if value >= float(lexeme[i+6][0]):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
                             elif one == True and three == False:
                                 value = ""
                                 for j in varidents:
@@ -1837,12 +1886,19 @@ def comparison_expression(lexeme):
                                         result = 'WIN'
                                     else:
                                        result = 'FAIL'
+                                else:
+                                    if float(lexeme[i+1][0]) >= value:
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
                             elif one == False and three == False:
                                 if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
                                         if float(varidents[lexeme[i+1][0]]) >= float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                                else:
+                                    result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
                                 
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
@@ -1856,24 +1912,34 @@ def comparison_expression(lexeme):
                             num_AN = num_operations * 2 + 3
 
                             temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:num_AN])
-                            one = convertFloat(temp)
-                            three = convertFloat(lexeme[index+3][0])
-                            if one == True and three == True:
-                                if float(lexeme[i+1][0]) == float(temp):
-                                    result = 'WIN'
-                                else:
-                                    result = 'FAIL'
-                           
-                            elif one == False and three == True:
-                                value = ""
-                                for j in varidents:
-                                    if j == lexeme[i+1][0]:
-                                        value = varidents[j]
-                                if convertFloat(value) == True:
-                                    if float(value) == float(temp):
-                                       result = 'WIN'
+                            if temp == 'NOOBERROR':
+                                result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
+                            else:
+                                one = convertFloat(temp)
+                                three = convertFloat(lexeme[index+3][0])
+                                if one == True and three == True:
+                                    if float(lexeme[i+1][0]) == float(temp):
+                                        result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                           
+                                elif one == False and three == True:
+                                    value = ""
+                                    for j in varidents:
+                                        if j == lexeme[i+1][0]:
+                                            value = varidents[j]
+                                    if convertFloat(value) == True:
+                                        if float(value) == float(temp):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                                    else:
+                                        if value == float(temp):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                            break
+                            
                 #for diffrint
                 elif lexeme[i][0] == 'DIFFRINT':
                     if len(lexeme) == 4:
@@ -1894,6 +1960,11 @@ def comparison_expression(lexeme):
                                    result = 'WIN'
                                 else:
                                    result = 'FAIL'
+                            else:
+                                if value != float(lexeme[i+3][0]):
+                                   result = 'WIN'
+                                else:
+                                   result = 'FAIL'
                         elif one == True and three == False:
                             value = ""
                             for j in varidents:
@@ -1904,12 +1975,22 @@ def comparison_expression(lexeme):
                                    result = 'WIN'
                                 else:
                                     result = 'FAIL'
+                            else:
+                                if float(lexeme[i+1][0]) != value:
+                                   result = 'WIN'
+                                else:
+                                    result = 'FAIL'
                         elif one == False and three == False:
                             if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+3][0]]) == True:
                                         if float(varidents[lexeme[i+1][0]]) != float(varidents[lexeme[i+3][0]]):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                            else:
+                                    if varidents[lexeme[i+1][0]] != varidents[lexeme[i+3][0]]:
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
                            
                     else: #for SMALLR OF and BIGGR OF
                         
@@ -1925,25 +2006,34 @@ def comparison_expression(lexeme):
                             num_AN =num_operations * 2 + 3
 
                             temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+1:index+4])
-                            one = convertFloat(temp)
-                            three = convertFloat(lexeme[index+4+1][0])
-                            last_operand = lexeme[index+4+1][0]
-                            if one == True and three == True:
-                                if float(temp) != float(last_operand):
-                                    result = 'WIN'
-                                else:
-                                    result = 'FAIL'
-                           
-                            elif one == True and three == False:
-                                value = ""
-                                for j in varidents:
-                                    if j == last_operand:
-                                        value = varidents[j]
-                                if convertFloat(value) == True:
-                                    if float(temp) != float(value):
-                                       result = 'WIN'
+                            print("temp", temp)
+                            if temp == 'NOOBERROR':
+                               result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
+                            else:
+                                one = convertFloat(temp)
+                                three = convertFloat(lexeme[index+4+1][0])
+                                last_operand = lexeme[index+4+1][0]
+                                if one == True and three == True:
+                                    if float(temp) != float(last_operand):
+                                        result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                           
+                                elif one == True and three == False:
+                                    value = ""
+                                    for j in varidents:
+                                        if j == last_operand:
+                                            value = varidents[j]
+                                    if convertFloat(value) == True:
+                                        if float(temp) != float(value):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                                    else:
+                                        if float(temp) != value:
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
                         
                         if lexeme[i+3][0] == 'SMALLR OF':
                             one = convertFloat(lexeme[i+1][0])
@@ -1963,6 +2053,11 @@ def comparison_expression(lexeme):
                                         result = 'WIN'
                                     else:
                                        result = 'FAIL'
+                                else:
+                                    if value > float(lexeme[i+6][0]):
+                                        result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
                             elif one == True and three == False:
                                 value = ""
                                 for j in varidents:
@@ -1973,12 +2068,19 @@ def comparison_expression(lexeme):
                                         result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                                else:
+                                    if float(lexeme[i+1][0]) > value:
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
                             elif one == False and three == False:
                                 if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
                                         if float(varidents[lexeme[i+1][0]]) > float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                                else:
+                                    result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
                                 
                         elif lexeme[i+3][0] == 'BIGGR OF':
                             one = convertFloat(lexeme[i+1][0])
@@ -1998,6 +2100,11 @@ def comparison_expression(lexeme):
                                        result = 'WIN'
                                     else:
                                        result = 'FAIL'
+                                else:
+                                    if value < float(lexeme[i+6][0]):
+                                       result = 'WIN'
+                                    else:
+                                       result = 'FAIL'
                             elif one == True and three == False:
                                 value = ""
                                 for j in varidents:
@@ -2008,12 +2115,19 @@ def comparison_expression(lexeme):
                                         result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                                else:
+                                    if lexeme[i+1][0] < float(value):
+                                        result = 'WIN'
+                                    else:
+                                        result = 'FAIL'
                             elif one == False and three == False:
                                 if convertFloat(varidents[lexeme[i+1][0]]) == True and  convertFloat(varidents[lexeme[i+6][0]]) == True:
                                         if float(varidents[lexeme[i+1][0]]) < float(varidents[lexeme[i+6][0]]):
                                             result = 'WIN'
                                         else:
                                             result = 'FAIL'
+                                else:
+                                    result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
                                 
                         #assuming y is in arithmetic
                         elif lexeme[i+3][0] in arithmetic:
@@ -2027,24 +2141,32 @@ def comparison_expression(lexeme):
                             num_AN = num_operations * 2 + 3
 
                             temp = arithmeticAnalyzer(varidents, arithmetic,lexeme[i+3:num_AN])
-                            one = convertFloat(temp)
-                            three = convertFloat(lexeme[index+3][0])
-                            if one == True and three == True:
-                                if float(lexeme[i+1][0]) != float(temp):
-                                    result = 'WIN'
-                                else:
-                                    result = 'FAIL'
-                           
-                            elif one == False and three == True:
-                                value = ""
-                                for j in varidents:
-                                    if j == lexeme[i+1][0]:
-                                        value = varidents[j]
-                                if convertFloat(value) == True:
-                                    if float(value) != float(temp):
-                                       result = 'WIN'
+                            if temp == 'NOOBERROR':
+                                result =  f'>> ERROR: Cannot be compare using SMALLR or BIGGR because (both input are strings) or (a string and an integer) or (a string and a float)'
+                            else:
+                                one = convertFloat(temp)
+                                three = convertFloat(lexeme[index+3][0])
+                                if one == True and three == True:
+                                    if float(lexeme[i+1][0]) != float(temp):
+                                        result = 'WIN'
                                     else:
                                         result = 'FAIL'
+                           
+                                elif one == False and three == True:
+                                    value = ""
+                                    for j in varidents:
+                                        if j == lexeme[i+1][0]:
+                                            value = varidents[j]
+                                    if convertFloat(value) == True:
+                                        if float(value) != float(temp):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
+                                    else:
+                                        if value != float(temp):
+                                            result = 'WIN'
+                                        else:
+                                            result = 'FAIL'
     return result
 
 def convertFloat(num):
