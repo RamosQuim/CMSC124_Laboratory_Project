@@ -770,6 +770,7 @@ conditionFlag = -1
 omgwtfFlag = -1
 gtfoFlag = -1
 nowaiFlag = -1
+ifElseFlag = -1
 isInFunction = -1
 isLoops = -1
 loopOut = -1
@@ -945,6 +946,7 @@ def semantics(text):
     global omgwtfFlag
     global gtfoFlag
     global nowaiFlag
+    global ifElseFlag
     global isInFunction
     global isLoops
     global functionBody
@@ -962,7 +964,8 @@ def semantics(text):
     global imOuttaFlag
     global hasObtw
     # global loops
-   
+    ifElseFlag = -1
+    nowaiFlag = -1
 
     varidents = {'IT': 'NOOB'}
     # temp_res.clear()
@@ -980,7 +983,7 @@ def semantics(text):
     undefined_error_prompt =  "\n>> ZeroDivisionError: Result will have an undefined due to 0.\n"
     noob_error_prompt = "\n>> SyntaxError near line <{h}>: \n\tVariable Identifier to be used in arithmetic operations should not be empty and should be numeric only!"
     parameter_list = {}
-    
+
     for h in range(0, len(text.splitlines())):
         lexeme = keywords.lex(text.splitlines()[h].lstrip().rstrip())
         if undefined_error == 1 or noob_error:
@@ -997,10 +1000,14 @@ def semantics(text):
                 continue
             elif conditionFlag == 1 and gtfoFlag == 1 and lexeme[0][0] != 'OIC':
                 continue
-            elif conditionFlag == 0 and nowaiFlag == 1:
-                if len(lexeme) != 2 or lexeme[0][0] != 'NO' or lexeme[1][0] != 'WAI':
+            
+            if ifElseFlag == 0 and nowaiFlag == 1:
+                if len(lexeme) != 2 or lexeme[0][0] != 'NO' or lexeme[1][0] != 'WAI':                  
+                    text = text.replace(f'{text.splitlines()[h]}', f'', 1)
                     continue
-            elif conditionFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
+            elif ifElseFlag == 1 and nowaiFlag == 0 and lexeme[0][0] != 'OIC':
+                ('pasok dito >>>>>>', text.splitlines()[h])
+                text = text.replace(f'{text.splitlines()[h]}', f'', 1)
                 continue 
             
             if imOuttaFlag == 1 and lexeme[0][0] != 'IM OUTTA YR':
@@ -1413,15 +1420,15 @@ def semantics(text):
 
                 elif len(lexeme) == 2 and lexeme[i][0] == 'YA' and lexeme[i+1][0] == 'RLY' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
                     if varidents['IT'] == 'WIN':
-                        conditionFlag = 1
+                        ifElseFlag = 1
                     elif varidents['IT'] == 'FAIL':
-                        conditionFlag = 0
+                        ifElseFlag = 0
                         nowaiFlag = 1
                     else:
                         if f'{int(float(varidents["IT"]))}' != '0' or varidents["IT"] != 'NOOB':
-                            conditionFlag = 1
+                            ifElseFlag = 1
                         else:
-                            conditionFlag = 0
+                            ifElseFlag = 0
                             nowaiFlag = 1
                 
                 elif len(lexeme) == 2 and lexeme[i][0] == 'NO' and lexeme[i+1][0] == 'WAI' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
@@ -1455,6 +1462,7 @@ def semantics(text):
                         gtfoFlag = -1
                     isInCondition == -1
                     conditionFlag = -1
+                    ifElseFlag = -1
                     nowaiFlag = -1
 
                 elif lexeme[i][0] == 'HOW IZ I' and hasObtw == -1 and lexeme[i-1][0] != 'BTW':
